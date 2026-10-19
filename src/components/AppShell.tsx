@@ -1,52 +1,60 @@
 "use client";
 
-import { useEffect, useSyncExternalStore, type ReactNode } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useState, type ReactNode } from "react";
+import { useRouter, usePathname } from "next/navigation";
+import Link from "next/link";
 import { Lockup } from "@/components/ui";
 import { Icon, type IconName } from "@/lib/icons";
-import { getSession, signOut, type Workspace } from "@/lib/auth";
+import { getSession, signOut, type Account, type Workspace } from "@/lib/auth";
 
-function subscribeNoop() {
-  return () => {};
-}
-function getServerSnapshot() {
-  return null;
-}
-
-type NavItem = { icon: IconName; label: string };
+type NavItem = { icon: IconName; label: string; href: string };
 
 const NAV: Record<Workspace, NavItem[]> = {
   regulator: [
-    { icon: "squares-four", label: "Dashboard" },
-    { icon: "buildings", label: "Organisations" },
-    { icon: "briefcase", label: "Assurance firms" },
-    { icon: "scroll", label: "Requirements library" },
-    { icon: "list-checks", label: "Programmes" },
+    { icon: "squares-four", label: "Dashboard", href: "/regulator" },
+    { icon: "buildings", label: "Organisations", href: "/regulator/organisations" },
+    { icon: "briefcase", label: "Assurance firms", href: "/regulator/firms" },
+    { icon: "scroll", label: "Requirements library", href: "/regulator/library" },
+    { icon: "list-checks", label: "Programmes", href: "/regulator/programmes" },
   ],
   organisation: [
-    { icon: "squares-four", label: "Dashboard" },
-    { icon: "list-checks", label: "Obligations" },
-    { icon: "files", label: "Evidence" },
-    { icon: "certificate", label: "Findings" },
+    { icon: "squares-four", label: "Dashboard", href: "/organisation" },
+    { icon: "list-checks", label: "Obligations", href: "/organisation/obligations" },
+    { icon: "files", label: "Evidence", href: "/organisation/evidence" },
+    { icon: "certificate", label: "Findings", href: "/organisation/findings" },
   ],
   firm: [
-    { icon: "squares-four", label: "Dashboard" },
-    { icon: "handshake", label: "Engagements" },
-    { icon: "list-checks", label: "Assessments" },
+    { icon: "squares-four", label: "Dashboard", href: "/firm" },
+    { icon: "handshake", label: "Engagements", href: "/firm/engagements" },
+    { icon: "list-checks", label: "Assessments", href: "/firm/assessments" },
   ],
 };
 
+// Session lives in localStorage, which only exists on the client. We can't
+// read it during the server-rendered pass, so the first client render must
+// also render nothing (to match the server output and avoid a hydration
+// mismatch) and only resolve the real session once, after mount.
+function useSessionOnMount() {
+  const [state, setState] = useState<{ checked: boolean; account: Account | null }>({ checked: false, account: null });
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time read of a browser-only store (localStorage) that cannot be observed during SSR; there is no external-store API that avoids this without reintroducing the same hydration race.
+    setState({ checked: true, account: getSession() });
+  }, []);
+  return state;
+}
+
 export function AppShell({ workspace, children }: { workspace: Workspace; children: ReactNode }) {
   const router = useRouter();
-  const account = useSyncExternalStore(subscribeNoop, getSession, getServerSnapshot);
+  const pathname = usePathname();
+  const { checked, account } = useSessionOnMount();
 
   useEffect(() => {
-    if (!account || account.workspace !== workspace) {
+    if (checked && (!account || account.workspace !== workspace)) {
       router.replace("/signin");
     }
-  }, [account, workspace, router]);
+  }, [checked, account, workspace, router]);
 
-  if (!account || account.workspace !== workspace) return null;
+  if (!checked || !account || account.workspace !== workspace) return null;
 
   const nav = NAV[workspace];
 
@@ -64,12 +72,15 @@ export function AppShell({ workspace, children }: { workspace: Workspace; childr
             </div>
           </div>
         </div>
-        {nav.map((item, i) => (
-          <button key={item.label} className={`nav ${i === 0 ? "on" : ""}`} type="button">
-            <Icon name={item.icon} />
-            <span>{item.label}</span>
-          </button>
-        ))}
+        {nav.map((item) => {
+          const active = item.href === `/${workspace}` ? pathname === item.href : pathname.startsWith(item.href);
+          return (
+            <Link key={item.href} href={item.href} className={`nav ${active ? "on" : ""}`}>
+              <Icon name={item.icon} />
+              <span>{item.label}</span>
+            </Link>
+          );
+        })}
         <div className="sb-foot">
           <button
             className="nav"
