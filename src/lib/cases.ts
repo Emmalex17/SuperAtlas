@@ -132,7 +132,7 @@ export type CaseFinding = {
   verify?: RemediationVerify;
   closed?: RemediationClosed;
   closedDate?: string;
-  ext?: unknown;
+  ext?: { status: "Requested" | "Approved" | "Declined"; date: string; reason: string; by: string; when: string };
 };
 
 export type ReqFirmRequest = { name: string; contact: string; reason: string; file: string; creds: string; when: string; by: string };
@@ -188,6 +188,9 @@ export const SERIES = seriesData as unknown as ProgrammeSeries[];
 export const COMPLIANCE_SETTINGS = complianceData as unknown as ComplianceSettings;
 export const SCHEMES = schemesData as unknown as ScoringScheme[];
 export const DEADLINES = deadlinesData as unknown as Deadlines;
+
+/** The prototype's fixed "today" — all its seed data (due dates, "X days ago" activity, etc.) is written relative to this date. */
+export const TODAY = "2026-10-19";
 
 export function schemeOf(id: string): ScoringScheme {
   return SCHEMES.find((s) => s.id === id) ?? SCHEMES[0];
@@ -414,4 +417,118 @@ export function publishOrScheduleSelected(ids: string[], mode: "now" | "schedule
     });
   }
   return { published: 0, scheduled: cs.length, held };
+}
+
+/* ================= Findings & remediation =================
+ * Findings live inside each Case's `findings` array (raised while a firm assesses it, see
+ * firm/assess in the prototype — not yet ported). This section is the register across every
+ * published case's findings, plus the remediation lifecycle: the organisation plans a fix,
+ * submits proof, the firm verifies it, the regulator closes it. */
+
+export type FindingWithCase = { f: CaseFinding; c: Case };
+
+export function allFindings(): FindingWithCase[] {
+  return CASES.filter((c) => c.stage === "Published").flatMap((c) =>
+    c.findings.map((f) => {
+      if (!f.status) f.status = fcOf(f.cls).days ? "Open" : "Noted";
+      if (!f.updates) f.updates = [];
+      if (!f.proof) f.proof = [];
+      return { f, c };
+    })
+  );
+}
+
+export function fdFind(id: string | undefined): FindingWithCase {
+  return allFindings().find((x) => x.f.id === id) ?? allFindings()[0];
+}
+
+export function effDue(f: CaseFinding): string | undefined {
+  return f.ext && f.ext.status === "Approved" ? f.ext.date : f.due;
+}
+
+export function fdOverdue(f: CaseFinding, today: string): boolean {
+  const due = effDue(f);
+  return !!due && ["Open", "In progress"].includes(f.status ?? "") && due < today;
+}
+
+export function fdLog(f: CaseFinding, what: string, who: string, today: string) {
+  (f.updates ??= []).push([today, who, what]);
+}
+
+export const FD_CARDS: [string, string, string, (x: FindingWithCase) => boolean][] = [
+  ["plan", "Plan needed", "flag", (x) => x.f.status === "Open"],
+  ["progress", "In progress", "wrench", (x) => x.f.status === "In progress"],
+  ["verify", "With firm to verify", "seal-question", (x) => x.f.status === "Fix submitted"],
+  ["close", "Ready to close", "seal-check", (x) => x.f.status === "Verified fixed"],
+];
+
+export function fdCardsWithOverdue(today: string): [string, string, string, (x: FindingWithCase) => boolean][] {
+  return [
+    ...FD_CARDS,
+    ["overdue", "Overdue", "warning", (x) => fdOverdue(x.f, today)],
+    ["ext", "More time asked", "clock-clockwise", (x) => !!x.f.ext && x.f.ext.status === "Requested"],
+  ];
+}
+
+export const FD_STATUS_TONE: Record<string, "warn" | "info" | "ok" | "neu"> = {
+  Open: "warn",
+  "In progress": "info",
+  "Fix submitted": "info",
+  "Verified fixed": "ok",
+  Closed: "neu",
+  Noted: "neu",
+};
+
+/* ---- mutators (see note above the Reviews mutators for why these live here) ---- */
+
+export function savePlan(f: CaseFinding, plan: RemediationPlan, today: string, byName: string) {
+  const isNew = !f.plan;
+  f.plan = plan;
+  if (f.status === "Open") f.status = "In progress";
+  fdLog(f, isNew ? "Plan submitted" : "Plan updated", byName, today);
+}
+
+export function toggleStep(f: CaseFinding, index: number) {
+  if (!f.plan) return;
+  const step = f.plan.steps[index];
+  if (step) step[1] = !step[1];
+}
+
+export function addProof(f: CaseFinding, fileName: string, size: string) {
+  (f.proof ??= []).push([fileName, size]);
+}
+
+export function submitFix(f: CaseFinding, today: string, byName: string) {
+  f.status = "Fix submitted";
+  fdLog(f, "Fix submitted with proof", byName, today);
+}
+
+export function verifyFix(f: CaseFinding, ok: boolean, note: string, today: string, byName: string, firmName: string) {
+  f.verify = { by: byName, when: today, ok, note };
+  f.status = ok ? "Verified fixed" : "In progress";
+  fdLog(f, ok ? "Verified fixed" : "Not fixed", firmName, today);
+}
+
+export function closeFinding(f: CaseFinding, today: string, byName: string) {
+  f.status = "Closed";
+  f.closed = { by: byName, when: today };
+  fdLog(f, "Closed", byName, today);
+}
+
+export function reopenFinding(f: CaseFinding, note: string, today: string, byName: string) {
+  f.status = "In progress";
+  f.closed = undefined;
+  fdLog(f, `Reopened${note ? `: ${note}` : ""}`, byName, today);
+}
+
+export function askExtension(f: CaseFinding, date: string, reason: string, today: string, byName: string) {
+  f.ext = { status: "Requested", date, reason, by: byName, when: today };
+  fdLog(f, "More time asked", byName, today);
+}
+
+export function decideExtension(f: CaseFinding, approved: boolean, today: string, byName: string) {
+  if (!f.ext) return;
+  f.ext.status = approved ? "Approved" : "Declined";
+  if (approved) f.due = f.ext.date;
+  fdLog(f, approved ? "More time approved" : "More time declined", byName, today);
 }

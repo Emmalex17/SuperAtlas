@@ -15,9 +15,11 @@ const NAV: Record<Workspace, NavItem[]> = {
     { icon: "squares-four", label: "Dashboard", href: "/regulator" },
     { icon: "buildings", label: "Organisations", href: "/regulator/organisations" },
     { icon: "briefcase", label: "Assurance firms", href: "/regulator/firms" },
+    { icon: "gavel", label: "Enforcement", href: "/regulator/enforcement" },
     { icon: "book-open-text", label: "Requirements library", href: "/regulator/library" },
     { icon: "calendar-check", label: "Programmes", href: "/regulator/programmes" },
     { icon: "stamp", label: "Reviews & publishing", href: "/regulator/reviews" },
+    { icon: "flag", label: "Findings", href: "/regulator/findings" },
     { icon: "table", label: "Data returns", href: "/regulator/returns" },
     { icon: "users", label: "Team", href: "/regulator/team" },
     { icon: "identification-card", label: "Profile", href: "/regulator/profile" },
@@ -25,8 +27,10 @@ const NAV: Record<Workspace, NavItem[]> = {
   organisation: [
     { icon: "squares-four", label: "Dashboard", href: "/organisation" },
     { icon: "list-checks", label: "Obligations", href: "/organisation/obligations" },
+    { icon: "table", label: "Data returns", href: "/organisation/returns" },
+    { icon: "flag", label: "Findings", href: "/organisation/findings" },
+    { icon: "gavel", label: "Regulatory actions", href: "/organisation/actions" },
     { icon: "files", label: "Evidence", href: "/organisation/evidence" },
-    { icon: "certificate", label: "Findings", href: "/organisation/findings" },
   ],
   firm: [
     { icon: "squares-four", label: "Dashboard", href: "/firm" },

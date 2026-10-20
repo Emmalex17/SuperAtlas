@@ -1,0 +1,275 @@
+[
+  {
+    "evidence": [
+      {
+        "kind": "result",
+        "label": "ISR 2024 annual assessment: score below benchmark"
+      }
+    ],
+    "timeline": [
+      [
+        "2025-03-10",
+        "N. Adeyemi",
+        "Case opened"
+      ],
+      [
+        "2025-03-12",
+        "M. Bello",
+        "Signed off and issued the notice"
+      ],
+      [
+        "2025-03-24",
+        "D. Musa",
+        "Accepted with a fix plan"
+      ],
+      [
+        "2025-06-02",
+        "M. Bello",
+        "Closed: complied"
+      ]
+    ],
+    "response": {
+      "kind": "accept",
+      "text": "MFA roll-out to all privileged accounts by June.",
+      "when": "2025-03-24",
+      "by": "D. Musa"
+    },
+    "decision": {
+      "outcome": "Complied",
+      "note": "Fix verified by the assessor.",
+      "when": "2025-06-02",
+      "by": "M. Bello"
+    },
+    "penalty": null,
+    "approver": "M. Bello",
+    "by": "N. Adeyemi",
+    "from": "watchlist",
+    "id": "ec1",
+    "ref": "EC-2025-011",
+    "org": "ironwood",
+    "type": "warning",
+    "status": "Closed",
+    "opened": "2025-03-10",
+    "issued": "2025-03-12",
+    "respondBy": "2025-03-26",
+    "reason": "Below the ISR benchmark in the 2024 cycle with a major nonconformity on multi-factor authentication."
+  },
+  {
+    "evidence": [
+      {
+        "kind": "result",
+        "label": "ISR 2024 annual assessment: score below benchmark"
+      }
+    ],
+    "timeline": [
+      [
+        "2025-04-20",
+        "N. Adeyemi",
+        "Case opened"
+      ],
+      [
+        "2025-04-22",
+        "M. Bello",
+        "Signed off and issued the notice"
+      ],
+      [
+        "2025-05-15",
+        "S. Ibe",
+        "Accepted with a fix plan"
+      ],
+      [
+        "2025-07-30",
+        "M. Bello",
+        "Closed: complied"
+      ]
+    ],
+    "response": {
+      "kind": "accept",
+      "text": "Tabletop exercise held; reporting procedure updated.",
+      "when": "2025-05-15",
+      "by": "S. Ibe"
+    },
+    "decision": {
+      "outcome": "Complied",
+      "note": "",
+      "when": "2025-07-30",
+      "by": "M. Bello"
+    },
+    "penalty": null,
+    "approver": "M. Bello",
+    "by": "N. Adeyemi",
+    "from": "watchlist",
+    "id": "ec2",
+    "ref": "EC-2025-019",
+    "org": "tidewater",
+    "type": "directive",
+    "status": "Closed",
+    "opened": "2025-04-20",
+    "issued": "2025-04-22",
+    "respondBy": "2025-05-22",
+    "reason": "Incident response plan never tested; major incidents reported late."
+  },
+  {
+    "evidence": [
+      {
+        "kind": "result",
+        "label": "ISR 2024 annual assessment: score below benchmark"
+      },
+      {
+        "kind": "result",
+        "label": "ISR 2025 annual assessment: score below benchmark"
+      }
+    ],
+    "timeline": [
+      [
+        "2026-04-02",
+        "N. Adeyemi",
+        "Case opened"
+      ],
+      [
+        "2026-04-06",
+        "M. Bello",
+        "Signed off and issued the notice"
+      ],
+      [
+        "2026-04-28",
+        "D. Musa",
+        "Accepted"
+      ],
+      [
+        "2026-04-30",
+        "M. Bello",
+        "Penalty confirmed; waiting for payment"
+      ]
+    ],
+    "response": {
+      "kind": "accept",
+      "text": "We accept the penalty and will pay within the period.",
+      "when": "2026-04-28",
+      "by": "D. Musa"
+    },
+    "decision": {
+      "outcome": "Penalty confirmed",
+      "note": "Payment due by 6 May 2026.",
+      "when": "2026-04-30",
+      "by": "M. Bello"
+    },
+    "penalty": {
+      "amount": 5000000,
+      "paid": false
+    },
+    "approver": "M. Bello",
+    "by": "N. Adeyemi",
+    "from": "watchlist",
+    "id": "ec3",
+    "ref": "EC-2026-003",
+    "org": "ironwood",
+    "type": "penalty",
+    "status": "Awaiting payment",
+    "opened": "2026-04-02",
+    "issued": "2026-04-06",
+    "respondBy": "2026-05-06",
+    "reason": "Below the ISR benchmark in two cycles running (2024 and 2025)."
+  },
+  {
+    "evidence": [
+      {
+        "kind": "result",
+        "label": "ISR 2025 annual assessment: score 39"
+      }
+    ],
+    "timeline": [
+      [
+        "2026-05-15",
+        "N. Adeyemi",
+        "Case opened"
+      ],
+      [
+        "2026-05-18",
+        "M. Bello",
+        "Signed off and issued the notice"
+      ],
+      [
+        "2026-05-30",
+        "A. Lawan",
+        "Contested with documents"
+      ]
+    ],
+    "response": {
+      "kind": "contest",
+      "text": "Two of the findings were fixed before the report was published. We attach the evidence and ask NITDA to reconsider.",
+      "files": [
+        [
+          "Access review records Q4 2025.pdf",
+          "310 KB"
+        ]
+      ],
+      "when": "2026-05-30",
+      "by": "A. Lawan"
+    },
+    "decision": null,
+    "penalty": null,
+    "approver": "M. Bello",
+    "by": "N. Adeyemi",
+    "from": "watchlist",
+    "id": "ec4",
+    "ref": "EC-2026-007",
+    "org": "sahel",
+    "type": "warning",
+    "status": "Response received",
+    "opened": "2026-05-15",
+    "issued": "2026-05-18",
+    "respondBy": "2026-06-01",
+    "reason": "Score of 39 in the ISR 2025 cycle with four open findings."
+  },
+  {
+    "evidence": [],
+    "timeline": [
+      [
+        "2026-05-20",
+        "J. Okeke",
+        "Case opened"
+      ],
+      [
+        "2026-05-21",
+        "M. Bello",
+        "Signed off and issued the notice"
+      ],
+      [
+        "2026-06-05",
+        "C. Nwankwo",
+        "Accepted with a fix plan"
+      ],
+      [
+        "2026-06-30",
+        "J. Okeke",
+        "Closed: no further action"
+      ]
+    ],
+    "response": {
+      "kind": "accept",
+      "text": "Reviews now scheduled monthly.",
+      "when": "2026-06-05",
+      "by": "C. Nwankwo"
+    },
+    "decision": {
+      "outcome": "No further action",
+      "note": "",
+      "when": "2026-06-30",
+      "by": "J. Okeke"
+    },
+    "penalty": null,
+    "approver": "M. Bello",
+    "by": "N. Adeyemi",
+    "from": "watchlist",
+    "id": "ec5",
+    "ref": "EC-2026-009",
+    "org": "kolanut",
+    "type": "advisory",
+    "status": "Closed",
+    "opened": "2026-05-20",
+    "issued": "2026-05-21",
+    "respondBy": "2026-06-11",
+    "reason": "Quarterly access reviews missed for two quarters."
+  }
+]
