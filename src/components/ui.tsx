@@ -73,7 +73,10 @@ export function Chip({ children, tone = "neu", icon }: { children: ReactNode; to
   );
 }
 
-export function Tile({ icon, tone = "", size = "" }: { icon: IconName; tone?: "" | "ok" | "warn" | "bad" | "info" | "neu" | "ai" | "solid"; size?: "" | "sm" | "lg" }) {
+type ToneWord = "" | "ok" | "warn" | "bad" | "info" | "neu" | "ai" | "solid";
+type Tone = ToneWord | `${ToneWord} ${ToneWord}`;
+
+export function Tile({ icon, tone = "", size = "" }: { icon: IconName | string; tone?: Tone | string; size?: "" | "sm" | "lg" }) {
   return (
     <span className={`tile ${tone} ${size}`}>
       <Icon name={icon} />
@@ -132,7 +135,7 @@ export function AlertBox({
   const defaults: Record<string, IconName> = { ok: "check-circle", warn: "warning", bad: "warning-octagon", info: "info", ai: "sparkle" };
   return (
     <div className={`alert ${tone}`}>
-      <Tile icon={icon ?? defaults[tone]} tone={`solid ${tone === "ai" ? "" : tone}` as "solid"} size="sm" />
+      <Tile icon={icon ?? defaults[tone]} tone={`solid ${tone === "ai" ? "" : tone}` as Tone} size="sm" />
       <div className="grow">
         <div className="t">{title}</div>
         {body ? <div className="b">{body}</div> : null}
