@@ -1,0 +1,384 @@
+[
+  {
+    "id": "isr",
+    "ref": "ISR",
+    "name": "Information Security Regulation 2026",
+    "category": "Information security",
+    "version": "v2.0",
+    "effective": "1 Jan 2026",
+    "updated": "12 Sep 2026",
+    "status": "Published",
+    "file": "information-security-regulation-2026.pdf",
+    "applies": [
+      "Commercial bank",
+      "Microfinance bank",
+      "Payment solution service provider",
+      "Cloud service provider"
+    ],
+    "desc": "Sets the minimum information security controls for supervised organisations: governance, asset management, access control, operations and incident response. Organisations answer each requirement once a year and attach evidence; an accredited assessor confirms the outcome.",
+    "sections": [
+      {
+        "id": "s1",
+        "name": "1. Governance",
+        "reqs": [
+          {
+            "ref": "ISR-1.1",
+            "t": "Board-approved information security policy",
+            "text": "The organisation shall maintain an information security policy approved by its board and reviewed at least once a year.",
+            "guidance": "Upload the policy and the board resolution that approved the current version. If the review is overdue, say when it is scheduled.",
+            "weight": "High (3)",
+            "evidence": [
+              "Board resolution approving the policy",
+              "Current policy document"
+            ],
+            "questions": [
+              [
+                "Does the board approve the information security policy?",
+                "Yes / No / Not applicable"
+              ],
+              [
+                "When did the board last review the policy?",
+                "Date"
+              ],
+              [
+                "Who owns the policy day to day?",
+                "Short text"
+              ]
+            ]
+          },
+          {
+            "ref": "ISR-1.2",
+            "t": "Named chief information security officer",
+            "text": "The organisation shall appoint a chief information security officer who reports to executive management.",
+            "guidance": "Give the name and reporting line. If the role is outsourced, describe the arrangement.",
+            "weight": "Normal (2)",
+            "evidence": [
+              "Appointment letter",
+              "Organisation chart"
+            ],
+            "questions": [
+              [
+                "Has a chief information security officer been appointed?",
+                "Yes / No / Not applicable"
+              ],
+              [
+                "To whom does the CISO report?",
+                "Short text"
+              ]
+            ]
+          },
+          {
+            "ref": "ISR-1.3",
+            "t": "Annual information security risk assessment",
+            "text": "The organisation shall carry out an information security risk assessment at least once a year and after any major change.",
+            "guidance": "Summarise the method used and the top risks identified.",
+            "weight": "Normal (2)",
+            "evidence": [
+              "Latest risk assessment report",
+              "Risk register extract"
+            ],
+            "questions": [
+              [
+                "Was a risk assessment completed in the last 12 months?",
+                "Yes / No / Not applicable"
+              ],
+              [
+                "Describe the method used",
+                "Long text"
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "id": "s2",
+        "name": "2. Asset management",
+        "reqs": [
+          {
+            "ref": "ISR-2.1",
+            "t": "Inventory of critical information assets",
+            "text": "Keep an up-to-date inventory of critical information assets, with a named owner for each.",
+            "guidance": "Upload the inventory or an extract showing critical assets and owners.",
+            "weight": "Normal (2)",
+            "evidence": [
+              "Asset inventory extract"
+            ],
+            "questions": [
+              [
+                "Is there a current inventory of critical assets?",
+                "Yes / No / Not applicable"
+              ],
+              [
+                "How many critical assets are listed?",
+                "Number"
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "id": "s4",
+        "name": "4. Access control",
+        "reqs": [
+          {
+            "ref": "ISR-4.1",
+            "t": "Multi-factor authentication for privileged access",
+            "text": "All privileged and remote access to production systems shall require multi-factor authentication.",
+            "guidance": "Explain how MFA is enforced for administrators and remote users. Include any exceptions and how they are approved.",
+            "weight": "High (3)",
+            "evidence": [
+              "MFA configuration export",
+              "List of privileged accounts"
+            ],
+            "questions": [
+              [
+                "Is MFA enforced for all privileged access?",
+                "Yes / No / Not applicable"
+              ],
+              [
+                "Is MFA enforced for all remote access?",
+                "Yes / No / Not applicable"
+              ],
+              [
+                "List any approved exceptions",
+                "Long text"
+              ]
+            ]
+          },
+          {
+            "ref": "ISR-4.2",
+            "t": "Quarterly access review",
+            "text": "Access rights to critical systems shall be reviewed at least quarterly and unused accounts removed within 30 days.",
+            "guidance": "Attach the last two signed access reviews.",
+            "weight": "Normal (2)",
+            "evidence": [
+              "Signed access review reports for the last two quarters"
+            ],
+            "questions": [
+              [
+                "Are access rights reviewed every quarter?",
+                "Yes / No / Not applicable"
+              ],
+              [
+                "Date of the last review",
+                "Date"
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "id": "s7",
+        "name": "7. Incident response",
+        "reqs": [
+          {
+            "ref": "ISR-7.1",
+            "t": "Report major incidents within 24 hours",
+            "text": "Major security incidents shall be reported to the regulator within 24 hours of detection.",
+            "guidance": "Describe how incidents are classified and who reports them.",
+            "weight": "High (3)",
+            "evidence": [
+              "Incident response plan",
+              "Incident log for the period"
+            ],
+            "questions": [
+              [
+                "Is there a documented incident response plan?",
+                "Yes / No / Not applicable"
+              ],
+              [
+                "How many major incidents were reported in the period?",
+                "Number"
+              ]
+            ]
+          },
+          {
+            "ref": "ISR-7.2",
+            "t": "Test the incident response plan yearly",
+            "text": "The incident response plan shall be tested at least once a year through a tabletop or live exercise.",
+            "guidance": "Attach the exercise report and the actions that came out of it.",
+            "weight": "Normal (2)",
+            "evidence": [
+              "Exercise report"
+            ],
+            "questions": [
+              [
+                "Was the plan tested in the last 12 months?",
+                "Yes / No / Not applicable"
+              ]
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "dpf",
+    "ref": "DPF",
+    "name": "Data Protection Compliance Framework",
+    "category": "Data protection",
+    "version": "v1.3",
+    "effective": "1 Jun 2025",
+    "updated": "2 Jun 2025",
+    "status": "Published",
+    "file": "data-protection-compliance-framework.pdf",
+    "applies": [
+      "Data controller of major importance",
+      "Fintech platform",
+      "Commercial bank"
+    ],
+    "desc": "How organisations that process personal data show lawful processing, records of processing, data subject rights and breach handling.",
+    "sections": [
+      {
+        "id": "s2",
+        "name": "2. Lawful processing",
+        "reqs": [
+          {
+            "ref": "DPF-2.1",
+            "t": "Record of processing activities",
+            "text": "Maintain a current record of processing activities covering purpose, lawful basis and retention.",
+            "guidance": "An extract is enough if the full record is long.",
+            "weight": "Normal (2)",
+            "evidence": [
+              "Record of processing activities"
+            ],
+            "questions": [
+              [
+                "Is the record of processing activities current?",
+                "Yes / No / Not applicable"
+              ]
+            ]
+          },
+          {
+            "ref": "DPF-2.2",
+            "t": "Lawful basis for each purpose",
+            "text": "Each processing purpose shall have a documented lawful basis.",
+            "guidance": "",
+            "weight": "Normal (2)",
+            "evidence": [
+              "Lawful basis register"
+            ],
+            "questions": [
+              [
+                "Is a lawful basis recorded for every purpose?",
+                "Yes / No / Not applicable"
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "id": "s5",
+        "name": "5. Breach handling",
+        "reqs": [
+          {
+            "ref": "DPF-5.1",
+            "t": "Notify personal data breaches within 72 hours",
+            "text": "Notify the authority of personal data breaches within 72 hours of becoming aware of them.",
+            "guidance": "",
+            "weight": "High (3)",
+            "evidence": [
+              "Breach procedure",
+              "Breach log"
+            ],
+            "questions": [
+              [
+                "Is there a breach notification procedure?",
+                "Yes / No / Not applicable"
+              ]
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "cpr",
+    "ref": "CPR",
+    "name": "Consumer Protection Rules",
+    "category": "Consumer protection",
+    "version": "v1.0",
+    "effective": "1 Sep 2025",
+    "updated": "1 Sep 2025",
+    "status": "Published",
+    "file": "consumer-protection-rules.pdf",
+    "applies": [
+      "Commercial bank",
+      "Microfinance bank",
+      "Mobile money operator"
+    ],
+    "desc": "Fair treatment of customers of digital financial services: complaints, disclosure and redress.",
+    "sections": [
+      {
+        "id": "s3",
+        "name": "3. Complaints",
+        "reqs": [
+          {
+            "ref": "CPR-3.1",
+            "t": "Resolve complaints within 14 days",
+            "text": "Customer complaints shall be acknowledged within 48 hours and resolved within 14 days.",
+            "guidance": "Give average resolution time for the period.",
+            "weight": "Normal (2)",
+            "evidence": [
+              "Complaints register",
+              "Monthly complaints report"
+            ],
+            "questions": [
+              [
+                "Are complaints resolved within 14 days?",
+                "Yes / No / Not applicable"
+              ],
+              [
+                "Average resolution time (days)",
+                "Number"
+              ]
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "aml",
+    "ref": "AML",
+    "name": "Anti-Money Laundering Guidelines",
+    "category": "Financial crime",
+    "version": "v3.1",
+    "effective": "1 Jan 2027",
+    "updated": "14 Oct 2026",
+    "status": "Draft",
+    "file": "aml-guidelines-v3-1.pdf",
+    "applies": [
+      "Commercial bank",
+      "Microfinance bank",
+      "Mobile money operator",
+      "Payment solution service provider"
+    ],
+    "desc": "Risk-based customer due diligence, monitoring and reporting of suspicious transactions. Draft for consultation.",
+    "sections": [
+      {
+        "id": "s5",
+        "name": "5. Customer due diligence",
+        "reqs": [
+          {
+            "ref": "AML-5.1",
+            "t": "Risk-based customer due diligence",
+            "text": "Apply customer due diligence measures proportionate to the assessed money-laundering risk.",
+            "guidance": "",
+            "weight": "High (3)",
+            "evidence": [
+              "CDD procedure",
+              "Risk assessment methodology"
+            ],
+            "questions": [
+              [
+                "Is CDD applied on a risk basis?",
+                "Yes / No / Not applicable"
+              ]
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

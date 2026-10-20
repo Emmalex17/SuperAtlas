@@ -1,0 +1,30 @@
+[
+  {
+    "code": "MaNC",
+    "name": "Major nonconformity",
+    "d": "A requirement is not met and the risk is significant.",
+    "days": 30,
+    "tone": "bad"
+  },
+  {
+    "code": "MiNC",
+    "name": "Minor nonconformity",
+    "d": "A requirement is partly met; the gap is contained.",
+    "days": 60,
+    "tone": "warn"
+  },
+  {
+    "code": "OBS",
+    "name": "Observation",
+    "d": "Not a breach yet, but could become one.",
+    "days": 90,
+    "tone": "info"
+  },
+  {
+    "code": "OFI",
+    "name": "Opportunity for improvement",
+    "d": "Good practice the organisation may adopt. No fix deadline.",
+    "days": 0,
+    "tone": "neu"
+  }
+]
