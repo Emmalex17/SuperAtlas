@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Lockup } from "@/components/ui";
 import { Icon, type IconName } from "@/lib/icons";
 import { getSession, signOut, type Account, type Workspace } from "@/lib/auth";
+import { NOTIFICATIONS } from "@/lib/mockData";
 
 type NavItem = { icon: IconName; label: string; href: string };
 
@@ -47,6 +48,7 @@ export function AppShell({ workspace, children }: { workspace: Workspace; childr
   const router = useRouter();
   const pathname = usePathname();
   const { checked, account } = useSessionOnMount();
+  const [query, setQuery] = useState("");
 
   useEffect(() => {
     if (checked && (!account || account.workspace !== workspace)) {
@@ -57,6 +59,12 @@ export function AppShell({ workspace, children }: { workspace: Workspace; childr
   if (!checked || !account || account.workspace !== workspace) return null;
 
   const nav = NAV[workspace];
+  const unreadCount = NOTIFICATIONS.filter((n) => n.workspace === workspace && n.unread).length;
+
+  function submitSearch(e: React.FormEvent) {
+    e.preventDefault();
+    router.push(`/search?q=${encodeURIComponent(query)}`);
+  }
 
   return (
     <div className="app">
@@ -100,13 +108,26 @@ export function AppShell({ workspace, children }: { workspace: Workspace; childr
           <div className="crumbs grow">
             <b>{account.entityName}</b>
           </div>
-          <button className="user" type="button">
+          <form className="search" role="search" onSubmit={submitSearch}>
+            <Icon name="magnifying-glass" />
+            <input
+              placeholder={workspace === "regulator" ? "Search organisations, firms, requirements" : "Search requirements, people"}
+              aria-label="Search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
+          </form>
+          <Link href="/notifications" className="icon-btn" aria-label="Notifications" style={{ position: "relative" }}>
+            <Icon name="bell" />
+            {unreadCount ? <span className="bell-dot" /> : null}
+          </Link>
+          <Link href="/account" className="user">
             <span className="av s24">{account.initials}</span>
             <div>
               <b>{account.name}</b>
               <span>{account.role}</span>
             </div>
-          </button>
+          </Link>
         </div>
         <div className="content">{children}</div>
       </div>
