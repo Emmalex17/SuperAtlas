@@ -1010,3 +1010,7 @@ button.link{background:none;border:0;color:var(--link);cursor:pointer;padding:4p
 .rep-hero h1{font-size:26px;line-height:32px;margin:4px 0}.rep-hero p{opacity:.8;font-size:13.5px;margin:0}
 .rep-score{display:flex;flex-direction:column;align-items:center;justify-content:center;width:110px;height:110px;border-radius:50%;border:3px solid rgba(255,255,255,.35);flex:none}
 .rep-score span{font:700 36px/40px var(--serif)}.rep-score b{font-size:12px;font-weight:600;opacity:.85;text-align:center;padding:0 8px}
+
+/* Phase 4: returns filing review row highlight and query reply */
+.tbl tr.row-warn td{background:var(--warn-bg)}
+.reply{margin-top:8px;padding:8px 10px;border-left:3px solid var(--brand-300);background:var(--surface-subtle);border-radius:0 8px 8px 0}
