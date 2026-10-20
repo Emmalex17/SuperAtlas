@@ -52,6 +52,52 @@ export const FIRMS: Firm[] = [
   { id: "meridale", name: "Meridale Partners", initials: "MP", color: "#5B6B2F", types: ["Audit & assurance"], status: "In review", assigned: 0, renews: "—", since: "—", city: "Port Harcourt" },
 ];
 
+export type CategoryType = { id: string; name: string; tiers: string[] };
+export type Category = { id: string; name: string; types: CategoryType[] };
+
+export const CATEGORIES: Category[] = [
+  {
+    id: "bank",
+    name: "Banking",
+    types: [
+      { id: "cb", name: "Commercial bank", tiers: ["International", "National", "Regional"] },
+      { id: "nib", name: "Non-interest bank", tiers: ["National", "Regional"] },
+      { id: "mb", name: "Merchant bank", tiers: ["National"] },
+      { id: "mfb", name: "Microfinance bank", tiers: ["National", "State", "Unit"] },
+    ],
+  },
+  {
+    id: "pay",
+    name: "Payments",
+    types: [
+      { id: "mmo", name: "Mobile money operator", tiers: [] },
+      { id: "sp", name: "Switching and processing", tiers: [] },
+      { id: "pssp", name: "Payment solution service provider", tiers: ["PSSP", "PTSP", "Super-agent"] },
+    ],
+  },
+  {
+    id: "dig",
+    name: "Digital economy",
+    types: [
+      { id: "dc", name: "Data controller of major importance", tiers: ["Ultra-high level", "Extra-high level", "Ordinary-high level"] },
+      { id: "csp", name: "Cloud service provider", tiers: [] },
+      { id: "fp", name: "Fintech platform", tiers: [] },
+    ],
+  },
+];
+
+export function tiersOf(typeName: string): string[] {
+  for (const cat of CATEGORIES) {
+    const t = cat.types.find((x) => x.name === typeName);
+    if (t) return t.tiers;
+  }
+  return [];
+}
+
+export function catLabel(type: string, tier: string): string {
+  return type ? type + (tier ? " · " + tier : "") : "Category to confirm";
+}
+
 export const STATUS_TONE: Record<string, "ok" | "warn" | "bad" | "info" | "neu"> = {
   Verified: "ok",
   Accredited: "ok",
