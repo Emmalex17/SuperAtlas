@@ -6,12 +6,33 @@ function lockupHtml(dark: boolean, size: number): string {
   return `<span class="row gap8" style="gap:10px"><svg width="${size}" height="${size}" viewBox="37 32 54 64" aria-label="SuperAtlas" role="img"><path d="M64 35L87 43.5V62C87 76.5 77.5 87 64 93C50.5 87 41 76.5 41 62V43.5L64 35Z" fill="${dark ? "#1B2056" : "#ffffff"}"/><path d="M64 77.5C72 77.5 78.5 71 78.5 63C78.5 55 72 48.5 64 48.5C56 48.5 49.5 55 49.5 63C49.5 71 56 77.5 64 77.5Z" stroke="${dark ? "#fff" : "#1B2056"}" stroke-width="3" fill="none"/><path d="M64 77.5C67.6 77.5 70.5 71 70.5 63C70.5 55 67.6 48.5 64 48.5C60.4 48.5 57.5 55 57.5 63C57.5 71 60.4 77.5 64 77.5Z" stroke="${dark ? "#fff" : "#1B2056"}" stroke-width="2.2" fill="none"/><path d="M49.5 63H62" stroke="${dark ? "#fff" : "#1B2056"}" stroke-width="2.2"/><path d="M59 64.5L64.5 70L77 56" stroke="#DBA94D" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg><span style="font:600 ${Math.round(size * 0.72)}px/1 var(--sans);letter-spacing:-.01em;color:${dark ? "#fff" : "var(--brand-700)"}">Super<span style="font-family:var(--serif);font-weight:700">Atlas</span></span></span>`;
 }
 
+const NAV_LINKS: [string, string][] = [
+  ["/#s-how", "Product"],
+  ["/#s-questions", "For regulators"],
+  ["/#s-audiences", "For organisations"],
+  ["/#s-audiences", "For assessors"],
+  ["/#s-security", "Security"],
+];
+
 export function mkNav(): string {
-  return `<header class="mk-nav"><div class="wrap">
-    <a href="/" aria-label="SuperAtlas home"><span class="row gap8" style="gap:10px">${BRAND_SVG}<span style="font:600 22px/1 var(--sans);letter-spacing:-.01em;color:#fff">Super<span style="font-family:var(--serif);font-weight:700">Atlas</span></span></span></a>
-    <nav class="links" aria-label="Site"><a href="/#s-how">Product</a><a href="/#s-questions">For regulators</a><a href="/#s-audiences">For organisations</a><a href="/#s-audiences">For assessors</a><a href="/#s-security">Security</a></nav>
-    <a href="/signin" class="signin">Sign in</a>${btnA("Book a demo", { v: "white", href: "/demo", ir: "arrow-right", testId: "nav-demo" })}
-  </div></header>`;
+  return `<header class="mk-nav">
+    <input type="checkbox" id="mk-nav-toggle" class="mk-nav-cb" aria-hidden="true">
+    <div class="wrap">
+      <a href="/" aria-label="SuperAtlas home"><span class="row gap8" style="gap:10px">${BRAND_SVG}<span style="font:600 22px/1 var(--sans);letter-spacing:-.01em;color:#fff">Super<span style="font-family:var(--serif);font-weight:700">Atlas</span></span></span></a>
+      <nav class="links" aria-label="Site">${NAV_LINKS.map(([href, label]) => `<a href="${href}">${label}</a>`).join("")}</nav>
+      <a href="/signin" class="signin">Sign in</a>${btnA("Book a demo", { v: "white", href: "/demo", ir: "arrow-right", testId: "nav-demo" })}
+      <label for="mk-nav-toggle" class="mk-burger" aria-label="Open menu" role="button" tabindex="0">
+        <span></span><span></span><span></span>
+      </label>
+    </div>
+    <div class="mk-mobile-panel">
+      <nav aria-label="Site">${NAV_LINKS.map(([href, label]) => `<a href="${href}">${label}</a>`).join("")}</nav>
+      <div class="mk-mobile-acts">
+        <a href="/signin" class="mk-mobile-signin">Sign in</a>
+        ${btnA("Book a demo", { v: "white", href: "/demo", ir: "arrow-right", block: true })}
+      </div>
+    </div>
+  </header>`;
 }
 
 export function mkFooter(): string {
