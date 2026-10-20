@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { Fragment, type ReactNode } from "react";
 import { Icon, type IconName } from "@/lib/icons";
 
 export function LogoMark({ size = 28, variant = "navy" }: { size?: number; variant?: "navy" | "white" }) {
@@ -156,4 +156,23 @@ export function PageHead({ over, title, sub, actions }: { over?: string; title: 
       {actions ? <div className="row wrap">{actions}</div> : null}
     </div>
   );
+}
+
+export function Kv({ pairs }: { pairs: [string, ReactNode][] }) {
+  return (
+    <div className="kv">
+      {pairs.map(([k, v]) => (
+        <Fragment key={k}>
+          <div>{k}</div>
+          <div>{v}</div>
+        </Fragment>
+      ))}
+    </div>
+  );
+}
+
+export function TrendChip({ delta }: { delta: number }) {
+  if (delta > 0) return <Chip tone="ok" icon="trend-up">+{delta} pts</Chip>;
+  if (delta < 0) return <Chip tone="bad" icon="trend-down">{delta} pts</Chip>;
+  return <Chip tone="neu" icon="minus">0 pts</Chip>;
 }
