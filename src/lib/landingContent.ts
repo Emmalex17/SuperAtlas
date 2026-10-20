@@ -1,13 +1,14 @@
-import { ic, tile, btnA, esc } from "./markup";
-import { lineChart, miniDash, AVG, LO, HI } from "./charts";
+import { ic, btnA } from "./markup";
 
-function card(i: string, t: string, p: string, cls = ""): string {
-  return `<div class="mcard ${cls}"><span class="tl">${ic(i)}</span><b>${esc(t)}</b><p>${esc(p)}</p></div>`;
+const BRAND_SVG = `<svg width="30" height="30" viewBox="37 32 54 64" aria-label="SuperAtlas" role="img"><path d="M64 35L87 43.5V62C87 76.5 77.5 87 64 93C50.5 87 41 76.5 41 62V43.5L64 35Z" fill="#ffffff"/><path d="M64 77.5C72 77.5 78.5 71 78.5 63C78.5 55 72 48.5 64 48.5C56 48.5 49.5 55 49.5 63C49.5 71 56 77.5 64 77.5Z" stroke="#1B2056" stroke-width="3" fill="none"/><path d="M64 77.5C67.6 77.5 70.5 71 70.5 63C70.5 55 67.6 48.5 64 48.5C60.4 48.5 57.5 55 57.5 63C57.5 71 60.4 77.5 64 77.5Z" stroke="#1B2056" stroke-width="2.2" fill="none"/><path d="M49.5 63H62" stroke="#1B2056" stroke-width="2.2"/><path d="M59 64.5L64.5 70L77 56" stroke="#DBA94D" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>`;
+
+function lockupHtml(dark: boolean, size: number): string {
+  return `<span class="row gap8" style="gap:10px"><svg width="${size}" height="${size}" viewBox="37 32 54 64" aria-label="SuperAtlas" role="img"><path d="M64 35L87 43.5V62C87 76.5 77.5 87 64 93C50.5 87 41 76.5 41 62V43.5L64 35Z" fill="${dark ? "#1B2056" : "#ffffff"}"/><path d="M64 77.5C72 77.5 78.5 71 78.5 63C78.5 55 72 48.5 64 48.5C56 48.5 49.5 55 49.5 63C49.5 71 56 77.5 64 77.5Z" stroke="${dark ? "#fff" : "#1B2056"}" stroke-width="3" fill="none"/><path d="M64 77.5C67.6 77.5 70.5 71 70.5 63C70.5 55 67.6 48.5 64 48.5C60.4 48.5 57.5 55 57.5 63C57.5 71 60.4 77.5 64 77.5Z" stroke="${dark ? "#fff" : "#1B2056"}" stroke-width="2.2" fill="none"/><path d="M49.5 63H62" stroke="${dark ? "#fff" : "#1B2056"}" stroke-width="2.2"/><path d="M59 64.5L64.5 70L77 56" stroke="#DBA94D" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg><span style="font:600 ${Math.round(size * 0.72)}px/1 var(--sans);letter-spacing:-.01em;color:${dark ? "#fff" : "var(--brand-700)"}">Super<span style="font-family:var(--serif);font-weight:700">Atlas</span></span></span>`;
 }
 
 export function mkNav(): string {
   return `<header class="mk-nav"><div class="wrap">
-    <a href="/" aria-label="SuperAtlas home"><span class="row gap8" style="gap:10px"><svg width="30" height="30" viewBox="37 32 54 64" aria-label="SuperAtlas" role="img"><path d="M64 35L87 43.5V62C87 76.5 77.5 87 64 93C50.5 87 41 76.5 41 62V43.5L64 35Z" fill="#ffffff"/><path d="M64 77.5C72 77.5 78.5 71 78.5 63C78.5 55 72 48.5 64 48.5C56 48.5 49.5 55 49.5 63C49.5 71 56 77.5 64 77.5Z" stroke="#1B2056" stroke-width="3" fill="none"/><path d="M64 77.5C67.6 77.5 70.5 71 70.5 63C70.5 55 67.6 48.5 64 48.5C60.4 48.5 57.5 55 57.5 63C57.5 71 60.4 77.5 64 77.5Z" stroke="#1B2056" stroke-width="2.2" fill="none"/><path d="M49.5 63H62" stroke="#1B2056" stroke-width="2.2"/><path d="M59 64.5L64.5 70L77 56" stroke="#DBA94D" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg><span style="font:600 22px/1 var(--sans);letter-spacing:-.01em;color:#fff">Super<span style="font-family:var(--serif);font-weight:700">Atlas</span></span></span></a>
+    <a href="/" aria-label="SuperAtlas home"><span class="row gap8" style="gap:10px">${BRAND_SVG}<span style="font:600 22px/1 var(--sans);letter-spacing:-.01em;color:#fff">Super<span style="font-family:var(--serif);font-weight:700">Atlas</span></span></span></a>
     <nav class="links" aria-label="Site"><a href="/#s-how">Product</a><a href="/#s-questions">For regulators</a><a href="/#s-audiences">For organisations</a><a href="/#s-audiences">For assessors</a><a href="/#s-security">Security</a></nav>
     <a href="/signin" class="signin">Sign in</a>${btnA("Book a demo", { v: "white", href: "/demo", ir: "arrow-right", testId: "nav-demo" })}
   </div></header>`;
@@ -15,131 +16,130 @@ export function mkNav(): string {
 
 export function mkFooter(): string {
   return `<footer class="mk-foot"><div class="wrap" style="max-width:1200px;margin:0 auto"><div class="cols">
-    <div class="col gap16"><span class="row gap8" style="gap:10px"><svg width="30" height="30" viewBox="37 32 54 64" aria-label="SuperAtlas" role="img"><path d="M64 35L87 43.5V62C87 76.5 77.5 87 64 93C50.5 87 41 76.5 41 62V43.5L64 35Z" fill="#ffffff"/><path d="M64 77.5C72 77.5 78.5 71 78.5 63C78.5 55 72 48.5 64 48.5C56 48.5 49.5 55 49.5 63C49.5 71 56 77.5 64 77.5Z" stroke="#1B2056" stroke-width="3" fill="none"/><path d="M64 77.5C67.6 77.5 70.5 71 70.5 63C70.5 55 67.6 48.5 64 48.5C60.4 48.5 57.5 55 57.5 63C57.5 71 60.4 77.5 64 77.5Z" stroke="#1B2056" stroke-width="2.2" fill="none"/><path d="M49.5 63H62" stroke="#1B2056" stroke-width="2.2"/><path d="M59 64.5L64.5 70L77 56" stroke="#DBA94D" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg><span style="font:600 22px/1 var(--sans);letter-spacing:-.01em;color:#fff">Super<span style="font-family:var(--serif);font-weight:700">Atlas</span></span></span><p style="color:var(--brand-200);font-size:13px;line-height:20px;max-width:34ch">Supervisory technology for regulators: returns, evidence, assessments and findings in one view.</p></div>
+    <div class="col gap16"><span class="row gap8" style="gap:10px">${BRAND_SVG}<span style="font:600 22px/1 var(--sans);letter-spacing:-.01em;color:#fff">Super<span style="font-family:var(--serif);font-weight:700">Atlas</span></span></span><p style="color:var(--brand-200);font-size:13px;line-height:20px;max-width:34ch">Supervisory technology for regulators: returns, evidence, assessments and findings in one view.</p></div>
     <div><h4>Product</h4><a href="/#s-how">Overview</a><a href="/#s-strength">Compliance strength</a><a href="/#s-configured">Scoring schemes</a><a href="/#s-configured">White-label</a></div>
     <div><h4>Who it's for</h4><a href="/#s-questions">Regulators</a><a href="/#s-audiences">Organisations</a><a href="/#s-audiences">Assurance firms</a></div>
     <div><h4>Company</h4><a href="/">About RegTech365</a><a href="/#s-security">Security</a><a href="/demo">Contact</a><a href="/demo">Book a demo</a></div>
   </div><div class="base"><span>© 2026 RegTech365 · SuperAtlas is a RegTech365 product</span><span>Privacy · Terms</span></div></div></footer>`;
 }
 
+export function heroCopyHtml(): string {
+  return `<div class="copy"><span class="badge">${ic("seal-check")}Supervisory technology for regulators</span>
+    <h1 id="hero-h">See every organisation you supervise, and the evidence behind it.</h1>
+    <p class="lead">SuperAtlas brings regulatory returns, evidence, assessments and findings into one supervisory view, so you know who is compliant, where the gaps are, and where to act next.</p>
+    <div class="ctas">${btnA("Book a demo", { href: "/demo", ir: "arrow-right", testId: "hero-demo" })}${btnA("Start a proof of value", { v: "ghost-light", href: "/pilot" })}</div>
+    <p class="small-line">Configured to your framework · Your branding · Your data stays where you choose</p></div>`;
+}
+
+export function sectionProof(): string {
+  return `<section class="sa-proof"><div class="sa-shell sa-proof-inner"><span class="sa-proof-lab">One platform for</span><div class="sa-proof-divider"></div><span>REGULATORY RETURNS</span><span>EVIDENCE &amp; ASSESSMENTS</span><span>FINDINGS &amp; REMEDIATION</span><span>EXECUTIVE INTELLIGENCE</span></div></section>`;
+}
+
+export function sectionIntro(): string {
+  return `<section class="sa-section sa-intro" id="s-questions"><div class="sa-shell"><div class="sa-intro-grid"><div><div class="sa-kicker">FROM FRAGMENTED INFORMATION TO COMPLETE CLARITY</div><h2>Regulation moves faster when everything connects.</h2></div><div class="sa-intro-aside">See beyond submitted reports. Bring obligations, evidence, assessments and supervisory action into a shared system of record, giving every decision the context it deserves.<div class="sa-arrowline">Built for the way regulators actually work</div></div></div><div class="sa-question-grid"><div class="sa-qtile"><span class="sa-qicon">01</span><h3>Who is compliant?</h3><p>Understand assessed compliance across every organisation and applicable requirement.</p></div><div class="sa-qtile"><span class="sa-qicon">02</span><h3>Where are the gaps?</h3><p>Pinpoint material weaknesses, recurring findings and areas that need attention.</p></div><div class="sa-qtile"><span class="sa-qicon">03</span><h3>What proves it?</h3><p>Trace every reported position back to the supporting evidence and assessment.</p></div><div class="sa-qtile"><span class="sa-qicon">04</span><h3>What happens next?</h3><p>Prioritise interventions, assign corrective actions and track progress to closure.</p></div></div></div></section>`;
+}
+
+export function storyFeature1Html(): string {
+  return `<div class="sa-story"><div class="sa-kicker">01 / SUPERVISORY INTELLIGENCE</div><h2>See the whole picture. Find the detail that matters.</h2><p>Move from a portfolio-wide view to an individual organisation, regulation or requirement. Spot trends and know where to direct supervisory attention.</p><div class="sa-checkline"><span>✓</span> Portfolio to requirement visibility</div><div class="sa-checkline"><span>✓</span> Clear trends and compliance comparisons</div><div class="sa-checkline"><span>✓</span> Risk-informed supervisory priorities</div><a href="#s-how" class="sa-link">Explore how supervision works <span>↗</span></a></div>`;
+}
+
+export function storyFeature2Html(): string {
+  return `<div class="sa-story"><div class="sa-kicker">02 / EVIDENCE-LED SUPERVISION</div><h2>Every compliance claim. Backed by evidence.</h2><p>Review responses, supporting files, assessor observations and supervisory decisions within a connected workspace, with no chasing of documents across inboxes.</p><div class="sa-checkline"><span>✓</span> Evidence attached to specific requirements</div><div class="sa-checkline"><span>✓</span> Clear version and review history</div><div class="sa-checkline"><span>✓</span> A traceable supervisory decision trail</div></div>`;
+}
+
+export function sectionFindings(): string {
+  return `<section class="sa-section sa-feature sa-feature-mint" id="s-findings"><div class="sa-shell sa-split"><div class="sa-story"><div class="sa-kicker">03 / ACTION &amp; ACCOUNTABILITY</div><h2>Don't just find the gaps. Close them.</h2><p>Turn supervisory findings into clear action. Assign remediation owners, set deadlines and keep a connected record from issue to verified resolution.</p><div class="sa-checkline"><span>✓</span> Findings tied to assessments and evidence</div><div class="sa-checkline"><span>✓</span> Owners, actions and due dates in one view</div><div class="sa-checkline"><span>✓</span> Follow through from discovery to closure</div></div><div class="sa-rem-scene"><div class="sa-rem-board"><div class="sa-rem-top"><div><small>FINDINGS &amp; REMEDIATION</small><h3>From identified to resolved</h3></div><span>All organisations ⌄</span></div><div class="sa-rem-columns"><div><div class="sa-rem-colhead">Open <span>04</span></div><article><span class="sa-rem-priority">● HIGH PRIORITY</span><b>Access review overdue</b><p>Identity &amp; access controls</p><small>Due 24 Oct</small></article><article><span class="sa-rem-priority">● MEDIUM PRIORITY</span><b>Policy documentation gap</b><p>Governance controls</p></article></div><div><div class="sa-rem-colhead">In progress <span>06</span></div><article><span class="sa-rem-priority amber">● IN REMEDIATION</span><b>Continuity plan update</b><p>Business continuity</p><div class="sa-progress"><i></i></div><small>Owner assigned</small></article></div><div><div class="sa-rem-colhead">Verified <span>12</span></div><article><span class="sa-rem-priority green">● VERIFIED</span><b>Evidence review complete</b><p>Risk management</p><small>Closed with evidence ✓</small></article></div></div></div></div></div></section>`;
+}
+
+export function sectionCapabilities(): string {
+  const caps: [string, string, string][] = [
+    ["tray", "Regulatory reporting", "Monitor submissions, deadlines, exceptions and reporting history."],
+    ["gauge", "Compliance monitoring", "Track organisations against obligations and supervisory requirements."],
+    ["files", "Evidence management", "Collect, review and connect supporting evidence to requirements."],
+    ["file-magnifying-glass", "Audits & assessments", "Plan assessments, document outcomes and review findings."],
+    ["scales", "Risk-based supervision", "Direct attention to gaps, emerging risks and overdue actions."],
+    ["flag", "Findings & remediation", "Assign corrective action and follow progress through closure."],
+    ["clock-counter-clockwise", "Regulatory history", "Keep a connected record of submissions, assessments and decisions."],
+    ["chart-bar", "Management intelligence", "Understand trends and compare performance across the portfolio."],
+  ];
+  return `<section class="sa-section sa-capabilities" id="s-capabilities"><div class="sa-shell"><div class="sa-center"><div class="sa-kicker">ONE CONNECTED PLATFORM</div><h2>All your supervisory work, working together.</h2><p>Eight essential capabilities, connected in one place, so your team spends less time navigating systems and more time making informed decisions.</p></div><div class="sa-cap-grid">${caps
+    .map(([i, t, p]) => `<div class="sa-cap"><div class="sa-cap-ico">${ic(i)}</div><h3>${t}</h3><p>${p}</p></div>`)
+    .join("")}</div></div></section>`;
+}
+
+export function sectionFramework(): string {
+  return `<section class="sa-section sa-framework" id="s-configured"><div class="sa-shell"><div class="sa-split"><div class="sa-story"><div class="sa-kicker">BUILT AROUND YOUR MANDATE</div><h2>Your rules. Your workflows. Your SuperAtlas.</h2><p>There is no one-size-fits-all approach to supervision. Configure SuperAtlas around your regulatory framework, reporting cycles, scoring method and operating model, rather than changing the way your institution works.</p><div class="sa-framework-tags"><span>Regulations &amp; standards</span><span>Scoring schemes</span><span>Approval workflows</span><span>Regulator branding</span></div></div><div class="sa-theme-scene"><div class="sa-theme-main"><div class="sa-theme-window"><div class="sa-theme-sidebar"><div class="sa-theme-logo">${lockupHtml(true, 18)}</div><span>▣ Overview</span><span>▤ Organisations</span><span>▥ Assessments</span><span>◷ Findings</span></div><div class="sa-theme-content"><small>SUPERVISORY WORKSPACE</small><h3>Configured for your authority</h3><div class="sa-theme-numbers"><div>96<small>Organisations</small></div><div>18<small>Open reviews</small></div><div>9<small>Due this week</small></div></div><div class="sa-theme-bars"><i></i><i></i><i></i><i></i></div></div></div></div><div class="sa-theme-switch"><span class="sa-theme-color purple"></span><span class="sa-theme-color green"></span><span class="sa-theme-color blue"></span><b>One platform. Your identity.</b></div></div></div></div></section>`;
+}
+
+export function sectionAudiences(): string {
+  const roles: [string, string, string, string, string][] = [
+    ["◎", "FOR REGULATORS", "Confidence in every decision.", "See your full supervised landscape, identify risk, commission assessments and drive action.", "Explore regulatory oversight"],
+    ["▦", "FOR REGULATED ORGANISATIONS", "Clarity in every obligation.", "Know what is required, submit returns and supporting evidence, and stay ahead of deadlines.", "Access your workspace"],
+    ["◈", "FOR ASSESSORS", "Evidence for every assessment.", "Review submissions, record findings and keep assessment outcomes organised.", "Explore assessor access"],
+  ];
+  const hrefs = ["/demo", "/signin", "/signin"];
+  return `<section class="sa-section sa-audiences" id="s-audiences"><div class="sa-shell"><div class="sa-center"><div class="sa-kicker">CONNECTED FROM END TO END</div><h2>One shared view. A better way to work together.</h2><p>SuperAtlas connects the people who set requirements, provide evidence and independently assess compliance.</p></div><div class="sa-role-grid">${roles
+    .map(([sym, label, h, p, cta], i) => `<div class="sa-role"><span class="sa-role-symbol">${sym}</span><div class="sa-role-label">${label}</div><h3>${h}</h3><p>${p}</p><a href="${hrefs[i]}">${cta} ↗</a></div>`)
+    .join("")}</div></div></section>`;
+}
+
+export function sectionProcess(): string {
+  const steps: [string, string][] = [
+    ["Define", "Structure your requirements, reporting obligations and supervisory framework."],
+    ["Collect", "Invite organisations to submit returns, responses and supporting evidence."],
+    ["Assess", "Review evidence, carry out assessments and document supervisory findings."],
+    ["Act", "Understand the results, prioritise risk and track remediation over time."],
+  ];
+  return `<section class="sa-section sa-process" id="s-how"><div class="sa-shell"><div class="sa-center"><div class="sa-kicker">HOW SUPERATLAS WORKS</div><h2>From obligations to insight, in four clear steps.</h2><p>A continuous supervisory process that keeps requirements, responses, assessments and decisions connected.</p></div><div class="sa-steps">${steps
+    .map(([t, p], i) => `<div><b>0${i + 1}</b><h3>${t}</h3><p>${p}</p></div>`)
+    .join("")}</div></div></section>`;
+}
+
+export function sectionSecurity(): string {
+  const items: [string, string, string][] = [
+    ["⌁", "Role-based access", "Align access with responsibilities across supervision teams."],
+    ["◷", "Audit-ready history", "Keep submissions, reviews and decisions connected in a clear record."],
+    ["▤", "Data governance", "Plan hosting and access requirements for your institution."],
+    ["◇", "Controlled workspaces", "Support structured engagement across supervised entities."],
+  ];
+  return `<section class="sa-section sa-security" id="s-security"><div class="sa-shell sa-split"><div class="sa-story"><div class="sa-kicker">GOVERNANCE BY DESIGN</div><h2>Built for the responsibilities of supervision.</h2><p>Regulatory work demands accountability, appropriate access and a defensible history of decisions. SuperAtlas is designed to help institutions bring governance into everyday workflows.</p><p class="sa-safety-note">Specific security controls, hosting arrangements and integrations are confirmed during technical scoping.</p></div><div class="sa-security-grid">${items
+    .map(([sym, t, p]) => `<div><span>${sym}</span><h3>${t}</h3><p>${p}</p></div>`)
+    .join("")}</div></div></section>`;
+}
+
+export function sectionPov(): string {
+  const steps: [string, string][] = [
+    ["Configure your framework", "Map a regulation or supervisory process into the platform."],
+    ["Run a real use case", "Collect returns and evidence, review and assess outcomes."],
+    ["Evaluate the evidence", "Review visibility, findings, usability and priorities for rollout."],
+  ];
+  return `<section class="sa-section sa-pov"><div class="sa-shell sa-split"><div class="sa-story"><div class="sa-kicker">START WITH A PROOF OF VALUE</div><h2>See what better supervision looks like on your own terms.</h2><p>Start with one regulatory use case and a selected group of organisations. Test your actual workflow, evaluate the results and make a considered decision about broader deployment.</p><div class="sa-pov-cta">${btnA("Start a proof of value", { href: "/pilot", ir: "arrow-right" })}</div></div><div class="sa-pov-list">${steps
+    .map(([t, p], i) => `<div><span>0${i + 1}</span><div><h3>${t}</h3><p>${p}</p></div></div>`)
+    .join("")}</div></div></section>`;
+}
+
+export function sectionFaq(): string {
+  const qs: [string, string][] = [
+    ["Can SuperAtlas support our existing framework?", "Yes. SuperAtlas is designed to be configured around an institution's regulations, reporting requirements, assessment processes and supervisory methodology."],
+    ["Is SuperAtlas only for one regulator or sector?", "No. SuperAtlas supports regulatory use cases across sectors. The applicable regulations, processes and operating model are configured for each institution."],
+    ["How does the proof of value work?", "We work with your team to select a supervisory use case, configure the framework and involve a selected group of organisations so you can evaluate the results."],
+    ["What about data hosting and security?", "Specific hosting, data residency, security and integration requirements are reviewed with your technical and governance teams during deployment planning."],
+    ["How is SuperAtlas priced?", "Commercial terms are discussed based on institutional scope, deployment requirements and the proposed solution configuration."],
+  ];
+  return `<section class="sa-section sa-faq" id="s-faq"><div class="sa-shell sa-split"><div class="sa-story"><div class="sa-kicker">FREQUENTLY ASKED QUESTIONS</div><h2>Good questions deserve clear answers.</h2><p>Explore how SuperAtlas fits existing regulatory environments and supervisory processes.</p></div><div class="sa-faq-list">${qs
+    .map(([q, a], i) => `<details ${i === 0 ? "open" : ""}><summary>${q}<span>+</span></summary><p>${a}</p></details>`)
+    .join("")}</div></div></section>`;
+}
+
+export function sectionFinal(): string {
+  return `<section class="sa-final"><div class="sa-shell"><div class="sa-final-inner"><div><div class="sa-kicker">MAKE SUPERVISION MORE CONNECTED</div><h2>See every organisation.<br>Act with confidence.</h2><p>Discover SuperAtlas in the context of your supervisory priorities.</p></div><div class="sa-final-actions">${btnA("Book a demo", { v: "white", href: "/demo", ir: "arrow-right" })}${btnA("Start a proof of value", { v: "ghost-light", href: "/pilot" })}</div></div></div></section>`;
+}
+
+export function tailSectionsHtml(): string {
+  return sectionFindings() + sectionCapabilities() + sectionFramework() + sectionAudiences() + sectionProcess() + sectionSecurity() + sectionPov() + sectionFaq() + sectionFinal();
+}
+
+/** @deprecated kept only so older imports don't break; the page is now composed in app/page.tsx from the section functions above */
 export function landingPageHtml(): string {
-  return `<div class="mk">${mkNav()}
-    <!-- Hero -->
-    <section class="band hero" aria-labelledby="hero-h"><span class="glow g1"></span><span class="glow g2"></span><span class="glow g3"></span><div class="wrap">
-      <div class="copy"><span class="badge">${ic("seal-check")}Supervisory technology for regulators</span>
-        <h1 id="hero-h">See every organisation you supervise, and the evidence behind it.</h1>
-        <p class="lead">SuperAtlas brings regulatory returns, evidence, assessments and findings into one supervisory view, so you know who is compliant, where the gaps are, and where to act next.</p>
-        <div class="ctas">${btnA("Book a demo", { href: "/demo", ir: "arrow-right", testId: "hero-demo" })}${btnA("Start a proof of value", { v: "ghost-light", href: "/pilot" })}</div>
-        <p class="small-line">Configured to your framework · Your branding · Your data stays where you choose</p></div>
-      <div class="hero-stage">
-        <div class="hero-chart"><div class="row top"><div class="grow"><b style="font-size:16px">Compliance strength · all organisations</b><div class="cap muted" style="margin-top:2px">Average score per quarter · band = middle 50% of organisations · Information Security Regulation 2026</div></div><div style="text-align:right"><div class="serif" style="font:700 30px/34px var(--serif)">78</div><div class="cap" style="color:var(--ok-fg)">+6 pts vs last quarter</div></div></div>
-          <div style="margin-top:12px">${lineChart({ w: 600, h: 230, series: [{ vals: AVG, col: "#4f46e5" }], band: [LO, HI] })}</div>
-          <div class="row cap muted" style="gap:16px;margin-top:6px"><span class="row gap6"><span class="dot" style="background:#4f46e5"></span>Average</span><span class="row gap6"><span class="dot" style="background:#c7d2fe"></span>Middle 50%</span></div></div>
-        <div class="hero-float ws-stat" style="left:0;top:150px;width:232px"><div class="lab">${tile("chart-line-up", "", "sm")}Compliance strength</div><div class="num">78</div><span class="trend up">${ic("trend-up")}6 pts this quarter</span><div class="cap muted" style="margin-top:10px">Portfolio average · 42 organisations</div></div>
-        <div class="hero-float ai-card" style="right:-40px;top:-50px;width:300px"><div class="row between" style="flex-wrap:nowrap"><span class="tagl" style="white-space:nowrap">${ic("sparkle")}Suggested requirement</span><span class="chip ok" style="height:20px;font-size:11px">High confidence</span></div><div class="strong" style="margin-top:8px;font-size:14px;line-height:20px;font-weight:600">Test disaster recovery at least once every 12 months</div><blockquote>"4.2 (a) A licensee shall test its disaster-recovery arrangements at least once in every twelve-month period…"</blockquote><div class="cap muted" style="margin-top:8px">Source: Information-Security-Regulation-2026.pdf · clause 4.2(a)</div><div class="row gap4" style="margin-top:10px">${["Accept", "Edit", "Split", "Reject"].map((l, i) => `<span class="btn btn-${i ? (i === 1 ? "secondary" : "tertiary") : "primary"} btn-sm" style="box-shadow:none;height:28px;padding:0 10px;font-size:12px">${l}</span>`).join("")}</div></div>
-        <div class="hero-float ws-stat" style="right:0;top:265px;width:232px"><div class="lab">${tile("flag", "", "sm")}Open findings</div><div class="num">23</div><span class="trend down">${ic("trend-down")}5 more than last quarter</span><div class="cap muted" style="margin-top:10px">9 high severity · 4 organisations</div></div>
-      </div></div></section>
-    <!-- Trust strip -->
-    <section class="band b-white trust"><div class="wrap"><div class="t">Built by RegTech365 · Regulatory technology in use across financial-sector supervision</div><div class="chips">${["Regulatory reporting", "Compliance monitoring", "Evidence management", "Audits & assessments", "Findings & remediation", "Risk-based supervision"].map((x) => `<span>${x}</span>`).join("")}</div></div></section>
-    <!-- Questions -->
-    <section class="band b-canvas" id="s-questions"><div class="wrap"><div class="head"><div class="eyebrow">The supervisory questions</div><h2 class="mk-h2">Answer the questions that matter, with evidence</h2></div>
-      <div class="cgrid c3">${[
-        ["check-circle", "Which organisations are compliant?", "A compliance-strength score per organisation and regulation, based on assessed outcomes, not self-declaration."],
-        ["warning", "Which have material gaps?", "Section-level scores and requirement history show exactly where the gaps are."],
-        ["files", "What evidence supports their position?", "Every answer links to its evidence, with file hashes, versions and who reviewed it."],
-        ["flag", "Which findings remain unresolved?", "Findings and corrective actions are tracked to verified closure, with ageing and owners."],
-        ["gauge", "Who presents heightened risk?", "Biggest drops, overdue actions and low coverage surface automatically."],
-        ["target", "Where should we direct resources?", "A supervisory calendar and queue focus your team on the organisations that need it."],
-      ]
-        .map((x) => card(x[0], x[1], x[2]))
-        .join("")}</div></div></section>
-    <!-- How it works -->
-    <section class="band b-white" id="s-how"><div class="wrap"><div class="head"><div class="eyebrow">How it works</div><h2 class="mk-h2">From regulation to supervisory insight in four steps</h2><p class="lead">The same flow for any regulation, standard or guideline. No custom build per framework.</p></div>
-      <div class="cgrid c4">${[
-        ["upload-simple", "Upload your regulation", "AI suggests requirements with their source clauses; your team reviews and publishes."],
-        ["chat-circle-dots", "Organisations respond", "Yes, No or Not applicable, with evidence and comments, on one consistent form."],
-        ["clipboard-text", "Assessors record outcomes", "Licensed assurance firms review the evidence and conclude on your scoring scheme."],
-        ["chart-line-up", "You see and act", "Compliance strength over time, findings and corrective actions through to verified closure."],
-      ]
-        .map(([i, t, p], n) => `<div class="mcard soft"><div class="row"><span class="tl">${ic(i)}</span><span class="num">0${n + 1}</span></div><b>${t}</b><p>${p}</p></div>`)
-        .join("")}</div></div></section>
-    <!-- Capabilities -->
-    <section class="band b-canvas"><div class="wrap"><div class="head"><div class="eyebrow">Capabilities</div><h2 class="mk-h2">Everything a supervisory team needs, in one place</h2></div>
-      <div class="cgrid c4">${[
-        ["tray", "Regulatory reporting oversight", "Periods, submissions, outstanding returns and receipts in one view."],
-        ["gauge", "Compliance monitoring", "A consolidated position against every applicable regulation and standard."],
-        ["files", "Evidence-based supervision", "Evidence linked to each requirement, reusable, versioned and verifiable."],
-        ["file-magnifying-glass", "Audits & assessments", "Engagements with licensed assurance firms, outcomes and reports."],
-        ["scales", "Risk-based supervision", "Gaps, recurring findings and overdue actions focus your attention."],
-        ["flag", "Findings & remediation", "Findings, corrective-action plans and deadlines tracked to closure."],
-        ["clock-counter-clockwise", "Regulatory history", "A continuous record of every submission, assessment and decision."],
-        ["chart-bar", "Management intelligence", "Trends and comparisons across the whole supervised population."],
-      ]
-        .map((x) => card(x[0], x[1], x[2], "sm"))
-        .join("")}</div></div></section>
-    <!-- Compliance strength showcase -->
-    <section class="band showcase" id="s-strength"><div class="wrap grid2">
-      <div><div class="eyebrow">Compliance strength</div><h2 class="mk-h2">Watch compliance strengthen, or slip, over time</h2><p class="lead">A score from 0 to 100 for every organisation and regulation, based only on assessed outcomes. Drill from the whole portfolio down to a single requirement's history.</p>
-        <div class="crumbs-chips"><span>Portfolio</span>${ic("caret-right")}<span>Organisation</span>${ic("caret-right")}<span>Regulation</span>${ic("caret-right")}<span class="on">Requirement</span></div>
-        <div class="checks">${["Scores comparable across regulations with different scoring schemes", "Coverage and open findings always shown alongside", "Method set by the regulator, visible on every chart"].map((t) => `<div><span class="ck">${ic("check")}</span>${t}</div>`).join("")}</div></div>
-      <div style="position:relative;padding-bottom:40px"><div class="chart-card"><div class="row top"><div class="grow"><b style="font-size:15px">Compliance strength by regulation</b><div class="cap muted">Demo Hosting Ltd · per quarter · assessor outcomes only</div></div><div style="text-align:right"><div style="font:700 28px/32px var(--serif)">81</div><div class="cap" style="color:var(--ok-fg)">+3 pts vs last quarter</div></div></div>
-        <div style="margin-top:10px">${lineChart({ w: 560, h: 200, series: [{ vals: [62, 64, 66, 70, 73, 75, 77, 81], col: "#4f46e5" }, { vals: [70, 68, 72, 73, 74, 76, 78, 80], col: "#8651cd" }, { vals: [55, 58, 57, 60, 63, 61, 66, 69], col: "#63a9b9" }], marks: [{ i: 5, y: 26, label: "Finding issued", w: 88, tone: "bad" }, { i: 6, y: 46, label: "Assessment closed", w: 108, tone: "ok" }] })}</div>
-        <div class="row wrap cap muted" style="gap:14px;margin-top:6px"><span class="row gap6"><span class="dot" style="background:#4f46e5"></span>Information Security Reg. 2026 <b style="color:var(--text)">81</b></span><span class="row gap6"><span class="dot" style="background:#63a9b9"></span>Data Protection Reg. <b style="color:var(--text)">69</b></span></div></div>
-        <div class="sec-score"><b style="font-size:15px">Score by section</b>${[["Part 3 · Access control", 71, "#c97d24"], ["Part 4 · Business continuity", 55, "#c97d24"], ["Part 5 · Incident management", 84, "#1e7a46"]].map(([l, v, c]) => `<div class="r"><span class="grow">${l}</span><i style="background:${c}"></i><b class="tnum" style="width:22px;text-align:right">${v}</b></div>`).join("")}</div></div>
-    </div></section>
-    <!-- Configured to you -->
-    <section class="band b-white" id="s-configured"><div class="wrap"><div class="head"><div class="eyebrow">Configured to you</div><h2 class="mk-h2">Your framework, your branding, your way of supervising</h2><p class="lead">SuperAtlas adapts to the regulator, not the other way round.</p></div>
-      <div class="cgrid c4">${[
-        ["book-open-text", "Any regulation or standard", "Upload laws, regulations, guidelines and standards; they become requirements."],
-        ["sliders-horizontal", "Your scoring scheme", "4-point, maturity, pass/fail or satisfactory scales, set per regulation."],
-        ["sparkle", "Your branding", "Logo, colours and name across the app, emails, receipts and reports."],
-        ["list-checks", "Your workflow", "Reporting cycles, assessment programmes, approvals and roles."],
-      ]
-        .map((x) => card(x[0], x[1], x[2], "sm soft"))
-        .join("")}</div>
-      <div class="thumbs">${[["default", "SuperAtlas default"], ["forest", "Forest Supervisory Authority"], ["ocean", "Ocean Markets Commission"]].map(([k, n]) => `<div><div class="thumb" aria-label="${n} theme"><div class="inner">${miniDash(k as "default" | "forest" | "ocean")}</div></div><div class="thumb-cap">${n}</div></div>`).join("")}</div></div></section>
-    <!-- Audiences -->
-    <section class="band b-canvas" id="s-audiences"><div class="wrap"><div class="head"><div class="eyebrow">One platform, three roles</div><h2 class="mk-h2">Built for everyone in the supervision chain</h2></div>
-      <div class="cgrid c2">${[
-        ["buildings", "For regulated organisations", "One place for every obligation", ["See every obligation, due date and next step", "Answer Yes / No / Not applicable with evidence", "Reuse evidence across requirements and periods", "A receipt for every submission"], "Invited by your regulator? Sign in", "/signin"],
-        ["briefcase", "For assurance firms", "Structured engagements, clear reporting", ["Engagements and request lists in one workspace", "Review evidence and record outcomes on the regulator's scheme", "Draft findings and submit reports for acceptance", "Work across the organisations assigned to your firm"], "Join as an assessor", "/firm/apply"],
-      ]
-        .map(([i, w, h, li, a, g]) => `<div class="aud"><div class="who">${tile(i as string, "", "sm")}${w}</div><h3>${h}</h3><ul>${(li as string[]).map((x) => `<li><span class="checks" style="margin:0"><span class="ck">${ic("check")}</span></span>${x}</li>`).join("")}</ul><a href="${g}">${a}${ic("arrow-right")}</a></div>`)
-        .join("")}</div></div></section>
-    <!-- Security -->
-    <section class="band b-navy" id="s-security"><div class="wrap"><div class="head"><div class="eyebrow">Security & governance</div><h2 class="mk-h2">Built for institutions that are audited themselves</h2><p class="lead">Security details to be confirmed with engineering before publication.</p></div>
-      <div class="cgrid c3">${[
-        ["key", "Role-based access", "Every action is limited to the right role, workspace and organisation."],
-        ["clock-counter-clockwise", "Complete audit trail", "Every submission, decision and change is recorded with who, what and when."],
-        ["lock-simple", "Encryption", "Data encrypted in transit and at rest; evidence files hashed on upload."],
-        ["database", "Data residency options", "Host in the region your mandate requires."],
-        ["fingerprint", "Single sign-on", "Connect your identity provider; enforce multi-factor authentication."],
-        ["shield-check", "Separation of tenants", "Each regulator's data, branding and users are isolated."],
-      ]
-        .map(([i, t, p]) => `<div class="scard"><span class="tl">${ic(i)}</span><b>${t}</b><p>${p}</p></div>`)
-        .join("")}</div></div></section>
-    <!-- Proof of value -->
-    <section class="band b-white"><div class="wrap"><div class="head"><div class="eyebrow">Proof of value</div><h2 class="mk-h2">See it working on your own use case first</h2><p class="lead">Start with one supervisory use case and a selected group of organisations, then decide on wider rollout.</p></div>
-      <div class="cgrid c3">${[
-        ["Configure", "We map one regulation or standard, your workflow and branding into SuperAtlas."],
-        ["Run", "A selected group of organisations respond; assessors review; your team supervises."],
-        ["Decide", "Review results, compliance strength and feedback with your stakeholders."],
-      ]
-        .map(([t, p], n) => `<div class="mcard soft"><span class="numc">${n + 1}</span><b>${t}</b><p>${p}</p></div>`)
-        .join("")}</div>
-      <div style="text-align:center;margin-top:32px">${btnA("Start a proof of value", { v: "secondary", href: "/pilot", ir: "arrow-right" })}</div></div></section>
-    <!-- FAQ -->
-    <section class="band b-canvas"><div class="wrap"><div class="head"><div class="eyebrow">FAQ</div><h2 class="mk-h2">Questions we often hear</h2></div>
-      <div class="faq">${[
-        ["Can SuperAtlas work with our existing regulations and processes?", "Yes. You upload your own regulations and standards, choose a scoring scheme, and configure reporting cycles, assessment programmes and approvals. We configure the platform around your methodology rather than asking you to change it."],
-        ["Where is our data hosted?", "In the region your mandate requires. Each regulator's data is isolated from every other tenant."],
-        ["How are regulated organisations onboarded?", "You invite them one by one or from a spreadsheet, mapped to your categories. Organisations can also register and choose their category, and you verify them."],
-        ["Can assurance firms work on the platform?", "Yes. Firms apply for accreditation by type. Once accredited, they are assigned to organisations, record outcomes and submit reports for your acceptance."],
-        ["How is SuperAtlas priced?", "Pricing depends on the number of supervised organisations and modules. A proof of value comes first, so you can decide on evidence."],
-      ]
-        .map(([q, a], i) => `<details ${i === 0 ? "open" : ""}><summary>${q}<span class="minus">${ic("minus")}</span><span class="plus">${ic("plus")}</span></summary><p>${a}</p></details>`)
-        .join("")}</div></div></section>
-    <!-- Final CTA -->
-    <section class="band b-white final"><div class="wrap"><div class="box"><h2>Bring every supervised organisation into one view</h2><p>See SuperAtlas configured for a supervisory use case like yours.</p><div class="ctas">${btnA("Book a demo", { v: "white", href: "/demo", ir: "arrow-right" })}${btnA("Start a proof of value", { v: "ghost-light", href: "/pilot" })}</div></div></div></section>
-    ${mkFooter()}</div>`;
+  return `<div class="mk">${mkNav()}${sectionProof()}${sectionIntro()}${tailSectionsHtml()}${mkFooter()}</div>`;
 }

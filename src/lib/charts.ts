@@ -1,4 +1,78 @@
-import { ic } from "./markup";
+import { ic, esc } from "./markup";
+
+export const CH = {
+  ink: "var(--text)",
+  quiet: "var(--text-2)",
+  grid: "var(--border)",
+  brand: "var(--brand-500)",
+  prev: "#9094a3",
+  ok: "var(--ok-icon)",
+  warn: "var(--warn-icon)",
+  bad: "var(--bad-icon)",
+  ai: "var(--ai-solid)",
+  neu: "var(--neu-icon)",
+};
+
+type ChLineSeries = { name?: string; col: string; w?: number; dash?: boolean; dots?: boolean; pts: [number, number][]; end?: string };
+
+export function chLine(o: {
+  w?: number;
+  h?: number;
+  x: { min: number; max: number; ticks?: [number, string][] };
+  y: { min: number; max: number; ticks?: number[]; unit?: string };
+  series: ChLineSeries[];
+  refY?: { v: number; col?: string; label: string }[];
+  refX?: { v: number; col?: string; label: string }[];
+  label?: string;
+}): string {
+  const W = o.w || 560, H = o.h || 220, L = 44, R = 16, T = 22, B = 28;
+  const xs = o.x, ys = o.y;
+  const X = (v: number) => L + ((v - xs.min) / (xs.max - xs.min || 1)) * (W - L - R);
+  const Y = (v: number) => T + (1 - (v - ys.min) / (ys.max - ys.min || 1)) * (H - T - B);
+  const grid = (ys.ticks || [])
+    .map(
+      (v) =>
+        `<line x1="${L}" x2="${W - R}" y1="${Y(v)}" y2="${Y(v)}" stroke="${CH.grid}"/><text x="${L - 6}" y="${Y(v) + 4}" text-anchor="end" font-size="12.5" fill="${CH.quiet}">${v}${ys.unit || ""}</text>`
+    )
+    .join("");
+  const xt = (xs.ticks || [])
+    .map(([v, l]) => `<text x="${X(v)}" y="${H - 8}" text-anchor="middle" font-size="12.5" fill="${CH.quiet}">${esc(l)}</text>`)
+    .join("");
+  const refs =
+    (o.refY || [])
+      .map(
+        (r) =>
+          `<line x1="${L}" x2="${W - R}" y1="${Y(r.v)}" y2="${Y(r.v)}" stroke="${r.col || CH.warn}" stroke-dasharray="5 4" stroke-width="1.25"/><text x="${L + 6}" y="${Y(r.v) - 6}" font-size="12.5" font-weight="600" fill="${r.col || CH.warn}">${esc(r.label)}</text>`
+      )
+      .join("") +
+    (o.refX || [])
+      .map((r) => {
+        const nearEnd = X(r.v) > W - R - 50;
+        return `<line x1="${X(r.v)}" x2="${X(r.v)}" y1="${T}" y2="${H - B}" stroke="${r.col || CH.quiet}" stroke-dasharray="3 4"/><text x="${X(r.v) + (nearEnd ? -4 : 4)}" y="${T + 10}" text-anchor="${nearEnd ? "end" : "start"}" font-size="12.5" fill="${r.col || CH.quiet}">${esc(r.label)}</text>`;
+      })
+      .join("");
+  const lines = o.series
+    .map((s) => {
+      const d = s.pts.map((p, i) => `${i ? "L" : "M"}${X(p[0]).toFixed(1)} ${Y(p[1]).toFixed(1)}`).join("");
+      const last = s.pts[s.pts.length - 1];
+      return `<path d="${d}" fill="none" stroke="${s.col}" stroke-width="${s.w || 2.25}" ${s.dash ? 'stroke-dasharray="6 5"' : ""} stroke-linejoin="round"/>${
+        s.dots ? s.pts.map((p) => `<circle cx="${X(p[0])}" cy="${Y(p[1])}" r="3.5" fill="var(--surface)" stroke="${s.col}" stroke-width="2"/>`).join("") : ""
+      }${
+        last && s.end
+          ? (() => {
+              const near = X(last[0]) > W - R - 60;
+              return `<circle cx="${X(last[0])}" cy="${Y(last[1])}" r="4" fill="${s.col}"/><text x="${X(last[0]) + (near ? -8 : 7)}" y="${Y(last[1]) + (near ? -10 : 4)}" text-anchor="${near ? "end" : "start"}" font-size="13" font-weight="600" fill="${s.col}">${esc(s.end)}</text>`;
+            })()
+          : ""
+      }`;
+    })
+    .join("");
+  const key =
+    o.series.length > 1 || (o.refY || []).length
+      ? `<div class="ch-key">${o.series.map((s) => `<span><i style="background:${s.col};${s.dash ? "opacity:.6" : ""}"></i>${esc(s.name || "")}</span>`).join("")}</div>`
+      : "";
+  return `<svg class="chsvg" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(o.label || "")}">${grid}${refs}${lines}${xt}</svg>${key}`;
+}
 
 export const Q = ["Q1 '25", "Q2 '25", "Q3 '25", "Q4 '25", "Q1 '26", "Q2 '26", "Q3 '26", "Q4 '26"];
 
