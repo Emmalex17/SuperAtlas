@@ -158,6 +158,19 @@ export function PageHead({ over, title, sub, actions }: { over?: string; title: 
   );
 }
 
+export function Tabs<T extends string>({ items, active, onChange }: { items: { id: T; label: string; count?: number }[]; active: T; onChange: (id: T) => void }) {
+  return (
+    <div className="tabs" role="tablist">
+      {items.map((t) => (
+        <button key={t.id} role="tab" className={t.id === active ? "on" : ""} onClick={() => onChange(t.id)}>
+          {t.label}
+          {t.count !== undefined ? <span className="count">{t.count}</span> : null}
+        </button>
+      ))}
+    </div>
+  );
+}
+
 export function Kv({ pairs }: { pairs: [string, ReactNode][] }) {
   return (
     <div className="kv">
