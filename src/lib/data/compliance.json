@@ -1,0 +1,12 @@
+{
+  "bench": {
+    "isr": 70,
+    "dpc": 70,
+    "cpr": 70,
+    "aml": 70,
+    "cps": 70
+  },
+  "watchDays": "",
+  "cyclesRunning": "2",
+  "lateRuns": "3"
+}

@@ -1,0 +1,32 @@
+[
+  {
+    "id": "isr",
+    "name": "ISR annual assessment",
+    "reg": "isr",
+    "freq": "Yearly"
+  },
+  {
+    "id": "dpc",
+    "name": "Data protection compliance",
+    "reg": "dpf",
+    "freq": "Yearly"
+  },
+  {
+    "id": "cpr",
+    "name": "Consumer protection review",
+    "reg": "cpr",
+    "freq": "Yearly"
+  },
+  {
+    "id": "aml",
+    "name": "AML guidelines readiness",
+    "reg": "aml",
+    "freq": "One-off"
+  },
+  {
+    "id": "cps",
+    "name": "Cloud and payments security check",
+    "reg": "isr",
+    "freq": "Yearly"
+  }
+]
