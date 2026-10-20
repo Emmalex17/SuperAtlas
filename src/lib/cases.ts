@@ -102,6 +102,8 @@ export type ScoringScheme = {
 
 export type Deadlines = { window: string; reminders: string; escalate: string; inviteExpiry: string; returnsGrace: string; tz: string; digest: string };
 
+export type QuestionChoice = "yn" | "text" | "number" | "date";
+
 export type CaseAnswer = {
   status: string;
   by: string;
@@ -109,7 +111,10 @@ export type CaseAnswer = {
   v?: string;
   comment?: string;
   files?: [string, string][];
+  link?: string;
   interview?: string;
+  flag?: boolean;
+  assignee?: string;
 };
 
 export type CaseOutcome = { o: string; note: string; override?: { by: string; reason: string } };
@@ -154,6 +159,7 @@ export type Case = {
   stage: string;
   due: string;
   reqFirm?: ReqFirmRequest;
+  declineNote?: string;
   submitted?: string;
   submittedBy?: string;
   receipt?: string;
@@ -531,4 +537,107 @@ export function decideExtension(f: CaseFinding, approved: boolean, today: string
   f.ext.status = approved ? "Approved" : "Declined";
   if (approved) f.due = f.ext.date;
   fdLog(f, approved ? "More time approved" : "More time declined", byName, today);
+}
+
+/* ================= Answering (organisation) & engagement ================= */
+
+export const LATE_STAGES = ["Submitted", "Assessing", "In preview", "Signed off", "Report submitted", "In review", "Returned", "Approved", "Scheduled", "Held back", "Published"];
+
+export function isSubmitted(c: Case): boolean {
+  return LATE_STAGES.includes(c.stage);
+}
+
+/** The regulation text only tells us the expected *kind* of answer via its hint ("Yes / No / Not applicable", "Date", "Number", "Short text", "Long text") — there's no separate machine-readable choice flag in the data, so we infer it here. */
+export function questionChoice(hint: string): QuestionChoice {
+  if (/yes.*no/i.test(hint)) return "yn";
+  if (/^date$/i.test(hint)) return "date";
+  if (/^number$/i.test(hint)) return "number";
+  return "text";
+}
+
+export function answerComplete(q: Question, a: CaseAnswer | undefined): boolean {
+  if (!a) return false;
+  const choice = questionChoice(q.hint);
+  if (!a.v) return false;
+  const neg = choice === "yn" && (a.v === "No" || a.v === "Not applicable");
+  if (neg && !(a.comment || "").trim()) return false;
+  return true;
+}
+
+export function saveAnswer(c: Case, qid: string, patch: Partial<CaseAnswer>, byName: string, today: string, q: Question) {
+  const existing = c.answers[qid] ?? ({ status: "draft", by: byName, when: today } as CaseAnswer);
+  const merged: CaseAnswer = { ...existing, ...patch, by: existing.by || byName, when: today };
+  merged.status = answerComplete(q, merged) ? "answered" : "draft";
+  c.answers[qid] = merged;
+}
+
+export function submitAnswers(c: Case, today: string, byName: string, receiptSuffix: string) {
+  c.stage = "Submitted";
+  c.submitted = today;
+  c.submittedBy = byName;
+  c.receipt = `SUB-${c.prog.toUpperCase()}-${receiptSuffix}`;
+}
+
+export function obligationAction(c: Case): "choose-firm" | "answer" | "assess-respond" | "view-report" | "view" | "none" {
+  if (c.stage === "Firm to choose") return "choose-firm";
+  if (["Answering", "Awaiting firm", "Firm to assign", "Firm approval"].includes(c.stage)) return "answer";
+  if (isSubmitted(c) && c.stage !== "Published") return "assess-respond";
+  if (c.stage === "Published") return "view-report";
+  if (isSubmitted(c)) return "view";
+  return "none";
+}
+
+export function engageFirm(c: Case, firmId: string, today: string, byName: string) {
+  void today;
+  c.firm = firmId;
+  c.firmStatus = "Requested by you";
+  c.stage = "Awaiting firm";
+  c.declineNote = undefined;
+  void byName;
+}
+
+export function requestNonAccreditedFirm(c: Case, req: ReqFirmRequest) {
+  c.reqFirm = req;
+  c.firmStatus = "Requested";
+  c.stage = "Firm approval";
+  c.declineNote = undefined;
+}
+
+export const ENG_ACTIVE_STAGES = ["Report submitted", "In review", "Approved", "Scheduled", "Held back"];
+
+export function engGroup(c: Case): "Requests" | "Completed" | "Submitted" | "Active" {
+  if (["Assigned", "Requested by you"].includes(c.firmStatus)) return "Requests";
+  if (c.stage === "Published") return "Completed";
+  if (ENG_ACTIVE_STAGES.includes(c.stage) && c.stage !== ("Returned" as string)) return "Submitted";
+  return "Active";
+}
+
+export function acceptEngagement(c: Case, lead: string, team: string[], today: string, firmName: string) {
+  c.lead = lead;
+  c.team = team;
+  c.firmStatus = "Accepted";
+  if (["Awaiting firm", "Firm to assign", "Firm to choose"].includes(c.stage)) c.stage = "Answering";
+  void today;
+  void firmName;
+}
+
+export function declineEngagement(c: Case, reason: string, firmName: string) {
+  c.firm = "";
+  c.firmStatus = "Declined";
+  c.stage = progOf(c.prog).firmMode === "organisation" ? "Firm to choose" : "Firm to assign";
+  c.declineNote = `${firmName} declined: ${reason}`;
+}
+
+export function startAssessing(c: Case) {
+  if (c.stage === "Submitted") c.stage = "Assessing";
+}
+
+export function recordOutcome(c: Case, ref: string, outcome: string, note: string) {
+  c.outcomes[ref] = { ...(c.outcomes[ref] ?? { o: "", note: "" }), o: outcome, note };
+}
+
+export function signOffAndSubmitReport(c: Case, today: string, byName: string) {
+  c.signed = { by: byName, when: today };
+  c.stage = "Report submitted";
+  c.reportAt = today;
 }
