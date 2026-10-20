@@ -160,6 +160,9 @@ export type Case = {
   subDate?: string;
   reportAt?: string;
   reportDays?: number;
+  pubAt?: string;
+  holdReason?: string;
+  returnNote?: string;
   score?: number;
   published?: string;
   opened?: boolean;
@@ -188,6 +191,41 @@ export const DEADLINES = deadlinesData as unknown as Deadlines;
 
 export function schemeOf(id: string): ScoringScheme {
   return SCHEMES.find((s) => s.id === id) ?? SCHEMES[0];
+}
+
+function reqWeight(w: string | undefined): number {
+  if (w && /High/.test(w)) return 3;
+  if (w && /Low/.test(w)) return 1;
+  return 2;
+}
+
+/** A case's overall (or single-section) score: the weighted average of its scored outcomes on the programme's scoring scheme, or null if nothing is scored yet. */
+export function caseScore(c: Case, onlySec?: string): number | null {
+  const p = progOf(c.prog);
+  const sch = schemeOf(p.scheme);
+  let num = 0;
+  let den = 0;
+  qsetReqs(p.qset)
+    .filter((r) => !onlySec || r.sec === onlySec)
+    .forEach((r) => {
+      const o = c.outcomes[r.ref];
+      if (!o) return;
+      const lv = sch.levels.find((l) => l[0] === o.o);
+      if (!lv || lv[1] === null) return;
+      num += lv[1] * reqWeight(r.weight);
+      den += reqWeight(r.weight);
+    });
+  return den ? Math.round(num / den) : null;
+}
+
+export function bandOf(sch: ScoringScheme, sc: number | null | undefined): string {
+  if (sc == null) return "—";
+  return (sch.bands.find((b) => sc >= b[1]) ?? sch.bands[sch.bands.length - 1])[0];
+}
+
+export function outTone(sch: ScoringScheme, o: string | undefined): "ok" | "warn" | "bad" | "neu" {
+  const lv = sch.levels.find((l) => l[0] === o);
+  return lv ? lv[2] : "neu";
 }
 
 export const PROG_STATUSES = ["Draft", "Scheduled", "Open", "In review", "Closed"] as const;
@@ -291,4 +329,89 @@ export function progStats(p: Programme): { n: number; done: number; pct: number 
   const n = scoped.length;
   const done = cases.filter((c) => DONE_STAGES.has(c.stage)).length;
   return { n, done, pct: n ? Math.round((done / n) * 100) : 0 };
+}
+
+/* ================= Mutators =================
+ * CASES (and the other data arrays in this module) are an in-memory mock store shared across
+ * the whole client session, mirroring the prototype's own global-state-plus-render() model.
+ * These functions are the only place that writes to it; callers re-render by bumping their own
+ * local tick state afterwards. Keeping the writes here (rather than inline in components) is
+ * also why the mutation itself doesn't trip the React compiler's render-purity lint rule — it
+ * isn't reachable from a component's render path. */
+
+export function assignReviewer(ids: string[], reviewerName: string) {
+  ids.map((id) => caseOf(id)).forEach((c) => {
+    if (!c) return;
+    c.reviewer = reviewerName;
+    c.stage = "In review";
+  });
+}
+
+export function approveCase(c: Case, reviewerName: string, today: string) {
+  c.reviewer = reviewerName || c.reviewer;
+  c.approved = { by: reviewerName, when: fmtD(today) };
+  c.score = caseScore(c) ?? c.score;
+  if (c.stage === "Held back") {
+    c.stage = "Scheduled";
+    c.holdReason = "";
+  } else {
+    c.stage = "Approved";
+  }
+}
+
+export function returnCase(c: Case, reviewerName: string, note: string) {
+  c.reviewer = reviewerName || c.reviewer;
+  c.stage = "Returned";
+  c.returnNote = note;
+  c.signed = undefined;
+}
+
+export function publishCase(c: Case, today: string) {
+  c.stage = "Published";
+  c.published = fmtD(today);
+  c.score = c.score ?? caseScore(c) ?? undefined;
+  c.opened = false;
+}
+
+export function markOpened(c: Case, today: string) {
+  if (c.opened) return;
+  c.opened = true;
+  c.openedAt = fmtD(today);
+}
+
+export function cancelScheduleOn(c: Case) {
+  c.stage = "Approved";
+  c.pubAt = undefined;
+}
+
+export function overrideOutcome(c: Case, ref: string, value: string, reason: string, byName: string) {
+  const oc = c.outcomes[ref];
+  c.outcomes[ref] = { ...oc, o: value, override: { by: byName, reason } };
+  if (c.stage === "Report submitted") {
+    c.stage = "In review";
+    c.reviewer = c.reviewer || byName;
+  }
+}
+
+export function publishOrScheduleSelected(ids: string[], mode: "now" | "schedule", today: string, date?: string, holdUnapproved?: boolean): { published: number; scheduled: number; held: number } {
+  const cs = ids.map((id) => caseOf(id)).filter((c): c is Case => !!c);
+  if (mode === "now") {
+    cs.forEach((c) => publishCase(c, today));
+    return { published: cs.length, scheduled: 0, held: 0 };
+  }
+  const progsSel = [...new Set(cs.map((c) => c.prog))];
+  cs.forEach((c) => {
+    c.stage = "Scheduled";
+    c.pubAt = date;
+  });
+  let held = 0;
+  if (holdUnapproved && date) {
+    CASES.filter((c) => progsSel.includes(c.prog) && ["Report submitted", "In review", "Returned"].includes(c.stage)).forEach((c) => {
+      c.stage = "Held back";
+      c.pubAt = date;
+      c.holdReason = `Not approved when publishing was scheduled for ${fmtD(date)}`;
+      held++;
+    });
+  }
+  return { published: 0, scheduled: cs.length, held };
 }
