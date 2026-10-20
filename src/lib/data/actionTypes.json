@@ -1,0 +1,50 @@
+[
+  {
+    "id": "advisory",
+    "name": "Advisory letter",
+    "d": "Points out a gap and expects it fixed. No formal sanction.",
+    "days": 21,
+    "penalty": false,
+    "level": 1
+  },
+  {
+    "id": "warning",
+    "name": "Warning letter",
+    "d": "Formal warning that further action follows if the gap is not fixed.",
+    "days": 14,
+    "penalty": false,
+    "level": 2
+  },
+  {
+    "id": "directive",
+    "name": "Compliance directive",
+    "d": "Orders specific steps by a set date.",
+    "days": 30,
+    "penalty": false,
+    "level": 3
+  },
+  {
+    "id": "penalty",
+    "name": "Monetary penalty",
+    "d": "A fine under the regulation, with a payment deadline.",
+    "days": 30,
+    "penalty": true,
+    "level": 4
+  },
+  {
+    "id": "restrict",
+    "name": "Restriction or suspension",
+    "d": "Limits or suspends an activity or licence until the gap is fixed.",
+    "days": 14,
+    "penalty": false,
+    "level": 5
+  },
+  {
+    "id": "referral",
+    "name": "Referral",
+    "d": "Refers the matter to another authority or to prosecution.",
+    "days": 0,
+    "penalty": false,
+    "level": 6
+  }
+]

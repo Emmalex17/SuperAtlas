@@ -1014,3 +1014,10 @@ button.link{background:none;border:0;color:var(--link);cursor:pointer;padding:4p
 /* Phase 4: returns filing review row highlight and query reply */
 .tbl tr.row-warn td{background:var(--warn-bg)}
 .reply{margin-top:8px;padding:8px 10px;border-left:3px solid var(--brand-300);background:var(--surface-subtle);border-radius:0 8px 8px 0}
+
+/* Phase 5: finding extension-request box */
+.ext-box{border:1px solid var(--warn-border);background:var(--warn-bg);border-radius:12px;padding:12px}
+
+/* Phase 5: watchlist reasons list */
+.why{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px}
+.why li{display:flex;gap:6px;align-items:flex-start;font-size:13px}.why .ic{width:14px;height:14px;margin-top:2px;color:var(--warn-icon);flex:none}
