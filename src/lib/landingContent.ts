@@ -7,11 +7,11 @@ function lockupHtml(dark: boolean, size: number): string {
 }
 
 const NAV_LINKS: [string, string][] = [
-  ["/#s-how", "Product"],
-  ["/#s-questions", "For regulators"],
-  ["/#s-audiences", "For organisations"],
-  ["/#s-audiences", "For assessors"],
+  ["/#s-strength", "Product"],
+  ["/#s-audiences", "Use cases"],
+  ["/#s-how", "How it works"],
   ["/#s-security", "Security"],
+  ["/#s-faq", "FAQ"],
 ];
 
 export function mkNav(): string {
@@ -38,8 +38,8 @@ export function mkNav(): string {
 export function mkFooter(): string {
   return `<footer class="mk-foot"><div class="wrap" style="max-width:1200px;margin:0 auto"><div class="cols">
     <div class="col gap16"><span class="row gap8" style="gap:10px">${BRAND_SVG}<span style="font:600 22px/1 var(--sans);letter-spacing:-.01em;color:#fff">Super<span style="font-family:var(--serif);font-weight:700">Atlas</span></span></span><p style="color:var(--brand-200);font-size:13px;line-height:20px;max-width:34ch">Supervisory technology for regulators: returns, evidence, assessments and findings in one view.</p></div>
-    <div><h4>Product</h4><a href="/#s-how">Overview</a><a href="/#s-strength">Compliance strength</a><a href="/#s-configured">Scoring schemes</a><a href="/#s-configured">White-label</a></div>
-    <div><h4>Who it's for</h4><a href="/#s-questions">Regulators</a><a href="/#s-audiences">Organisations</a><a href="/#s-audiences">Assurance firms</a></div>
+    <div><h4>Product</h4><a href="/#s-how">Overview</a><a href="/#s-strength">Compliance strength</a><a href="/#s-configured">Scoring schemes</a><a href="/#s-configured">White label</a></div>
+    <div><h4>Who it&rsquo;s for</h4><a href="/#s-questions">Regulators</a><a href="/#s-audiences">Organisations</a><a href="/#s-audiences">Assurance firms</a></div>
     <div><h4>Company</h4><a href="/">About RegTech365</a><a href="/#s-security">Security</a><a href="/demo">Contact</a><a href="/demo">Book a demo</a></div>
   </div><div class="base"><span>© 2026 RegTech365 · SuperAtlas is a RegTech365 product</span><span>Privacy · Terms</span></div></div></footer>`;
 }
