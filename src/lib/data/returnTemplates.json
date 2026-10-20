@@ -1,0 +1,326 @@
+[
+  {
+    "id": "rt1",
+    "code": "MQR",
+    "name": "MFB quarterly operations return",
+    "freq": "Quarterly",
+    "types": [
+      "Microfinance bank"
+    ],
+    "dueDays": 20,
+    "grace": "",
+    "status": "Active",
+    "version": "v1.1",
+    "source": "Built online",
+    "updated": "2 Jun 2026",
+    "reminders": "7, 3, 1",
+    "desc": "Customers, digital usage, transactions, fraud and complaints for the quarter.",
+    "fields": [
+      {
+        "key": "customers",
+        "label": "Total customers",
+        "type": "number",
+        "unit": "",
+        "req": true,
+        "min": 0,
+        "max": "",
+        "lte": "",
+        "help": "Unique customers with an active account at quarter end."
+      },
+      {
+        "key": "digital",
+        "label": "Active digital-channel customers",
+        "type": "number",
+        "unit": "",
+        "req": true,
+        "min": 0,
+        "max": "",
+        "lte": "customers",
+        "help": "Used the app, USSD or web at least once in the quarter."
+      },
+      {
+        "key": "txValue",
+        "label": "Transaction value",
+        "type": "number",
+        "unit": "₦ million",
+        "req": true,
+        "min": 0,
+        "max": "",
+        "lte": "",
+        "help": ""
+      },
+      {
+        "key": "failRate",
+        "label": "Failed transaction rate",
+        "type": "number",
+        "unit": "%",
+        "req": true,
+        "min": 0,
+        "max": 100,
+        "lte": "",
+        "help": ""
+      },
+      {
+        "key": "fraudN",
+        "label": "Fraud incidents",
+        "type": "number",
+        "unit": "",
+        "req": true,
+        "min": 0,
+        "max": "",
+        "lte": "",
+        "help": ""
+      },
+      {
+        "key": "fraudLoss",
+        "label": "Fraud losses",
+        "type": "number",
+        "unit": "₦ million",
+        "req": true,
+        "min": 0,
+        "max": "",
+        "lte": "",
+        "help": ""
+      },
+      {
+        "key": "cmpRecv",
+        "label": "Complaints received",
+        "type": "number",
+        "unit": "",
+        "req": true,
+        "min": 0,
+        "max": "",
+        "lte": "",
+        "help": ""
+      },
+      {
+        "key": "cmpRes",
+        "label": "Complaints resolved within 14 days",
+        "type": "number",
+        "unit": "",
+        "req": true,
+        "min": 0,
+        "max": "",
+        "lte": "cmpRecv",
+        "help": ""
+      },
+      {
+        "key": "officer",
+        "label": "Reporting officer",
+        "type": "text",
+        "unit": "",
+        "req": true,
+        "min": "",
+        "max": "",
+        "lte": "",
+        "help": ""
+      }
+    ]
+  },
+  {
+    "id": "rt2",
+    "code": "CIR",
+    "name": "Monthly cyber incident return",
+    "freq": "Monthly",
+    "types": [
+      "Commercial bank",
+      "Non-interest bank",
+      "Microfinance bank"
+    ],
+    "dueDays": 10,
+    "grace": "",
+    "status": "Active",
+    "version": "v2.0",
+    "source": "Built online",
+    "updated": "1 Jan 2026",
+    "reminders": "3, 1",
+    "desc": "Security incidents in the month, how many were major, and how quickly they were reported.",
+    "fields": [
+      {
+        "key": "incidents",
+        "label": "Security incidents logged",
+        "type": "number",
+        "unit": "",
+        "req": true,
+        "min": 0,
+        "max": "",
+        "lte": "",
+        "help": ""
+      },
+      {
+        "key": "major",
+        "label": "Major incidents",
+        "type": "number",
+        "unit": "",
+        "req": true,
+        "min": 0,
+        "max": "",
+        "lte": "incidents",
+        "help": ""
+      },
+      {
+        "key": "in24",
+        "label": "Major incidents reported within 24 hours",
+        "type": "number",
+        "unit": "",
+        "req": true,
+        "min": 0,
+        "max": "",
+        "lte": "major",
+        "help": ""
+      },
+      {
+        "key": "downtime",
+        "label": "Customer-facing downtime",
+        "type": "number",
+        "unit": "hours",
+        "req": true,
+        "min": 0,
+        "max": "",
+        "lte": "",
+        "help": ""
+      },
+      {
+        "key": "summary",
+        "label": "Summary of major incidents",
+        "type": "text",
+        "unit": "",
+        "req": false,
+        "min": "",
+        "max": "",
+        "lte": "",
+        "help": ""
+      }
+    ]
+  },
+  {
+    "id": "rt3",
+    "code": "DPA",
+    "name": "Annual data protection audit filing",
+    "freq": "Yearly",
+    "types": [
+      "Commercial bank",
+      "Data controller of major importance",
+      "Fintech platform"
+    ],
+    "dueDays": 90,
+    "grace": "",
+    "status": "Active",
+    "version": "v1.0",
+    "source": "Uploaded template",
+    "file": "dpa-filing-template.xlsx",
+    "updated": "5 Jan 2026",
+    "reminders": "30, 14, 7",
+    "desc": "Yearly summary of processing activities, data subject requests and breaches.",
+    "fields": [
+      {
+        "key": "activities",
+        "label": "Processing activities on record",
+        "type": "number",
+        "unit": "",
+        "req": true,
+        "min": 0,
+        "max": "",
+        "lte": "",
+        "help": ""
+      },
+      {
+        "key": "dsar",
+        "label": "Data subject requests received",
+        "type": "number",
+        "unit": "",
+        "req": true,
+        "min": 0,
+        "max": "",
+        "lte": "",
+        "help": ""
+      },
+      {
+        "key": "dsarMet",
+        "label": "Requests answered within 30 days",
+        "type": "number",
+        "unit": "",
+        "req": true,
+        "min": 0,
+        "max": "",
+        "lte": "dsar",
+        "help": ""
+      },
+      {
+        "key": "breaches",
+        "label": "Breaches notified to the authority",
+        "type": "number",
+        "unit": "",
+        "req": true,
+        "min": 0,
+        "max": "",
+        "lte": "",
+        "help": ""
+      },
+      {
+        "key": "dpo",
+        "label": "Data protection officer",
+        "type": "text",
+        "unit": "",
+        "req": true,
+        "min": "",
+        "max": "",
+        "lte": "",
+        "help": ""
+      }
+    ]
+  },
+  {
+    "id": "rt4",
+    "code": "ANR",
+    "name": "Agent network return",
+    "freq": "Quarterly",
+    "types": [
+      "Payment solution service provider",
+      "Mobile money operator"
+    ],
+    "dueDays": 30,
+    "grace": "",
+    "status": "Draft",
+    "version": "v0.1",
+    "source": "Built online",
+    "updated": "14 Oct 2026",
+    "reminders": "7, 3, 1",
+    "desc": "Draft. Agents, locations and agent-related complaints.",
+    "fields": [
+      {
+        "key": "agents",
+        "label": "Active agents",
+        "type": "number",
+        "unit": "",
+        "req": true,
+        "min": 0,
+        "max": "",
+        "lte": "",
+        "help": ""
+      },
+      {
+        "key": "states",
+        "label": "States with at least one agent",
+        "type": "number",
+        "unit": "",
+        "req": true,
+        "min": 0,
+        "max": 37,
+        "lte": "",
+        "help": ""
+      },
+      {
+        "key": "agentCmp",
+        "label": "Agent-related complaints",
+        "type": "number",
+        "unit": "",
+        "req": true,
+        "min": 0,
+        "max": "",
+        "lte": "",
+        "help": ""
+      }
+    ]
+  }
+]
