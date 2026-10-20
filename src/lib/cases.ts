@@ -4,6 +4,10 @@ import casesData from "./data/cases.json";
 import evidenceData from "./data/evidence.json";
 import findingClassesData from "./data/findingClasses.json";
 import ratingsData from "./data/ratings.json";
+import seriesData from "./data/series.json";
+import complianceData from "./data/compliance.json";
+import schemesData from "./data/schemes.json";
+import deadlinesData from "./data/deadlines.json";
 import { ORGANISATIONS } from "./mockData";
 
 /** A requirement's raw question, as the regulation text states it: the question itself, plus a hint describing the expected kind of answer (e.g. "Yes / No / Not applicable", "Date", "Short text"). */
@@ -57,7 +61,7 @@ export type Programme = {
   id: string;
   name: string;
   reg: string;
-  status: "Draft" | "Scheduled" | "Open" | "Closed";
+  status: "Draft" | "Scheduled" | "Open" | "In review" | "Closed";
   opens: string;
   closes: string;
   created: string;
@@ -72,12 +76,31 @@ export type Programme = {
   reminders: unknown;
   escalate: unknown;
   exclude?: string[];
-  cycle?: string;
+  series: string;
+  cycle: string;
+  published?: string;
   edited?: number;
   qset: QSet;
   ver: string;
   activity: [string, string, string][];
 };
+
+/** A programme series is the recurring assessment (e.g. "ISR annual assessment"); each year's run is one Programme ("cycle") sharing the series id. */
+export type ProgrammeSeries = { id: string; name: string; reg: string; freq: "Yearly" | "One-off" };
+
+export type ComplianceSettings = { bench: Record<string, number>; watchDays: string; cyclesRunning: string; lateRuns: string };
+
+export type ScoringScheme = {
+  id: string;
+  name: string;
+  def?: boolean;
+  kind: string;
+  used: number;
+  levels: [string, number | null, "ok" | "warn" | "bad" | "neu"][];
+  bands: [string, number][];
+};
+
+export type Deadlines = { window: string; reminders: string; escalate: string; inviteExpiry: string; returnsGrace: string; tz: string; digest: string };
 
 export type CaseAnswer = {
   status: string;
@@ -158,15 +181,43 @@ export const CASES = casesData as unknown as Case[];
 export const EVIDENCE = evidenceData as unknown as Evidence[];
 export const FINDING_CLASSES = findingClassesData as unknown as FindingClass[];
 export const RATINGS = ratingsData as unknown as Rating[];
+export const SERIES = seriesData as unknown as ProgrammeSeries[];
+export const COMPLIANCE_SETTINGS = complianceData as unknown as ComplianceSettings;
+export const SCHEMES = schemesData as unknown as ScoringScheme[];
+export const DEADLINES = deadlinesData as unknown as Deadlines;
 
-export const PROG_STATUSES = ["Draft", "Scheduled", "Open", "Closed"] as const;
+export function schemeOf(id: string): ScoringScheme {
+  return SCHEMES.find((s) => s.id === id) ?? SCHEMES[0];
+}
+
+export const PROG_STATUSES = ["Draft", "Scheduled", "Open", "In review", "Closed"] as const;
+
+export function fmtD(d: string | undefined): string {
+  if (!d) return "—";
+  return new Date(d + "T12:00:00").toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+}
 
 export function regOf(id: string): Regulation {
   return REGS.find((r) => r.id === id) ?? REGS[0];
 }
 
+export function regOfProg(p: Programme): Regulation {
+  return REGS.find((r) => r.id === p.reg) ?? REGS[0];
+}
+
 export function progOf(id: string | undefined): Programme {
   return PROGRAMMES.find((p) => p.id === id) ?? PROGRAMMES[0];
+}
+
+/** All cycles (Programme runs) of a series, most recent cycle first. */
+export function cyclesOf(seriesId: string): Programme[] {
+  return PROGRAMMES.filter((p) => p.series === seriesId).sort((a, b) => String(b.cycle).localeCompare(String(a.cycle)));
+}
+
+/** The cycle a series is "on" right now: the open/in-review one if there is one, else its most recent cycle. */
+export function currentCycle(seriesId: string): Programme | undefined {
+  const cs = cyclesOf(seriesId);
+  return cs.find((p) => p.status === "Open" || p.status === "In review") ?? cs[0];
 }
 
 export function casesOf(progId: string): Case[] {
@@ -202,6 +253,34 @@ export function myCases(orgId: string): Case[] {
 
 export function myEngs(firmId: string): Case[] {
   return CASES.filter((c) => c.firm === firmId);
+}
+
+export function seriesOf(p: Programme): ProgrammeSeries | undefined {
+  return SERIES.find((s) => s.id === p.series);
+}
+
+/** The programme-level questions a case's organisation must answer. */
+export function caseQs(c: Case) {
+  return qsetQs(progOf(c.prog).qset);
+}
+
+/** Percentage of a case's questions that have been answered. */
+export function caseProgress(c: Case): number {
+  const qs = caseQs(c);
+  if (!qs.length) return 0;
+  const n = qs.filter((q) => c.answers[q.id]?.status === "answered").length;
+  return Math.round((n / qs.length) * 100);
+}
+
+/** The five broad pipeline groups a case's stage falls into, for the programme overview funnel. */
+export function stageGroups(tenantShort: string): [string, string[]][] {
+  return [
+    ["Needs a firm", ["Firm to assign", "Firm to choose", "Firm approval", "Awaiting firm"]],
+    ["Answering", ["Answering"]],
+    ["With the firm", ["Submitted", "Assessing", "In preview", "Signed off"]],
+    [`With ${tenantShort}`, ["Report submitted", "In review", "Returned", "Approved", "Scheduled", "Held back"]],
+    ["Published", ["Published"]],
+  ];
 }
 
 /** Progress stats for a programme: how many of its scoped organisations have reached a "done" stage. */

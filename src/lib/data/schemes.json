@@ -1,0 +1,166 @@
+[
+  {
+    "id": "four",
+    "name": "4-point compliance scale",
+    "def": true,
+    "kind": "Outcome scale",
+    "used": 3,
+    "levels": [
+      [
+        "Compliant",
+        100,
+        "ok"
+      ],
+      [
+        "Partially compliant",
+        50,
+        "warn"
+      ],
+      [
+        "Non-compliant",
+        0,
+        "bad"
+      ],
+      [
+        "Not applicable",
+        null,
+        "neu"
+      ]
+    ],
+    "bands": [
+      [
+        "Strong",
+        85
+      ],
+      [
+        "Satisfactory",
+        70
+      ],
+      [
+        "Needs improvement",
+        50
+      ],
+      [
+        "Weak",
+        0
+      ]
+    ]
+  },
+  {
+    "id": "maturity",
+    "name": "Maturity scale",
+    "kind": "Maturity",
+    "used": 1,
+    "levels": [
+      [
+        "5 · Optimised",
+        100,
+        "ok"
+      ],
+      [
+        "4 · Managed",
+        75,
+        "ok"
+      ],
+      [
+        "3 · Defined",
+        50,
+        "warn"
+      ],
+      [
+        "2 · Developing",
+        25,
+        "warn"
+      ],
+      [
+        "1 · Initial",
+        0,
+        "bad"
+      ]
+    ],
+    "bands": [
+      [
+        "Advanced",
+        80
+      ],
+      [
+        "Established",
+        60
+      ],
+      [
+        "Emerging",
+        0
+      ]
+    ]
+  },
+  {
+    "id": "pf",
+    "name": "Pass / fail",
+    "kind": "Binary",
+    "used": 0,
+    "levels": [
+      [
+        "Pass",
+        100,
+        "ok"
+      ],
+      [
+        "Fail",
+        0,
+        "bad"
+      ],
+      [
+        "Not applicable",
+        null,
+        "neu"
+      ]
+    ],
+    "bands": [
+      [
+        "Pass",
+        100
+      ],
+      [
+        "Fail",
+        0
+      ]
+    ]
+  },
+  {
+    "id": "sat",
+    "name": "Satisfactory scale",
+    "kind": "Rating",
+    "used": 0,
+    "levels": [
+      [
+        "Satisfactory",
+        100,
+        "ok"
+      ],
+      [
+        "Needs improvement",
+        50,
+        "warn"
+      ],
+      [
+        "Unsatisfactory",
+        0,
+        "bad"
+      ]
+    ],
+    "bands": [
+      [
+        "Satisfactory",
+        75
+      ],
+      [
+        "Needs improvement",
+        50
+      ],
+      [
+        "Unsatisfactory",
+        0
+      ]
+    ]
+  }
+]

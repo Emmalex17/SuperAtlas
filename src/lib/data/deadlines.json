@@ -1,0 +1,9 @@
+{
+  "window": "30",
+  "reminders": "14, 7, 3, 1",
+  "escalate": "3",
+  "inviteExpiry": "14",
+  "returnsGrace": "5",
+  "tz": "West Africa Time (WAT, UTC+1)",
+  "digest": "Daily at 08:00"
+}
