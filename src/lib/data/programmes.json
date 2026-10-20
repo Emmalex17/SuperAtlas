@@ -1,0 +1,1343 @@
+[
+  {
+    "scheme": "four",
+    "reminders": "14, 7, 3, 1",
+    "escalate": "3",
+    "firmMode": "regulator",
+    "preview": true,
+    "publisher": "regulator",
+    "by": "M. Bello",
+    "activity": [
+      [
+        "20 Oct 2026",
+        "C. Eze",
+        "answered 7 questions for Zenith Bank"
+      ],
+      [
+        "18 Oct 2026",
+        "KPMG",
+        "submitted the report for Wema Bank"
+      ],
+      [
+        "3 Oct 2026",
+        "Deloitte",
+        "accepted the engagement for Zenith Bank"
+      ],
+      [
+        "1 Oct 2026",
+        "M. Bello",
+        "launched the programme to 26 organisations"
+      ]
+    ],
+    "id": "p1",
+    "name": "ISR 2026 annual assessment",
+    "reg": "isr",
+    "status": "Open",
+    "opens": "2026-10-01",
+    "closes": "2026-11-30",
+    "created": "12 Sep 2026",
+    "types": [
+      "Commercial bank",
+      "Microfinance bank"
+    ],
+    "desc": "Yearly information security assessment for banks, assessed by accredited firms.",
+    "locked": "1 Oct 2026",
+    "qset": {
+      "ver": "v2.0",
+      "sections": [
+        {
+          "id": "s1",
+          "name": "1. Governance",
+          "on": true,
+          "reqs": [
+            {
+              "ref": "ISR-1.1",
+              "t": "Board-approved information security policy",
+              "text": "The organisation shall maintain an information security policy approved by its board and reviewed at least once a year.",
+              "guidance": "Upload the policy and the board resolution that approved the current version. If the review is overdue, say when it is scheduled.",
+              "weight": "High (3)",
+              "evidence": [
+                "Board resolution approving the policy",
+                "Current policy document"
+              ],
+              "questions": [
+                {
+                  "id": "ISR-1.1#0",
+                  "text": "Does the board approve the information security policy?",
+                  "hint": "Yes / No / Not applicable"
+                },
+                {
+                  "id": "ISR-1.1#1",
+                  "text": "When did the board last review the policy?",
+                  "hint": "Date"
+                },
+                {
+                  "id": "ISR-1.1#2",
+                  "text": "Who owns the policy day to day?",
+                  "hint": "Short text"
+                }
+              ]
+            },
+            {
+              "ref": "ISR-1.2",
+              "t": "Named chief information security officer",
+              "text": "The organisation shall appoint a chief information security officer who reports to executive management.",
+              "guidance": "Give the name and reporting line. If the role is outsourced, describe the arrangement.",
+              "weight": "Normal (2)",
+              "evidence": [
+                "Appointment letter",
+                "Organisation chart"
+              ],
+              "questions": [
+                {
+                  "id": "ISR-1.2#0",
+                  "text": "Has a chief information security officer been appointed?",
+                  "hint": "Yes / No / Not applicable"
+                },
+                {
+                  "id": "ISR-1.2#1",
+                  "text": "To whom does the CISO report?",
+                  "hint": "Short text"
+                }
+              ]
+            },
+            {
+              "ref": "ISR-1.3",
+              "t": "Annual information security risk assessment",
+              "text": "The organisation shall carry out an information security risk assessment at least once a year and after any major change.",
+              "guidance": "Summarise the method used and the top risks identified.",
+              "weight": "Normal (2)",
+              "evidence": [
+                "Latest risk assessment report",
+                "Risk register extract"
+              ],
+              "questions": [
+                {
+                  "id": "ISR-1.3#0",
+                  "text": "Was a risk assessment completed in the last 12 months?",
+                  "hint": "Yes / No / Not applicable"
+                },
+                {
+                  "id": "ISR-1.3#1",
+                  "text": "Describe the method used",
+                  "hint": "Long text"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "s2",
+          "name": "2. Asset management",
+          "on": true,
+          "reqs": [
+            {
+              "ref": "ISR-2.1",
+              "t": "Inventory of critical information assets",
+              "text": "Keep an up-to-date inventory of critical information assets, with a named owner for each.",
+              "guidance": "Upload the inventory or an extract showing critical assets and owners.",
+              "weight": "Normal (2)",
+              "evidence": [
+                "Asset inventory extract"
+              ],
+              "questions": [
+                {
+                  "id": "ISR-2.1#0",
+                  "text": "Is there a current inventory of critical assets?",
+                  "hint": "Yes / No / Not applicable"
+                },
+                {
+                  "id": "ISR-2.1#1",
+                  "text": "How many critical assets are listed?",
+                  "hint": "Number"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "s4",
+          "name": "4. Access control",
+          "on": true,
+          "reqs": [
+            {
+              "ref": "ISR-4.1",
+              "t": "Multi-factor authentication for privileged access",
+              "text": "All privileged and remote access to production systems shall require multi-factor authentication.",
+              "guidance": "Explain how MFA is enforced for administrators and remote users. Include any exceptions and how they are approved.",
+              "weight": "High (3)",
+              "evidence": [
+                "MFA configuration export",
+                "List of privileged accounts"
+              ],
+              "questions": [
+                {
+                  "id": "ISR-4.1#0",
+                  "text": "Is MFA enforced for all privileged access?",
+                  "hint": "Yes / No / Not applicable"
+                },
+                {
+                  "id": "ISR-4.1#1",
+                  "text": "Is MFA enforced for all remote access?",
+                  "hint": "Yes / No / Not applicable"
+                },
+                {
+                  "id": "ISR-4.1#2",
+                  "text": "List any approved exceptions",
+                  "hint": "Long text"
+                }
+              ]
+            },
+            {
+              "ref": "ISR-4.2",
+              "t": "Quarterly access review",
+              "text": "Access rights to critical systems shall be reviewed at least quarterly and unused accounts removed within 30 days.",
+              "guidance": "Attach the last two signed access reviews.",
+              "weight": "Normal (2)",
+              "evidence": [
+                "Signed access review reports for the last two quarters"
+              ],
+              "questions": [
+                {
+                  "id": "ISR-4.2#0",
+                  "text": "Are access rights reviewed every quarter?",
+                  "hint": "Yes / No / Not applicable"
+                },
+                {
+                  "id": "ISR-4.2#1",
+                  "text": "Date of the last review",
+                  "hint": "Date"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "s7",
+          "name": "7. Incident response",
+          "on": true,
+          "reqs": [
+            {
+              "ref": "ISR-7.1",
+              "t": "Report major incidents within 24 hours",
+              "text": "Major security incidents shall be reported to the regulator within 24 hours of detection.",
+              "guidance": "Describe how incidents are classified and who reports them.",
+              "weight": "High (3)",
+              "evidence": [
+                "Incident response plan",
+                "Incident log for the period"
+              ],
+              "questions": [
+                {
+                  "id": "ISR-7.1#0",
+                  "text": "Is there a documented incident response plan?",
+                  "hint": "Yes / No / Not applicable"
+                },
+                {
+                  "id": "ISR-7.1#1",
+                  "text": "How many major incidents were reported in the period?",
+                  "hint": "Number"
+                }
+              ]
+            },
+            {
+              "ref": "ISR-7.2",
+              "t": "Test the incident response plan yearly",
+              "text": "The incident response plan shall be tested at least once a year through a tabletop or live exercise.",
+              "guidance": "Attach the exercise report and the actions that came out of it.",
+              "weight": "Normal (2)",
+              "evidence": [
+                "Exercise report"
+              ],
+              "questions": [
+                {
+                  "id": "ISR-7.2#0",
+                  "text": "Was the plan tested in the last 12 months?",
+                  "hint": "Yes / No / Not applicable"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "ver": "v2.0",
+    "edited": 2,
+    "series": "isr",
+    "cycle": "2026"
+  },
+  {
+    "scheme": "four",
+    "reminders": "14, 7, 3, 1",
+    "escalate": "3",
+    "firmMode": "organisation",
+    "preview": false,
+    "publisher": "firm",
+    "by": "M. Bello",
+    "activity": [
+      [
+        "17 Oct 2026",
+        "F. Adeyemi",
+        "asked to use Clearwater Assurance (not accredited) for UBA"
+      ],
+      [
+        "16 Oct 2026",
+        "O. Bakare",
+        "engaged PwC for Guaranty Trust Bank"
+      ],
+      [
+        "15 Oct 2026",
+        "M. Bello",
+        "launched the programme to 3 organisations"
+      ]
+    ],
+    "id": "p2",
+    "name": "Data protection compliance 2026",
+    "reg": "dpf",
+    "status": "Open",
+    "opens": "2026-10-15",
+    "closes": "2026-12-15",
+    "created": "1 Oct 2026",
+    "types": [
+      "Commercial bank"
+    ],
+    "desc": "Organisations engage their own data protection assessor.",
+    "locked": "15 Oct 2026",
+    "qset": {
+      "ver": "v1.3",
+      "sections": [
+        {
+          "id": "s2",
+          "name": "2. Lawful processing",
+          "on": true,
+          "reqs": [
+            {
+              "ref": "DPF-2.1",
+              "t": "Record of processing activities",
+              "text": "Maintain a current record of processing activities covering purpose, lawful basis and retention.",
+              "guidance": "An extract is enough if the full record is long.",
+              "weight": "Normal (2)",
+              "evidence": [
+                "Record of processing activities"
+              ],
+              "questions": [
+                {
+                  "id": "DPF-2.1#0",
+                  "text": "Is the record of processing activities current?",
+                  "hint": "Yes / No / Not applicable"
+                }
+              ]
+            },
+            {
+              "ref": "DPF-2.2",
+              "t": "Lawful basis for each purpose",
+              "text": "Each processing purpose shall have a documented lawful basis.",
+              "guidance": "",
+              "weight": "Normal (2)",
+              "evidence": [
+                "Lawful basis register"
+              ],
+              "questions": [
+                {
+                  "id": "DPF-2.2#0",
+                  "text": "Is a lawful basis recorded for every purpose?",
+                  "hint": "Yes / No / Not applicable"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "s5",
+          "name": "5. Breach handling",
+          "on": true,
+          "reqs": [
+            {
+              "ref": "DPF-5.1",
+              "t": "Notify personal data breaches within 72 hours",
+              "text": "Notify the authority of personal data breaches within 72 hours of becoming aware of them.",
+              "guidance": "",
+              "weight": "High (3)",
+              "evidence": [
+                "Breach procedure",
+                "Breach log"
+              ],
+              "questions": [
+                {
+                  "id": "DPF-5.1#0",
+                  "text": "Is there a breach notification procedure?",
+                  "hint": "Yes / No / Not applicable"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "ver": "v1.3",
+    "series": "dpc",
+    "cycle": "2026"
+  },
+  {
+    "scheme": "four",
+    "reminders": "14, 7, 3, 1",
+    "escalate": "3",
+    "firmMode": "regulator",
+    "preview": true,
+    "publisher": "regulator",
+    "by": "M. Bello",
+    "activity": [
+      [
+        "20 Feb 2026",
+        "M. Bello",
+        "published 6 reports"
+      ]
+    ],
+    "id": "p3",
+    "name": "Consumer protection review 2025",
+    "reg": "cpr",
+    "status": "Closed",
+    "opens": "2025-10-01",
+    "closes": "2025-12-15",
+    "created": "1 Sep 2025",
+    "types": [
+      "Commercial bank",
+      "Microfinance bank",
+      "Mobile money operator"
+    ],
+    "desc": "Annual consumer protection review. Results published 20 Feb 2026.",
+    "locked": "1 Oct 2025",
+    "qset": {
+      "ver": "v1.0",
+      "sections": [
+        {
+          "id": "s3",
+          "name": "3. Complaints",
+          "on": true,
+          "reqs": [
+            {
+              "ref": "CPR-3.1",
+              "t": "Resolve complaints within 14 days",
+              "text": "Customer complaints shall be acknowledged within 48 hours and resolved within 14 days.",
+              "guidance": "Give average resolution time for the period.",
+              "weight": "Normal (2)",
+              "evidence": [
+                "Complaints register",
+                "Monthly complaints report"
+              ],
+              "questions": [
+                {
+                  "id": "CPR-3.1#0",
+                  "text": "Are complaints resolved within 14 days?",
+                  "hint": "Yes / No / Not applicable"
+                },
+                {
+                  "id": "CPR-3.1#1",
+                  "text": "Average resolution time (days)",
+                  "hint": "Number"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "ver": "v1.0",
+    "series": "cpr",
+    "cycle": "2025"
+  },
+  {
+    "scheme": "four",
+    "reminders": "14, 7, 3, 1",
+    "escalate": "3",
+    "firmMode": "regulator",
+    "preview": true,
+    "publisher": "regulator",
+    "by": "M. Bello",
+    "activity": [],
+    "id": "p4",
+    "name": "AML guidelines readiness 2027",
+    "reg": "aml",
+    "status": "Draft",
+    "opens": "2027-02-01",
+    "closes": "2027-04-30",
+    "created": "14 Oct 2026",
+    "types": [
+      "Commercial bank",
+      "Microfinance bank",
+      "Mobile money operator"
+    ],
+    "desc": "Draft. Waiting for the AML guidelines to be published.",
+    "qset": {
+      "ver": "v3.1",
+      "sections": [
+        {
+          "id": "s5",
+          "name": "5. Customer due diligence",
+          "on": true,
+          "reqs": [
+            {
+              "ref": "AML-5.1",
+              "t": "Risk-based customer due diligence",
+              "text": "Apply customer due diligence measures proportionate to the assessed money-laundering risk.",
+              "guidance": "",
+              "weight": "High (3)",
+              "evidence": [
+                "CDD procedure",
+                "Risk assessment methodology"
+              ],
+              "questions": [
+                {
+                  "id": "AML-5.1#0",
+                  "text": "Is CDD applied on a risk basis?",
+                  "hint": "Yes / No / Not applicable"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "ver": "v3.1",
+    "series": "aml",
+    "cycle": "2027"
+  },
+  {
+    "scheme": "four",
+    "reminders": "14, 7, 3, 1",
+    "escalate": "3",
+    "firmMode": "regulator",
+    "preview": true,
+    "publisher": "regulator",
+    "by": "M. Bello",
+    "activity": [],
+    "id": "p5",
+    "name": "Cloud and payments security check 2027",
+    "reg": "isr",
+    "status": "Scheduled",
+    "opens": "2027-01-15",
+    "closes": "2027-03-15",
+    "created": "10 Oct 2026",
+    "types": [
+      "Mobile money operator",
+      "Cloud service provider"
+    ],
+    "desc": "Opens automatically on 15 Jan 2027.",
+    "locked": "",
+    "qset": {
+      "ver": "v2.0",
+      "sections": [
+        {
+          "id": "s1",
+          "name": "1. Governance",
+          "on": true,
+          "reqs": [
+            {
+              "ref": "ISR-1.1",
+              "t": "Board-approved information security policy",
+              "text": "The organisation shall maintain an information security policy approved by its board and reviewed at least once a year.",
+              "guidance": "Upload the policy and the board resolution that approved the current version. If the review is overdue, say when it is scheduled.",
+              "weight": "High (3)",
+              "evidence": [
+                "Board resolution approving the policy",
+                "Current policy document"
+              ],
+              "questions": [
+                {
+                  "id": "ISR-1.1#0",
+                  "text": "Does the board approve the information security policy?",
+                  "hint": "Yes / No / Not applicable"
+                },
+                {
+                  "id": "ISR-1.1#1",
+                  "text": "When did the board last review the policy?",
+                  "hint": "Date"
+                },
+                {
+                  "id": "ISR-1.1#2",
+                  "text": "Who owns the policy day to day?",
+                  "hint": "Short text"
+                }
+              ]
+            },
+            {
+              "ref": "ISR-1.2",
+              "t": "Named chief information security officer",
+              "text": "The organisation shall appoint a chief information security officer who reports to executive management.",
+              "guidance": "Give the name and reporting line. If the role is outsourced, describe the arrangement.",
+              "weight": "Normal (2)",
+              "evidence": [
+                "Appointment letter",
+                "Organisation chart"
+              ],
+              "questions": [
+                {
+                  "id": "ISR-1.2#0",
+                  "text": "Has a chief information security officer been appointed?",
+                  "hint": "Yes / No / Not applicable"
+                },
+                {
+                  "id": "ISR-1.2#1",
+                  "text": "To whom does the CISO report?",
+                  "hint": "Short text"
+                }
+              ]
+            },
+            {
+              "ref": "ISR-1.3",
+              "t": "Annual information security risk assessment",
+              "text": "The organisation shall carry out an information security risk assessment at least once a year and after any major change.",
+              "guidance": "Summarise the method used and the top risks identified.",
+              "weight": "Normal (2)",
+              "evidence": [
+                "Latest risk assessment report",
+                "Risk register extract"
+              ],
+              "questions": [
+                {
+                  "id": "ISR-1.3#0",
+                  "text": "Was a risk assessment completed in the last 12 months?",
+                  "hint": "Yes / No / Not applicable"
+                },
+                {
+                  "id": "ISR-1.3#1",
+                  "text": "Describe the method used",
+                  "hint": "Long text"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "s2",
+          "name": "2. Asset management",
+          "on": true,
+          "reqs": [
+            {
+              "ref": "ISR-2.1",
+              "t": "Inventory of critical information assets",
+              "text": "Keep an up-to-date inventory of critical information assets, with a named owner for each.",
+              "guidance": "Upload the inventory or an extract showing critical assets and owners.",
+              "weight": "Normal (2)",
+              "evidence": [
+                "Asset inventory extract"
+              ],
+              "questions": [
+                {
+                  "id": "ISR-2.1#0",
+                  "text": "Is there a current inventory of critical assets?",
+                  "hint": "Yes / No / Not applicable"
+                },
+                {
+                  "id": "ISR-2.1#1",
+                  "text": "How many critical assets are listed?",
+                  "hint": "Number"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "s4",
+          "name": "4. Access control",
+          "on": true,
+          "reqs": [
+            {
+              "ref": "ISR-4.1",
+              "t": "Multi-factor authentication for privileged access",
+              "text": "All privileged and remote access to production systems shall require multi-factor authentication.",
+              "guidance": "Explain how MFA is enforced for administrators and remote users. Include any exceptions and how they are approved.",
+              "weight": "High (3)",
+              "evidence": [
+                "MFA configuration export",
+                "List of privileged accounts"
+              ],
+              "questions": [
+                {
+                  "id": "ISR-4.1#0",
+                  "text": "Is MFA enforced for all privileged access?",
+                  "hint": "Yes / No / Not applicable"
+                },
+                {
+                  "id": "ISR-4.1#1",
+                  "text": "Is MFA enforced for all remote access?",
+                  "hint": "Yes / No / Not applicable"
+                },
+                {
+                  "id": "ISR-4.1#2",
+                  "text": "List any approved exceptions",
+                  "hint": "Long text"
+                }
+              ]
+            },
+            {
+              "ref": "ISR-4.2",
+              "t": "Quarterly access review",
+              "text": "Access rights to critical systems shall be reviewed at least quarterly and unused accounts removed within 30 days.",
+              "guidance": "Attach the last two signed access reviews.",
+              "weight": "Normal (2)",
+              "evidence": [
+                "Signed access review reports for the last two quarters"
+              ],
+              "questions": [
+                {
+                  "id": "ISR-4.2#0",
+                  "text": "Are access rights reviewed every quarter?",
+                  "hint": "Yes / No / Not applicable"
+                },
+                {
+                  "id": "ISR-4.2#1",
+                  "text": "Date of the last review",
+                  "hint": "Date"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "s7",
+          "name": "7. Incident response",
+          "on": true,
+          "reqs": [
+            {
+              "ref": "ISR-7.1",
+              "t": "Report major incidents within 24 hours",
+              "text": "Major security incidents shall be reported to the regulator within 24 hours of detection.",
+              "guidance": "Describe how incidents are classified and who reports them.",
+              "weight": "High (3)",
+              "evidence": [
+                "Incident response plan",
+                "Incident log for the period"
+              ],
+              "questions": [
+                {
+                  "id": "ISR-7.1#0",
+                  "text": "Is there a documented incident response plan?",
+                  "hint": "Yes / No / Not applicable"
+                },
+                {
+                  "id": "ISR-7.1#1",
+                  "text": "How many major incidents were reported in the period?",
+                  "hint": "Number"
+                }
+              ]
+            },
+            {
+              "ref": "ISR-7.2",
+              "t": "Test the incident response plan yearly",
+              "text": "The incident response plan shall be tested at least once a year through a tabletop or live exercise.",
+              "guidance": "Attach the exercise report and the actions that came out of it.",
+              "weight": "Normal (2)",
+              "evidence": [
+                "Exercise report"
+              ],
+              "questions": [
+                {
+                  "id": "ISR-7.2#0",
+                  "text": "Was the plan tested in the last 12 months?",
+                  "hint": "Yes / No / Not applicable"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "ver": "v2.0",
+    "series": "cps",
+    "cycle": "2027"
+  },
+  {
+    "scheme": "four",
+    "reminders": "14, 7, 3, 1",
+    "escalate": "3",
+    "firmMode": "regulator",
+    "preview": true,
+    "publisher": "regulator",
+    "by": "M. Bello",
+    "activity": [
+      [
+        "21 Feb 2025",
+        "M. Bello",
+        "published the results"
+      ],
+      [
+        "1 Oct 2024",
+        "M. Bello",
+        "launched the programme"
+      ]
+    ],
+    "id": "pI24",
+    "name": "ISR 2024 annual assessment",
+    "reg": "isr",
+    "status": "Closed",
+    "opens": "2024-10-01",
+    "closes": "2024-11-30",
+    "created": "1 Sept 2024",
+    "types": [
+      "Commercial bank",
+      "Microfinance bank"
+    ],
+    "desc": "Results published 21 Feb 2025.",
+    "locked": "1 Oct 2024",
+    "qset": {
+      "ver": "v2.0",
+      "sections": [
+        {
+          "id": "s1",
+          "name": "1. Governance",
+          "on": true,
+          "reqs": [
+            {
+              "ref": "ISR-1.1",
+              "t": "Board-approved information security policy",
+              "text": "The organisation shall maintain an information security policy approved by its board and reviewed at least once a year.",
+              "guidance": "Upload the policy and the board resolution that approved the current version. If the review is overdue, say when it is scheduled.",
+              "weight": "High (3)",
+              "evidence": [
+                "Board resolution approving the policy",
+                "Current policy document"
+              ],
+              "questions": [
+                {
+                  "id": "ISR-1.1#0",
+                  "text": "Does the board approve the information security policy?",
+                  "hint": "Yes / No / Not applicable"
+                },
+                {
+                  "id": "ISR-1.1#1",
+                  "text": "When did the board last review the policy?",
+                  "hint": "Date"
+                },
+                {
+                  "id": "ISR-1.1#2",
+                  "text": "Who owns the policy day to day?",
+                  "hint": "Short text"
+                }
+              ]
+            },
+            {
+              "ref": "ISR-1.2",
+              "t": "Named chief information security officer",
+              "text": "The organisation shall appoint a chief information security officer who reports to executive management.",
+              "guidance": "Give the name and reporting line. If the role is outsourced, describe the arrangement.",
+              "weight": "Normal (2)",
+              "evidence": [
+                "Appointment letter",
+                "Organisation chart"
+              ],
+              "questions": [
+                {
+                  "id": "ISR-1.2#0",
+                  "text": "Has a chief information security officer been appointed?",
+                  "hint": "Yes / No / Not applicable"
+                },
+                {
+                  "id": "ISR-1.2#1",
+                  "text": "To whom does the CISO report?",
+                  "hint": "Short text"
+                }
+              ]
+            },
+            {
+              "ref": "ISR-1.3",
+              "t": "Annual information security risk assessment",
+              "text": "The organisation shall carry out an information security risk assessment at least once a year and after any major change.",
+              "guidance": "Summarise the method used and the top risks identified.",
+              "weight": "Normal (2)",
+              "evidence": [
+                "Latest risk assessment report",
+                "Risk register extract"
+              ],
+              "questions": [
+                {
+                  "id": "ISR-1.3#0",
+                  "text": "Was a risk assessment completed in the last 12 months?",
+                  "hint": "Yes / No / Not applicable"
+                },
+                {
+                  "id": "ISR-1.3#1",
+                  "text": "Describe the method used",
+                  "hint": "Long text"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "s2",
+          "name": "2. Asset management",
+          "on": true,
+          "reqs": [
+            {
+              "ref": "ISR-2.1",
+              "t": "Inventory of critical information assets",
+              "text": "Keep an up-to-date inventory of critical information assets, with a named owner for each.",
+              "guidance": "Upload the inventory or an extract showing critical assets and owners.",
+              "weight": "Normal (2)",
+              "evidence": [
+                "Asset inventory extract"
+              ],
+              "questions": [
+                {
+                  "id": "ISR-2.1#0",
+                  "text": "Is there a current inventory of critical assets?",
+                  "hint": "Yes / No / Not applicable"
+                },
+                {
+                  "id": "ISR-2.1#1",
+                  "text": "How many critical assets are listed?",
+                  "hint": "Number"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "s4",
+          "name": "4. Access control",
+          "on": true,
+          "reqs": [
+            {
+              "ref": "ISR-4.1",
+              "t": "Multi-factor authentication for privileged access",
+              "text": "All privileged and remote access to production systems shall require multi-factor authentication.",
+              "guidance": "Explain how MFA is enforced for administrators and remote users. Include any exceptions and how they are approved.",
+              "weight": "High (3)",
+              "evidence": [
+                "MFA configuration export",
+                "List of privileged accounts"
+              ],
+              "questions": [
+                {
+                  "id": "ISR-4.1#0",
+                  "text": "Is MFA enforced for all privileged access?",
+                  "hint": "Yes / No / Not applicable"
+                },
+                {
+                  "id": "ISR-4.1#1",
+                  "text": "Is MFA enforced for all remote access?",
+                  "hint": "Yes / No / Not applicable"
+                },
+                {
+                  "id": "ISR-4.1#2",
+                  "text": "List any approved exceptions",
+                  "hint": "Long text"
+                }
+              ]
+            },
+            {
+              "ref": "ISR-4.2",
+              "t": "Quarterly access review",
+              "text": "Access rights to critical systems shall be reviewed at least quarterly and unused accounts removed within 30 days.",
+              "guidance": "Attach the last two signed access reviews.",
+              "weight": "Normal (2)",
+              "evidence": [
+                "Signed access review reports for the last two quarters"
+              ],
+              "questions": [
+                {
+                  "id": "ISR-4.2#0",
+                  "text": "Are access rights reviewed every quarter?",
+                  "hint": "Yes / No / Not applicable"
+                },
+                {
+                  "id": "ISR-4.2#1",
+                  "text": "Date of the last review",
+                  "hint": "Date"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "s7",
+          "name": "7. Incident response",
+          "on": true,
+          "reqs": [
+            {
+              "ref": "ISR-7.1",
+              "t": "Report major incidents within 24 hours",
+              "text": "Major security incidents shall be reported to the regulator within 24 hours of detection.",
+              "guidance": "Describe how incidents are classified and who reports them.",
+              "weight": "High (3)",
+              "evidence": [
+                "Incident response plan",
+                "Incident log for the period"
+              ],
+              "questions": [
+                {
+                  "id": "ISR-7.1#0",
+                  "text": "Is there a documented incident response plan?",
+                  "hint": "Yes / No / Not applicable"
+                },
+                {
+                  "id": "ISR-7.1#1",
+                  "text": "How many major incidents were reported in the period?",
+                  "hint": "Number"
+                }
+              ]
+            },
+            {
+              "ref": "ISR-7.2",
+              "t": "Test the incident response plan yearly",
+              "text": "The incident response plan shall be tested at least once a year through a tabletop or live exercise.",
+              "guidance": "Attach the exercise report and the actions that came out of it.",
+              "weight": "Normal (2)",
+              "evidence": [
+                "Exercise report"
+              ],
+              "questions": [
+                {
+                  "id": "ISR-7.2#0",
+                  "text": "Was the plan tested in the last 12 months?",
+                  "hint": "Yes / No / Not applicable"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "ver": "v2.0",
+    "edited": 0,
+    "series": "isr",
+    "cycle": "2024",
+    "published": "21 Feb 2025",
+    "scopeCount": 20
+  },
+  {
+    "scheme": "four",
+    "reminders": "14, 7, 3, 1",
+    "escalate": "3",
+    "firmMode": "regulator",
+    "preview": true,
+    "publisher": "regulator",
+    "by": "M. Bello",
+    "activity": [
+      [
+        "18 Feb 2026",
+        "M. Bello",
+        "published the results"
+      ],
+      [
+        "1 Oct 2025",
+        "M. Bello",
+        "launched the programme"
+      ]
+    ],
+    "id": "pI25",
+    "name": "ISR 2025 annual assessment",
+    "reg": "isr",
+    "status": "Closed",
+    "opens": "2025-10-01",
+    "closes": "2025-11-30",
+    "created": "1 Sept 2025",
+    "types": [
+      "Commercial bank",
+      "Microfinance bank"
+    ],
+    "desc": "Results published 18 Feb 2026.",
+    "locked": "1 Oct 2025",
+    "qset": {
+      "ver": "v2.0",
+      "sections": [
+        {
+          "id": "s1",
+          "name": "1. Governance",
+          "on": true,
+          "reqs": [
+            {
+              "ref": "ISR-1.1",
+              "t": "Board-approved information security policy",
+              "text": "The organisation shall maintain an information security policy approved by its board and reviewed at least once a year.",
+              "guidance": "Upload the policy and the board resolution that approved the current version. If the review is overdue, say when it is scheduled.",
+              "weight": "High (3)",
+              "evidence": [
+                "Board resolution approving the policy",
+                "Current policy document"
+              ],
+              "questions": [
+                {
+                  "id": "ISR-1.1#0",
+                  "text": "Does the board approve the information security policy?",
+                  "hint": "Yes / No / Not applicable"
+                },
+                {
+                  "id": "ISR-1.1#1",
+                  "text": "When did the board last review the policy?",
+                  "hint": "Date"
+                },
+                {
+                  "id": "ISR-1.1#2",
+                  "text": "Who owns the policy day to day?",
+                  "hint": "Short text"
+                }
+              ]
+            },
+            {
+              "ref": "ISR-1.2",
+              "t": "Named chief information security officer",
+              "text": "The organisation shall appoint a chief information security officer who reports to executive management.",
+              "guidance": "Give the name and reporting line. If the role is outsourced, describe the arrangement.",
+              "weight": "Normal (2)",
+              "evidence": [
+                "Appointment letter",
+                "Organisation chart"
+              ],
+              "questions": [
+                {
+                  "id": "ISR-1.2#0",
+                  "text": "Has a chief information security officer been appointed?",
+                  "hint": "Yes / No / Not applicable"
+                },
+                {
+                  "id": "ISR-1.2#1",
+                  "text": "To whom does the CISO report?",
+                  "hint": "Short text"
+                }
+              ]
+            },
+            {
+              "ref": "ISR-1.3",
+              "t": "Annual information security risk assessment",
+              "text": "The organisation shall carry out an information security risk assessment at least once a year and after any major change.",
+              "guidance": "Summarise the method used and the top risks identified.",
+              "weight": "Normal (2)",
+              "evidence": [
+                "Latest risk assessment report",
+                "Risk register extract"
+              ],
+              "questions": [
+                {
+                  "id": "ISR-1.3#0",
+                  "text": "Was a risk assessment completed in the last 12 months?",
+                  "hint": "Yes / No / Not applicable"
+                },
+                {
+                  "id": "ISR-1.3#1",
+                  "text": "Describe the method used",
+                  "hint": "Long text"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "s2",
+          "name": "2. Asset management",
+          "on": true,
+          "reqs": [
+            {
+              "ref": "ISR-2.1",
+              "t": "Inventory of critical information assets",
+              "text": "Keep an up-to-date inventory of critical information assets, with a named owner for each.",
+              "guidance": "Upload the inventory or an extract showing critical assets and owners.",
+              "weight": "Normal (2)",
+              "evidence": [
+                "Asset inventory extract"
+              ],
+              "questions": [
+                {
+                  "id": "ISR-2.1#0",
+                  "text": "Is there a current inventory of critical assets?",
+                  "hint": "Yes / No / Not applicable"
+                },
+                {
+                  "id": "ISR-2.1#1",
+                  "text": "How many critical assets are listed?",
+                  "hint": "Number"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "s4",
+          "name": "4. Access control",
+          "on": true,
+          "reqs": [
+            {
+              "ref": "ISR-4.1",
+              "t": "Multi-factor authentication for privileged access",
+              "text": "All privileged and remote access to production systems shall require multi-factor authentication.",
+              "guidance": "Explain how MFA is enforced for administrators and remote users. Include any exceptions and how they are approved.",
+              "weight": "High (3)",
+              "evidence": [
+                "MFA configuration export",
+                "List of privileged accounts"
+              ],
+              "questions": [
+                {
+                  "id": "ISR-4.1#0",
+                  "text": "Is MFA enforced for all privileged access?",
+                  "hint": "Yes / No / Not applicable"
+                },
+                {
+                  "id": "ISR-4.1#1",
+                  "text": "Is MFA enforced for all remote access?",
+                  "hint": "Yes / No / Not applicable"
+                },
+                {
+                  "id": "ISR-4.1#2",
+                  "text": "List any approved exceptions",
+                  "hint": "Long text"
+                }
+              ]
+            },
+            {
+              "ref": "ISR-4.2",
+              "t": "Quarterly access review",
+              "text": "Access rights to critical systems shall be reviewed at least quarterly and unused accounts removed within 30 days.",
+              "guidance": "Attach the last two signed access reviews.",
+              "weight": "Normal (2)",
+              "evidence": [
+                "Signed access review reports for the last two quarters"
+              ],
+              "questions": [
+                {
+                  "id": "ISR-4.2#0",
+                  "text": "Are access rights reviewed every quarter?",
+                  "hint": "Yes / No / Not applicable"
+                },
+                {
+                  "id": "ISR-4.2#1",
+                  "text": "Date of the last review",
+                  "hint": "Date"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "s7",
+          "name": "7. Incident response",
+          "on": true,
+          "reqs": [
+            {
+              "ref": "ISR-7.1",
+              "t": "Report major incidents within 24 hours",
+              "text": "Major security incidents shall be reported to the regulator within 24 hours of detection.",
+              "guidance": "Describe how incidents are classified and who reports them.",
+              "weight": "High (3)",
+              "evidence": [
+                "Incident response plan",
+                "Incident log for the period"
+              ],
+              "questions": [
+                {
+                  "id": "ISR-7.1#0",
+                  "text": "Is there a documented incident response plan?",
+                  "hint": "Yes / No / Not applicable"
+                },
+                {
+                  "id": "ISR-7.1#1",
+                  "text": "How many major incidents were reported in the period?",
+                  "hint": "Number"
+                }
+              ]
+            },
+            {
+              "ref": "ISR-7.2",
+              "t": "Test the incident response plan yearly",
+              "text": "The incident response plan shall be tested at least once a year through a tabletop or live exercise.",
+              "guidance": "Attach the exercise report and the actions that came out of it.",
+              "weight": "Normal (2)",
+              "evidence": [
+                "Exercise report"
+              ],
+              "questions": [
+                {
+                  "id": "ISR-7.2#0",
+                  "text": "Was the plan tested in the last 12 months?",
+                  "hint": "Yes / No / Not applicable"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "ver": "v2.0",
+    "edited": 0,
+    "series": "isr",
+    "cycle": "2025",
+    "published": "18 Feb 2026",
+    "scopeCount": 24
+  },
+  {
+    "scheme": "four",
+    "reminders": "14, 7, 3, 1",
+    "escalate": "3",
+    "firmMode": "regulator",
+    "preview": true,
+    "publisher": "regulator",
+    "by": "M. Bello",
+    "activity": [
+      [
+        "19 Feb 2025",
+        "M. Bello",
+        "published the results"
+      ],
+      [
+        "1 Oct 2024",
+        "M. Bello",
+        "launched the programme"
+      ]
+    ],
+    "id": "pC24",
+    "name": "Consumer protection review 2024",
+    "reg": "cpr",
+    "status": "Closed",
+    "opens": "2024-10-01",
+    "closes": "2024-12-15",
+    "created": "1 Sept 2024",
+    "types": [
+      "Commercial bank",
+      "Microfinance bank",
+      "Mobile money operator"
+    ],
+    "desc": "Results published 19 Feb 2025.",
+    "locked": "1 Oct 2024",
+    "qset": {
+      "ver": "v1.0",
+      "sections": [
+        {
+          "id": "s3",
+          "name": "3. Complaints",
+          "on": true,
+          "reqs": [
+            {
+              "ref": "CPR-3.1",
+              "t": "Resolve complaints within 14 days",
+              "text": "Customer complaints shall be acknowledged within 48 hours and resolved within 14 days.",
+              "guidance": "Give average resolution time for the period.",
+              "weight": "Normal (2)",
+              "evidence": [
+                "Complaints register",
+                "Monthly complaints report"
+              ],
+              "questions": [
+                {
+                  "id": "CPR-3.1#0",
+                  "text": "Are complaints resolved within 14 days?",
+                  "hint": "Yes / No / Not applicable"
+                },
+                {
+                  "id": "CPR-3.1#1",
+                  "text": "Average resolution time (days)",
+                  "hint": "Number"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "ver": "v1.0",
+    "series": "cpr",
+    "cycle": "2024",
+    "published": "19 Feb 2025",
+    "edited": 0
+  }
+]
