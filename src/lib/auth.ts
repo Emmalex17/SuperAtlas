@@ -3,6 +3,7 @@ export type Workspace = "regulator" | "organisation" | "firm";
 export type Account = {
   email: string;
   name: string;
+  first: string;
   initials: string;
   role: string;
   workspace: Workspace;
@@ -15,6 +16,7 @@ export const ACCOUNTS: Record<string, Account> = {
   "m.bello@nitda.gov.ng": {
     email: "m.bello@nitda.gov.ng",
     name: "M. Bello",
+    first: "Musa",
     initials: "MB",
     role: "Supervision lead",
     workspace: "regulator",
@@ -23,6 +25,7 @@ export const ACCOUNTS: Record<string, Account> = {
   "a.okonkwo@zenith.example": {
     email: "a.okonkwo@zenith.example",
     name: "A. Okonkwo",
+    first: "Adaeze",
     initials: "AO",
     role: "Chief compliance officer",
     workspace: "organisation",
@@ -31,6 +34,7 @@ export const ACCOUNTS: Record<string, Account> = {
   "t.adebayo@deloitte.example": {
     email: "t.adebayo@deloitte.example",
     name: "T. Adebayo",
+    first: "Tunde",
     initials: "TA",
     role: "Partner, risk advisory",
     workspace: "firm",
