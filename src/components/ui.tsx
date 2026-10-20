@@ -73,6 +73,10 @@ export function Chip({ children, tone = "neu", icon }: { children: ReactNode; to
   );
 }
 
+export function Tag({ children }: { children: ReactNode }) {
+  return <span className="tag">{children}</span>;
+}
+
 type ToneWord = "" | "ok" | "warn" | "bad" | "info" | "neu" | "ai" | "solid";
 type Tone = ToneWord | `${ToneWord} ${ToneWord}`;
 
