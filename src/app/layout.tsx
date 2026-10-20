@@ -23,8 +23,23 @@ const serif = Source_Serif_4({
 });
 
 export const metadata: Metadata = {
-  title: "SuperAtlas",
-  description: "SuperAtlas — regulator, organisation and assurance firm workspaces.",
+  metadataBase: new URL("https://superatlas-green.vercel.app"),
+  title: {
+    default: "SuperAtlas — Supervisory technology for regulators",
+    template: "%s · SuperAtlas",
+  },
+  description: "SuperAtlas brings regulatory returns, evidence, assessments and findings into one supervisory view, so you know who is compliant, where the gaps are, and where to act next.",
+  openGraph: {
+    type: "website",
+    siteName: "SuperAtlas",
+    title: "SuperAtlas — Supervisory technology for regulators",
+    description: "See every organisation you supervise, and the evidence behind it. Returns, evidence, assessments and findings in one view.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "SuperAtlas — Supervisory technology for regulators",
+    description: "See every organisation you supervise, and the evidence behind it.",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

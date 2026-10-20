@@ -1021,3 +1021,29 @@ button.link{background:none;border:0;color:var(--link);cursor:pointer;padding:4p
 /* Phase 5: watchlist reasons list */
 .why{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px}
 .why li{display:flex;gap:6px;align-items:flex-start;font-size:13px}.why .ic{width:14px;height:14px;margin-top:2px;color:var(--warn-icon);flex:none}
+
+/* Mobile nav: hamburger toggle + slide-down panel (checkbox-hack, no JS) */
+.mk-nav{position:sticky}
+.mk-nav-cb{position:absolute;opacity:0;pointer-events:none;width:0;height:0}
+.mk-burger{display:none;flex-direction:column;justify-content:center;gap:5px;width:36px;height:36px;cursor:pointer;flex:none}
+.mk-burger span{display:block;width:20px;height:2px;background:#fff;border-radius:2px;transition:transform .2s,opacity .2s}
+.mk-nav-cb:checked ~ .wrap .mk-burger span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.mk-nav-cb:checked ~ .wrap .mk-burger span:nth-child(2){opacity:0}
+.mk-nav-cb:checked ~ .wrap .mk-burger span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.mk-mobile-panel{display:none;flex-direction:column;gap:4px;background:#13173f;border-top:1px solid rgba(255,255,255,.1);padding:10px var(--side-gutter-r) 20px var(--side-gutter-l)}
+.mk-nav-cb:checked ~ .mk-mobile-panel{display:flex}
+.mk-mobile-panel nav{display:flex;flex-direction:column}
+.mk-mobile-panel nav a{color:rgba(255,255,255,.85);font-size:15px;font-weight:500;text-decoration:none;padding:12px 4px;border-bottom:1px solid rgba(255,255,255,.08)}
+.mk-mobile-panel nav a:active{color:#fff}
+.mk-mobile-acts{display:flex;flex-direction:column;gap:10px;margin-top:14px}
+.mk-mobile-signin{color:#fff;font-weight:500;font-size:15px;text-align:center;padding:10px;text-decoration:none;border:1px solid rgba(255,255,255,.2);border-radius:10px}
+@media (max-width: 1100px){
+  .mk-burger{display:flex;flex-shrink:0}
+  .mk-nav .wrap{gap:12px}
+  .mk-nav .wrap a[aria-label="SuperAtlas home"]{min-width:0;overflow:hidden}
+  .mk-nav .wrap>a.btn{padding:0 14px;font-size:13px;white-space:nowrap}
+}
+@media (max-width: 380px){
+  .mk-nav .wrap>a.btn .ic{display:none}
+  .mk-nav .wrap>a.btn{padding:0 12px}
+}
