@@ -375,3 +375,21 @@ export const FIRM_TYPES = [
 ];
 
 export const FIRM_RULES = { renewal: 12, conflictMonths: 24 };
+
+export const ROLES = [
+  { name: "Admin", desc: "Everything, including settings, team and branding" },
+  { name: "Supervisor", desc: "Manage organisations and firms in their portfolio; approve and publish" },
+  { name: "Reviewer", desc: "Review reports and returns assigned to them" },
+  { name: "Viewer", desc: "Read-only access to dashboards and records" },
+];
+
+export const PERMS: [string, boolean, boolean, boolean, boolean][] = [
+  ["Invite and verify organisations", true, true, false, false],
+  ["Approve classification changes", true, true, false, false],
+  ["Accredit assurance firms", true, true, false, false],
+  ["Edit requirements and scoring", true, false, false, false],
+  ["Review reports and returns", true, true, true, false],
+  ["Publish reports", true, true, false, false],
+  ["Manage branding and team", true, false, false, false],
+  ["View dashboards", true, true, true, true],
+];
