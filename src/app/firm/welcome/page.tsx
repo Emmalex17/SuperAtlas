@@ -139,8 +139,6 @@ export default function FirmWelcomePage() {
               {l}
             </button>
           ))}
-          <hr className="sep" style={{ margin: "8px 0" }} />
-          <Button variant="tertiary" icon="certificate" onClick={() => router.push("/firm/apply")}>Apply for accreditation</Button>
         </div>
 
         <div className="card col gap16">

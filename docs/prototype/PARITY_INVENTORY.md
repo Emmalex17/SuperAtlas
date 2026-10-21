@@ -268,7 +268,7 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 
 ### `organisations`: Organisations
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Regulator (M. Bello) · Layout: app · Breadcrumb: Organisations
 - Reference: `screens/organisations.jpg`
 - Headings and section titles: “Organisations”
@@ -288,7 +288,7 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 
 ### `organisations/profile`: Organisation
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Regulator (M. Bello) · Layout: app · Breadcrumb: Organisations > Zenith Bank Plc
 - Reference: `screens/organisations_profile.jpg`
 - Headings and section titles: “Zenith Bank Plc” · “Organisation details” · “Classification” · “Status” · “Key officers”
@@ -296,16 +296,16 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 - Buttons and links: “Message” · “Change category” · “Manage”
 - Status chips seen: “Verified”
 - Tab states (each must match its screenshot):
-    - [ ] “Compliance”: `screens/organisations_profile__compliance.jpg` · shows: “Status by programme” · “Score history” · “Section scores in ISR 2025 annual assessment” · “Findings” · “Returns and enforcement”
-    - [ ] “Classification”: `screens/organisations_profile__classification.jpg` · shows: “Current category” · “Request history”
-    - [ ] “Invitations”: `screens/organisations_profile__invitations.jpg` · shows: “Invitation history” · “Current invitation”
-    - [ ] “People”: `screens/organisations_profile__people.jpg`
-    - [ ] “Licences”: `screens/organisations_profile__licences.jpg`
-    - [ ] “Activity”: `screens/organisations_profile__activity.jpg` · shows: “No activity yet”
+    - [x] “Compliance”: `screens/organisations_profile__compliance.jpg` · shows: “Status by programme” · “Score history” · “Section scores in ISR 2025 annual assessment” · “Findings” · “Returns and enforcement”
+    - [x] “Classification”: `screens/organisations_profile__classification.jpg` · shows: “Current category” · “Request history”
+    - [x] “Invitations”: `screens/organisations_profile__invitations.jpg` · shows: “Invitation history” · “Current invitation”
+    - [x] “People”: `screens/organisations_profile__people.jpg`
+    - [x] “Licences”: `screens/organisations_profile__licences.jpg`
+    - [x] “Activity”: `screens/organisations_profile__activity.jpg` · shows: “No activity yet”
 
 ### `organisations/category`: Category
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Regulator (M. Bello) · Layout: app · Breadcrumb: Organisations > Category
 - Reference: `screens/organisations_category.jpg`
 - Headings and section titles: “Microfinance banks” · “Section scores: microfinance banks against all organisations” · “Compliance status” · “Ranking”
@@ -315,7 +315,7 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 
 ### `firms`: Assurance firms
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Regulator (M. Bello) · Layout: app · Breadcrumb: Assurance firms
 - Reference: `screens/firms.jpg`
 - Headings and section titles: “Assurance firms”
@@ -326,7 +326,7 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 
 ### `firms/profile`: Assurance firm
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Regulator (M. Bello) · Layout: app · Breadcrumb: Assurance firms > Deloitte & Touche (Nigeria)
 - Reference: `screens/firms_profile.jpg`
 - Headings and section titles: “Deloitte & Touche (Nigeria)” · “Firm details” · “At a glance”
@@ -334,15 +334,15 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 - Buttons and links: “Renew accreditation”
 - Status chips seen: “Accredited”
 - Tab states (each must match its screenshot):
-    - [ ] “Performance”: `screens/firms_profile__performance.jpg` · shows: “Average rating 4.6 → 4.5” · “Compared with other firms” · “Ratings”
-    - [ ] “Accreditations”: `screens/firms_profile__accreditations.jpg` · shows: “Accreditations”
-    - [ ] “People 3”: `screens/firms_profile__people-3.jpg`
-    - [ ] “Assignments”: `screens/firms_profile__assignments.jpg` · shows: “Assignments arrive with programmes”
-    - [ ] “Activity”: `screens/firms_profile__activity.jpg`
+    - [x] “Performance”: `screens/firms_profile__performance.jpg` · shows: “Average rating 4.6 → 4.5” · “Compared with other firms” · “Ratings”
+    - [x] “Accreditations”: `screens/firms_profile__accreditations.jpg` · shows: “Accreditations”
+    - [x] “People 3”: `screens/firms_profile__people-3.jpg`
+    - [x] “Assignments”: `screens/firms_profile__assignments.jpg` · shows: “Assignments arrive with programmes”
+    - [x] “Activity”: `screens/firms_profile__activity.jpg`
 
 ### `org/welcome`: Set up your organisation
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Organisation (Zenith) · Layout: app · Breadcrumb: Dashboard > Set up
 - Reference: `screens/org_welcome.jpg`
 - Headings and section titles: “Set up Zenith Bank Plc”
@@ -350,7 +350,7 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 
 ### `org/team`: Team
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Organisation (Zenith) · Layout: app · Breadcrumb: Team
 - Reference: `screens/org_team.jpg`
 - Headings and section titles: “Team”
@@ -360,7 +360,7 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 
 ### `org/profile`: Profile
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Organisation (Zenith) · Layout: app · Breadcrumb: Profile
 - Reference: `screens/org_profile.jpg`
 - Headings and section titles: “Zenith Bank Plc” · “Organisation details” · “Logo” · “Key officers”
@@ -369,14 +369,14 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 - Buttons and links: “Save changes” · “Upload logo”
 - Status chips seen: “Verified”
 - Tab states (each must match its screenshot):
-    - [ ] “Classification”: `screens/org_profile__classification.jpg` · shows: “Request a classification change” · “Current category” · “History”
-    - [ ] “Licences”: `screens/org_profile__licences.jpg`
-    - [ ] “Group links”: `screens/org_profile__group-links.jpg`
-    - [ ] “Settings”: `screens/org_profile__settings.jpg`
+    - [x] “Classification”: `screens/org_profile__classification.jpg` · shows: “Request a classification change” · “Current category” · “History”
+    - [x] “Licences”: `screens/org_profile__licences.jpg`
+    - [x] “Group links”: `screens/org_profile__group-links.jpg`
+    - [x] “Settings”: `screens/org_profile__settings.jpg`
 
 ### `firm/welcome`: Set up your firm
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Assurance firm (Deloitte) · Layout: app · Breadcrumb: Dashboard > Set up
 - Reference: `screens/firm_welcome.jpg`
 - Headings and section titles: “Set up Deloitte & Touche (Nigeria)”
@@ -384,7 +384,7 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 
 ### `firm/team`: Team
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Assurance firm (Deloitte) · Layout: app · Breadcrumb: Team
 - Reference: `screens/firm_team.jpg`
 - Headings and section titles: “Team”
@@ -394,7 +394,7 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 
 ### `firm/profile`: Profile
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Assurance firm (Deloitte) · Layout: app · Breadcrumb: Profile
 - Reference: `screens/firm_profile.jpg`
 - Headings and section titles: “Deloitte & Touche (Nigeria)”
@@ -403,14 +403,14 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 - Buttons and links: “Save changes”
 - Status chips seen: “Accredited”
 - Tab states (each must match its screenshot):
-    - [ ] “Performance”: `screens/firm_profile__performance.jpg` · shows: “Average rating 4.6 → 4.5” · “What organisations said”
-    - [ ] “Accreditations”: `screens/firm_profile__accreditations.jpg` · shows: “Accreditations”
-    - [ ] “Assessors 3”: `screens/firm_profile__assessors-3.jpg`
-    - [ ] “Advisory clients 2”: `screens/firm_profile__advisory-clients-2.jpg`
+    - [x] “Performance”: `screens/firm_profile__performance.jpg` · shows: “Average rating 4.6 → 4.5” · “What organisations said”
+    - [x] “Accreditations”: `screens/firm_profile__accreditations.jpg` · shows: “Accreditations”
+    - [x] “Assessors 3”: `screens/firm_profile__assessors-3.jpg`
+    - [x] “Advisory clients 2”: `screens/firm_profile__advisory-clients-2.jpg`
 
 ### `firm/apply`: Apply for accreditation
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Assurance firm (Deloitte) · Layout: app · Breadcrumb: Profile > Apply for accreditation
 - Reference: `screens/firm_apply.jpg`
 - **Pilot note:** Keep the screen in code but remove every entry point (firms are invited by NITDA).

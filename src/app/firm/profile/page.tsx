@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useReducer, useState } from "react";
-import { useRouter } from "next/navigation";
 import { AppShell } from "@/components/AppShell";
 import { ProfileHeader } from "@/components/ProfileHeader";
 import { Button, Chip, Tile, Field, Tabs, AlertBox, ChartCard, KTile, MiniTable, Stars } from "@/components/ui";
@@ -24,7 +23,6 @@ function reportDays(c: Case): number | null {
 }
 
 export default function FirmProfilePage() {
-  const router = useRouter();
   const toast = useToast();
   const firm = FIRMS.find((f) => f.id === FIRM_ID)!;
   const [, bump] = useReducer((x: number) => x + 1, 0);
@@ -187,7 +185,6 @@ export default function FirmProfilePage() {
         <div className="card col gap12">
           <div className="row">
             <span className="h4 grow">Accreditations</span>
-            <Button size="sm" icon="certificate" testId="go-apply" onClick={() => router.push("/firm/apply")}>Apply for accreditation</Button>
           </div>
           {accs.map((a) => (
             <div key={a.ref} className="file">
