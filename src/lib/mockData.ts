@@ -462,6 +462,12 @@ export type AuditEntry = {
   detail: string;
 };
 
+/** Logs a new audit-trail entry for the signed-in regulator persona — the prototype's addAudit()
+ * (core.js). Not yet called by every mutator in this codebase, only the ones built against it. */
+export function addAudit(action: string, record: string, detail = "") {
+  AUDIT.unshift({ when: "Just now", who: "M. Bello", initials: "MB", action, record, workspace: "regulator", ip: "41.58.xx.xx", detail });
+}
+
 export const AUDIT: AuditEntry[] = [
   { when: "18 Oct 2026, 16:41", who: "System", initials: "SA", action: "Sent reminder", record: "Verification queue (2 waiting)", workspace: "regulator", ip: "—", detail: "Daily digest to supervisors" },
   { when: "15 Oct 2026, 11:30", who: "N. Eze", initials: "NE", action: "Accepted invitation", record: "Stanbic IBTC Bank Plc", workspace: "organisation", ip: "102.89.xx.xx", detail: "Account created, MFA set up" },
