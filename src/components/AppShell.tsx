@@ -69,8 +69,6 @@ function buildNav(account: Account): NavItem[] {
       { icon: "stamp", label: "Reviews & publishing", href: "/regulator/reviews", count: regulatorCount("reviews") },
       { icon: "flag", label: "Findings", href: "/regulator/findings", count: regulatorCount("findings") },
       { icon: "table", label: "Data returns", href: "/regulator/returns", section: "Collect", count: regulatorCount("returns") },
-      { icon: "users", label: "Team", href: "/regulator/team" },
-      { icon: "identification-card", label: "Profile", href: "/regulator/profile" },
     ];
   }
   if (ws === "organisation") {
@@ -274,6 +272,17 @@ export function AppShell({ workspace, crumbs, children }: { workspace: Workspace
             <Icon name="question" />
             <span>Help</span>
           </button>
+          {workspace === "regulator" ? (
+            <Link
+              href="/regulator/settings/categories"
+              className={`nav ${
+                pathname.startsWith("/regulator/settings") || pathname === "/regulator/profile" || pathname.startsWith("/regulator/profile/") || pathname === "/regulator/team" ? "on" : ""
+              }`}
+            >
+              <Icon name="gear-six" />
+              <span>Settings</span>
+            </Link>
+          ) : null}
           <div className="sb-foot">
             <LogoMark size={16} variant="white" />
             <span>Powered by SuperAtlas</span>

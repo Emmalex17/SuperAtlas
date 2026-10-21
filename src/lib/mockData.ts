@@ -219,39 +219,148 @@ export const ACC_APPS: AccApplication[] = [
   { id: "acc3", firm: "meridale", type: "Audit & assurance", submitted: "16 Oct 2026", due: "13 Nov 2026", status: "In review", docs: [["Company registration", true], ["Professional indemnity insurance", true], ["Audit methodology", true], ["Assessor CVs and certificates (3)", true]], assessors: [["P. Eke", "FCA", true], ["S. Ojo", "ACA, CISA", true]], decl: "Independence declaration signed. Advisory clients declared: 1." },
 ];
 
-export type CategoryType = { id: string; name: string; tiers: string[] };
-export type Category = { id: string; name: string; types: CategoryType[] };
+export type CategoryType = { id: string; name: string; plural?: string; count: number; tiers: string[]; isNew?: boolean };
+export type Category = { id: string; name: string; types: CategoryType[]; isNew?: boolean };
 
 export const CATEGORIES: Category[] = [
   {
     id: "bank",
     name: "Banking",
     types: [
-      { id: "cb", name: "Commercial bank", tiers: ["International", "National", "Regional"] },
-      { id: "nib", name: "Non-interest bank", tiers: ["National", "Regional"] },
-      { id: "mb", name: "Merchant bank", tiers: ["National"] },
-      { id: "mfb", name: "Microfinance bank", tiers: ["National", "State", "Unit"] },
+      { id: "cb", name: "Commercial bank", plural: "Commercial banks", count: 24, tiers: ["International", "National", "Regional"] },
+      { id: "nib", name: "Non-interest bank", plural: "Non-interest banks", count: 5, tiers: ["National", "Regional"] },
+      { id: "mb", name: "Merchant bank", plural: "Merchant banks", count: 6, tiers: ["National"] },
+      { id: "mfb", name: "Microfinance bank", plural: "Microfinance banks", count: 58, tiers: ["National", "State", "Unit"] },
     ],
   },
   {
     id: "pay",
     name: "Payments",
     types: [
-      { id: "mmo", name: "Mobile money operator", tiers: [] },
-      { id: "sp", name: "Switching and processing", tiers: [] },
-      { id: "pssp", name: "Payment solution service provider", tiers: ["PSSP", "PTSP", "Super-agent"] },
+      { id: "mmo", name: "Mobile money operator", count: 22, tiers: [] },
+      { id: "sp", name: "Switching and processing", count: 6, tiers: [] },
+      { id: "pssp", name: "Payment solution service provider", count: 12, tiers: ["PSSP", "PTSP", "Super-agent"] },
     ],
   },
   {
     id: "dig",
     name: "Digital economy",
     types: [
-      { id: "dc", name: "Data controller of major importance", tiers: ["Ultra-high level", "Extra-high level", "Ordinary-high level"] },
-      { id: "csp", name: "Cloud service provider", tiers: [] },
-      { id: "fp", name: "Fintech platform", tiers: [] },
+      { id: "dc", name: "Data controller of major importance", count: 21, tiers: ["Ultra-high level", "Extra-high level", "Ordinary-high level"] },
+      { id: "csp", name: "Cloud service provider", count: 7, tiers: [] },
+      { id: "fp", name: "Fintech platform", count: 6, tiers: [] },
     ],
   },
 ];
+
+export const TAGS: string[] = ["Listed", "D-SIB", "Systemically important", "Foreign-owned"];
+
+export type CatGroup = { name: string; rule: string; count: number };
+export const GROUPS: CatGroup[] = [
+  { name: "DMBs (deposit money banks)", rule: "Commercial bank + Non-interest bank + Merchant bank", count: 35 },
+  { name: "Tier-1 banks", rule: "Commercial bank · International", count: 8 },
+];
+
+export type CatHistoryEntry = { when: string; who: string; what: string };
+export const CAT_HISTORY: CatHistoryEntry[] = [
+  { when: "12 Oct 2026", who: "M. Bello", what: 'Added tier "Super-agent" under Payment solution service provider' },
+  { when: "3 Oct 2026", who: "N. Adeyemi", what: 'Created saved group "Tier-1 banks"' },
+  { when: "1 Mar 2026", who: "M. Bello", what: "Imported 3 sectors, 10 types and 19 tiers from spreadsheet" },
+];
+
+function logCatHistory(what: string) {
+  CAT_HISTORY.unshift({ when: "Today", who: "M. Bello", what });
+}
+
+export function allCategoryTypes(): CategoryType[] {
+  return CATEGORIES.flatMap((c) => c.types);
+}
+
+export function moveSector(sectorId: string, dir: 1 | -1) {
+  const i = CATEGORIES.findIndex((c) => c.id === sectorId);
+  const j = i + dir;
+  if (i < 0 || j < 0 || j >= CATEGORIES.length) return;
+  [CATEGORIES[i], CATEGORIES[j]] = [CATEGORIES[j], CATEGORIES[i]];
+}
+
+export function moveType(sectorId: string, typeId: string, dir: 1 | -1) {
+  const c = CATEGORIES.find((x) => x.id === sectorId);
+  if (!c) return;
+  const i = c.types.findIndex((t) => t.id === typeId);
+  const j = i + dir;
+  if (i < 0 || j < 0 || j >= c.types.length) return;
+  [c.types[i], c.types[j]] = [c.types[j], c.types[i]];
+}
+
+export function addSector(name: string) {
+  CATEGORIES.push({ id: `s${Date.now()}`, name, types: [], isNew: true });
+  logCatHistory(`Added sector "${name}"`);
+}
+
+export function addType(sectorId: string, name: string) {
+  const c = CATEGORIES.find((x) => x.id === sectorId);
+  if (!c) return;
+  c.types.push({ id: `t${Date.now()}`, name, count: 0, tiers: [], isNew: true });
+  logCatHistory(`Added institution type "${name}"`);
+}
+
+export function addTier(sectorId: string, typeId: string, name: string) {
+  const c = CATEGORIES.find((x) => x.id === sectorId);
+  const t = c?.types.find((x) => x.id === typeId);
+  if (!t) return;
+  t.tiers.push(name);
+  logCatHistory(`Added tier "${name}"`);
+}
+
+export function renameSector(sectorId: string, name: string) {
+  const c = CATEGORIES.find((x) => x.id === sectorId);
+  if (!c) return;
+  const old = c.name;
+  c.name = name;
+  logCatHistory(`Renamed "${old}" to "${name}"`);
+}
+
+export function renameType(sectorId: string, typeId: string, name: string) {
+  const c = CATEGORIES.find((x) => x.id === sectorId);
+  const t = c?.types.find((x) => x.id === typeId);
+  if (!t) return;
+  const old = t.name;
+  t.name = name;
+  logCatHistory(`Renamed "${old}" to "${name}"`);
+}
+
+export function deleteSector(sectorId: string): boolean {
+  const c = CATEGORIES.find((x) => x.id === sectorId);
+  if (!c) return false;
+  const n = c.types.reduce((a, t) => a + t.count, 0);
+  if (n) return false;
+  const idx = CATEGORIES.indexOf(c);
+  CATEGORIES.splice(idx, 1);
+  logCatHistory(`Deleted "${c.name}"`);
+  return true;
+}
+
+export function deleteType(sectorId: string, typeId: string): boolean {
+  const c = CATEGORIES.find((x) => x.id === sectorId);
+  const t = c?.types.find((x) => x.id === typeId);
+  if (!c || !t) return false;
+  if (t.count) return false;
+  c.types = c.types.filter((x) => x.id !== typeId);
+  logCatHistory(`Deleted "${t.name}"`);
+  return true;
+}
+
+export function addTag(name: string) {
+  TAGS.push(name);
+}
+export function removeTag(i: number) {
+  TAGS.splice(i, 1);
+}
+
+export function addGroup(name: string, include: string[]) {
+  const count = allCategoryTypes().filter((t) => include.includes(t.name)).reduce((a, t) => a + t.count, 0);
+  GROUPS.push({ name, rule: include.join(" + "), count });
+}
 
 export function tiersOf(typeName: string): string[] {
   for (const cat of CATEGORIES) {
@@ -416,13 +525,53 @@ export const DASH = {
 };
 
 export const FIRM_TYPES = [
-  { id: "audit", name: "Audit & assurance", icon: "certificate" },
-  { id: "dpco", name: "Data protection (DPCO)", icon: "lock-simple" },
-  { id: "cyber", name: "Cybersecurity assessor", icon: "shield-check" },
-  { id: "advisory", name: "Advisory & remediation", icon: "users" },
+  {
+    id: "audit",
+    name: "Audit & assurance",
+    icon: "certificate",
+    criteria: ["Registered audit firm in good standing", "Professional indemnity insurance of at least ₦500m", "At least 2 partners with FCA or equivalent"],
+    creds: "FCA, ACA, CISA",
+    docs: "Registration, insurance, methodology, assessor CVs",
+  },
+  {
+    id: "dpco",
+    name: "Data protection (DPCO)",
+    icon: "lock-simple",
+    criteria: ["Current DPCO licence from the data protection authority", "Named data protection lead", "Documented audit methodology"],
+    creds: "CIPP/E, CIPM, CDPO",
+    docs: "DPCO licence, insurance, methodology, assessor CVs",
+  },
+  {
+    id: "cyber",
+    name: "Cybersecurity assessor",
+    icon: "shield-check",
+    criteria: ["At least 3 certified assessors", "Penetration testing methodology", "Secure evidence handling procedure"],
+    creds: "CISSP, OSCP, ISO 27001 Lead Auditor",
+    docs: "Registration, insurance, methodology, assessor CVs",
+  },
+  {
+    id: "advisory",
+    name: "Advisory & remediation",
+    icon: "users",
+    criteria: ["Registered consulting firm", "Conflict-of-interest policy", "Cannot assess an organisation it advised in the last 24 months"],
+    creds: "Relevant professional certification",
+    docs: "Registration, conflict policy, team CVs",
+  },
 ];
 
-export const FIRM_RULES = { renewal: 12, conflictMonths: 24 };
+export const FIRM_RULES = { renewal: "12", grace: "30", conflictMonths: "24" };
+
+export function saveFirmRules(patch: Partial<typeof FIRM_RULES>) {
+  Object.assign(FIRM_RULES, patch);
+}
+
+export function saveFirmTypeCriteria(id: string, criteria: string[], creds: string) {
+  const t = FIRM_TYPES.find((x) => x.id === id);
+  if (t) {
+    t.criteria = criteria;
+    t.creds = creds;
+  }
+}
 
 export const ROLES = [
   { name: "Admin", desc: "Everything, including settings, team and branding" },
@@ -448,4 +597,48 @@ export function orgIdFor(entityName: string): string | undefined {
 }
 export function firmIdFor(entityName: string): string | undefined {
   return FIRMS.find((f) => f.name === entityName)?.id;
+}
+
+const TODAY_LABEL = "Today";
+
+/** Adds a newly-invited organisation to the directory — the prototype's newInvited(). Used by both the
+ * single-organisation and the bulk-spreadsheet invite flows. */
+export function inviteOrganisation(r: { org: string; email: string; initials: string; color: string; sector: string; type: string; tier: string }): string {
+  const id = r.org
+    .toLowerCase()
+    .replace(/[^a-z]+/g, "-")
+    .replace(/^-|-$/g, "")
+    .slice(0, 24);
+  ORGANISATIONS.push({
+    id,
+    name: r.org,
+    initials: r.initials,
+    color: r.color,
+    sector: r.sector,
+    type: r.type,
+    tier: r.tier,
+    status: "Invited",
+    officer: "—",
+    joined: "—",
+    last: TODAY_LABEL,
+    hq: "—",
+    tags: [],
+    isNew: true,
+    web: r.email.split("@")[1],
+    invite: { email: r.email, sent: "19 Oct 2026", expires: "2 Nov 2026", by: "M. Bello", history: [["19 Oct 2026", "Invitation sent", "M. Bello"]] },
+  });
+  return id;
+}
+
+/** Resends an invitation to an organisation whose earlier one expired — if no matching record exists yet
+ * (this app's sample directory is a subset of the prototype's), falls back to inviting it fresh so the row
+ * still goes out, matching the prototype's own resend behaviour where it can. */
+export function resendOrInvite(r: { org: string; email: string; initials: string; color: string; sector: string; type: string; tier: string }): string {
+  const existing = ORGANISATIONS.find((o) => o.name === r.org);
+  if (existing) {
+    existing.status = "Invited";
+    existing.invite = { email: r.email, sent: "19 Oct 2026", expires: "2 Nov 2026", by: "M. Bello", history: [...(existing.invite?.history ?? []), ["19 Oct 2026", "Invitation resent", "M. Bello"]] };
+    return existing.id;
+  }
+  return inviteOrganisation(r);
 }

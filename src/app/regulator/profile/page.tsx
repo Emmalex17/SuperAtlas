@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { AppShell } from "@/components/AppShell";
+import { SettingsShell } from "@/components/SettingsShell";
 import { PageHead, Button, Field } from "@/components/ui";
 import { useToast } from "@/components/Toast";
 import { Icon } from "@/lib/icons";
@@ -38,12 +38,9 @@ export default function RegulatorProfilePage() {
   }
 
   return (
-    <AppShell workspace="regulator">
+    <AppShell workspace="regulator" crumbs={[{ label: "Profile", href: "/regulator/profile" }, { label: "Details" }]}>
+      <SettingsShell active="profile">
       <PageHead title="Profile" sub="How NITDA appears to organisations and assurance firms, on screen and in emails." />
-      <div className="tabs" role="tablist">
-        <button role="tab" className="on">Details</button>
-        <Link href="/regulator/profile/branding" role="tab">Branding</Link>
-      </div>
 
       <form className="grid side" onSubmit={submit} noValidate>
         <div className="card col gap20">
@@ -127,6 +124,7 @@ export default function RegulatorProfilePage() {
           </div>
         </div>
       </form>
+      </SettingsShell>
     </AppShell>
   );
 }

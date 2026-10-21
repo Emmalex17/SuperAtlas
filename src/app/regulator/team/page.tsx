@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { AppShell } from "@/components/AppShell";
+import { SettingsShell } from "@/components/SettingsShell";
 import { PageHead, Button, Chip, Field, Tabs } from "@/components/ui";
 import { Dialog } from "@/components/Overlay";
 import { Popover, MenuItem } from "@/components/Popover";
@@ -65,7 +66,8 @@ export default function TeamPage() {
   }
 
   return (
-    <AppShell workspace="regulator">
+    <AppShell workspace="regulator" crumbs={[{ label: "Team" }]}>
+      <SettingsShell active="team">
       <PageHead
         title="Team"
         sub="Give each person a role and a portfolio. A portfolio limits a supervisor or reviewer to the categories they look after."
@@ -200,6 +202,7 @@ export default function TeamPage() {
           <Button variant="danger" onClick={confirmRemove}>Remove access</Button>
         </div>
       </Dialog>
+      </SettingsShell>
     </AppShell>
   );
 }

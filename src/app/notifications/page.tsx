@@ -34,7 +34,7 @@ export default function NotificationsPage() {
         actions={
           <>
             <Button variant="secondary" icon="check" onClick={() => setReadIds(new Set(mine.map((n) => n.id)))}>Mark all as read</Button>
-            <Button variant="outline" icon="gear-six" onClick={() => router.push("/account")}>Preferences</Button>
+            <Button variant="outline" icon="gear-six" onClick={() => router.push("/account?tab=notif")}>Preferences</Button>
           </>
         }
       />

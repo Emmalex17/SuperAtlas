@@ -253,3 +253,14 @@ export function uploadPaymentProof(c: EnforcementCase, today: string, byName: st
   c.penalty.proof = [`Payment receipt ${c.ref}.pdf`, "120 KB"];
   caseLog(c, "Proof of payment uploaded", byName, today);
 }
+
+export function saveActionType(id: string | undefined, patch: Omit<ActionType, "id" | "level">) {
+  if (id) {
+    const a = ACTION_TYPES.find((x) => x.id === id);
+    if (a) Object.assign(a, patch);
+    return a;
+  }
+  const next: ActionType = { id: `at${ACTION_TYPES.length + 1}`, level: Math.max(0, ...ACTION_TYPES.map((a) => a.level)) + 1, ...patch };
+  ACTION_TYPES.push(next);
+  return next;
+}

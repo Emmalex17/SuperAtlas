@@ -1119,3 +1119,19 @@ button.link{background:none;border:0;color:var(--link);cursor:pointer;padding:4p
   .ch-hb,.ch-sr,.ch-fs{grid-template-columns:minmax(90px,38%) minmax(0,1fr) 54px}
   .ch-dr{grid-template-columns:minmax(90px,34%) minmax(0,1fr) 70px}
 }
+
+/* ---- settings shell (docs/prototype/source/core.js settingsShell() + styles.css) ---- */
+.set-shell{display:grid;grid-template-columns:220px minmax(0,1fr);gap:24px;align-items:start}
+.set-nav{position:sticky;top:72px;display:flex;flex-direction:column;gap:2px;background:var(--surface);border-radius:16px;box-shadow:var(--e1);padding:12px}
+.set-nav .set-g{font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--text-2);padding:10px 10px 4px}
+.set-nav .set-g:first-child{padding-top:2px}
+.set-nav a{padding:7px 10px;border-radius:8px;color:var(--text);font-weight:500;font-size:13.5px;text-decoration:none!important}
+.set-nav a:hover{background:var(--surface-subtle)}
+.set-nav a.on{background:var(--brand-50);color:var(--brand-600);font-weight:600}
+.set-body{min-width:0;display:flex;flex-direction:column;gap:18px}
+@media (max-width: 900px){
+  .set-shell{grid-template-columns:minmax(0,1fr)}
+  .set-nav{position:static;flex-direction:row;overflow-x:auto;padding:6px;gap:4px}
+  .set-nav .set-g{display:none}
+  .set-nav a{white-space:nowrap}
+}
