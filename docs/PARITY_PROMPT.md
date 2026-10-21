@@ -10,7 +10,7 @@ This repository and its Vercel project belong to GitHub account **Emmalex17**. V
 
 - At the start of every session, check `git config user.name` and `git config user.email` match the Emmalex17 identity before committing anything.
 - Every commit must be authored as Emmalex17, with **no `Co-authored-by` lines**.
-- After every screen, fix, or phase: commit as Emmalex17 → push to `staging` → confirm the staging Vercel deployment succeeds (not "Blocked", not failed) → promote to `main` through a pull request from `staging` into `main` (or a fast-forward) → confirm the production deployment succeeds → confirm `main` and `staging` point at the same commit and record that hash in `docs/PROGRESS.md`.
+- After every screen, fix, or phase: commit as Emmalex17 → push to `staging` → confirm the staging Vercel deployment succeeds (not "Blocked", not failed) → promote to `main` through a pull request from `staging` into `main` (a merge commit is expected and fine) → confirm the production deployment succeeds → confirm `main` and `staging` are in sync (`git diff origin/staging origin/main --stat` is empty — the commit hashes themselves will usually differ once a merge commit has been used, which is expected) and record both hashes in `docs/PROGRESS.md`.
 - **Never** commit directly to `main`, **never** force-push, **never** promote `staging` → `main` while a check is red.
 
 ---
