@@ -31,11 +31,28 @@ The earlier (now superseded) `ddf4619`/`2ec46d0` commits were never reverted or 
   4. Confirm `main` and `staging` are in sync — `git diff origin/staging origin/main --stat` is empty (zero content drift). The hashes themselves (`git rev-parse origin/main` / `origin/staging`) will usually differ once any promotion has used a merge commit, which is expected, not a problem — see "Deployment-identity fix" above for why. Record both hashes and confirm the diff is empty here.
 - **Never** commit directly to `main`, **never** force-push, **never** promote `staging` → `main` while a check is red.
 
-## Current state (2026-10-21, ~16:45)
+## Current state (2026-10-21, ~18:30)
 
-**Phase:** Step 1 (audit) done. Step 2 (foundations) substantially done. **P1 and P2 (Step 3) are both fully closed: 16/16 and 24/24 Matches.** P3 (Organisations and assurance firms) now underway — see below for what's done.
+**Phase:** Step 1 (audit) done. Step 2 (foundations) substantially done. **P1, P2 and P3 (Step 3) are all fully closed: 16/16, 24/24, and 32/32 Matches.** Next: P4 (Requirements library).
 
-**Pushed to `staging` and `main` (PR #42, merge commit `7171986`), both deployed `Ready` and verified live** — `origin/main` = `7171986`, `origin/staging` = `1f6aa4e`, `git diff origin/staging origin/main --stat` empty (zero content drift). Production (`superatlas-green.vercel.app`) and staging (`superatlas-git-staging-emmanueladedeji67-3967.vercel.app`) both return 200.
+**P3 is complete — 32/32 Matches (up from 10/32 at session start).** Full build list, in order:
+1. `organisations/category` (category ranking screen) + shared compliance helpers in `cases.ts`/`enforcement.ts`.
+2. `organisations/profile`'s Compliance tab + a shared `Scorecard` component.
+3. The prototype's global `polishDom()` pass (dash → "None yet"/"None") — a previously-undiscovered gap affecting every already-shipped P1/P2 screen, not just P3.
+4. Finding-status chip labels (`FD_STATUS_TONE` → `FD_STATUS_CHIP`) — a second previously-undiscovered gap, fixed across 5 pages.
+5. The category-cards pins system on `organisations` (list page) + the "Organisation"/"Firm" sidebar nav sections.
+6. `firms/profile`'s Performance tab + a shared `Stars` component.
+7. Self-service `org/team`, `org/profile` (5 tabs), `firm/team`, `firm/profile` (5 tabs).
+8. `org/welcome` (5-step wizard), `firm/welcome` (4-step wizard), `firm/apply` (4-step accreditation application).
+9. Wired `INVITES.zenith.next`/`deloitte.next` to the new wizards; verified end to end (accept invite → MFA → lands on the wizard).
+10. **Fixed a real gap against `firm/apply`'s pilot note** ("keep the screen in code but remove every entry point — firms are invited by NITDA"): the prototype's own screenshots show "Apply for accreditation" buttons on `firm/profile` and `firm/welcome`, but the pilot note requires those removed too, not just the public-nav link. Caught by re-reading `PARITY_INVENTORY.md`'s pilot note carefully while writing the final audit, after having built the buttons to match the prototype screenshots exactly — removed both, route stays fully built and reachable only by direct URL (same treatment as P1's `register`).
+11. Rewrote `docs/PARITY_AUDIT.md`'s P3 section (32/32, full per-row notes) and ticked all 32 `PARITY_INVENTORY.md` checkboxes.
+
+**Noted but deliberately left for P9** (flagged in the audit, not fixed here — real scope creep risk otherwise): the prototype's organisation-workspace nav has one "Compliance" item (`org/compliance`) with `org/exposure`/`org/actions` folded in as sub-views, not the app's current standalone "Regulatory actions" item (`/organisation/actions`, built in an earlier phase). P9's own audit already tracks `org/compliance` as entirely missing — this is that phase's problem to solve, not a P3 self-service-workspace one.
+
+Every screen in this list was live-verified against its `docs/prototype/screens/*.jpg` reference (pixel/text match) before being marked done — see the commit messages for `fa77ffc`, `10a9085`, `1f6aa4e`, `cc1fda6`, `c09a68c`, `02c0743` for full per-commit detail.
+
+**Pushed to `staging` and `main` (PR #43, merge commit `d4affcb`), both deployed `Ready` and verified live** — `origin/main` = `d4affcb`, `origin/staging` = `02c0743`, `git diff origin/staging origin/main --stat` empty (zero content drift). Production (`superatlas-green.vercel.app`) returns 200 at `/signin`.
 
 **Deployment infra note (2026-10-21, after the mid-session resume):** GitHub → Vercel's auto-deploy webhook stopped firing for plain `git push` events partway through this session (confirmed via `gh api repos/.../commits/<sha>/status` returning `total_count: 0` for several minutes after a push that previously would have triggered a build within seconds). PR-open events still triggered builds fine (used for PR #42's checks). Worked around it for both the `staging` push and the `main` merge by running `vercel deploy --yes` (staging) / `vercel deploy --prod --yes` (production) directly, then `vercel alias set <new-deployment> superatlas-git-staging-....vercel.app` for the staging alias (the production alias updates automatically on `--prod` deploys). Both verified `Ready` and returning 200 afterwards. **If a future session hits the same "pushed but no Vercel status after ~30s" symptom, this manual-deploy-and-alias workaround is the fix** — check the Vercel GitHub integration in the dashboard if it keeps recurring.
 
@@ -71,26 +88,15 @@ No WIP outstanding. Working tree clean as of this point in the session.
 
 ## Exact next step
 
-P3 build order from here. `firms/profile`'s Performance tab (and the already-correct "People 3" label) are now done — see above. Remaining:
+**P3 is done.** Move to Step 3, P4 (Requirements library) — `docs/PARITY_AUDIT.md`'s P4 section (1/8 Matches, 4 Different, 3 Missing) is the next read. Biggest items per that section: `library/requirement` (standalone requirement detail view) and `library/edit` (requirement editor) don't exist at all; `library/ai` ("Add regulation with AI" stepper) doesn't exist; the `library` list's three action buttons ("Add regulation", "Import spreadsheet", "Add with AI") are all dead (no `onClick`/`href`); `library/regulation`'s left-aside "Actions" card (Edit details/Add requirement/Create new version/Publish/Archive) is missing entirely, as are several smaller pieces (search box, "Expand all", per-question badge pills, the Evidence tab's row-click-to-open). Read the full P4 section and its "Questions" before starting — in particular, confirm whether the missing "Actions" card + `library/edit` + `library/ai` should be treated as one connected "no requirement/regulation authoring exists" gap or several separate fixes, per that section's own open question.
 
-1. **Build the self-service workspace screens — the single largest remaining P3 chunk.** Prototype source fully read this session (`docs/prototype/source/onboarding.js` lines 149-305, `docs/prototype/source/workspace.js` lines 1-131) — exact copy ready to port, no further source-reading needed before building. Build order:
-   - Data layer first: extend `Organisation` (mockData.ts) with `onboard: {profile,logo,officers,people,group}`, `links: {name,rel}[]`, `logoUp?: boolean` (officers/colleagues already exist); extend `Firm` with the same `onboard`/`logoUp` shape (people/clients already exist). Add mutators: officer add/remove, colleague invite, link add, logo-upload toggle (org side); assessor add/remove, client declare/remove, logo-upload toggle (firm side) — mirroring the prototype's `ACT.form_obProfile`/`obLogo`/`form_obOfficer`/`obOffDel`/`form_obColleague`/`form_obLink` and `ACT.form_fbProfile`/`fbLogo`/`form_fbAssessor`/`fbAsDel`/`form_fbClient`/`fbClDel`.
-   - `org/team` (`src/app/organisation/team/page.tsx`): NAME/ROLE/STATUS table (officers as "Organisation admin" + colleagues), "Invite colleague" dialog, 4 role-description cards. Simplest screen, build first to validate the data layer.
-   - `firm/team` (`src/app/firm/team/page.tsx`): PERSON/ROLE/CREDENTIALS/CREDENTIAL EXPIRY/STATUS table, "Add person" dialog, remove action (except self).
-   - `org/profile` (`src/app/organisation/profile/page.tsx`, 5 tabs: Details/Classification/Licences/Group links/Settings) — Details is a form (Legal name read-only/Registration number/Website/Head office/Compliance contact email + Logo card + Key officers card linking to org/welcome); Classification is the self-service "Request a classification change" flow (reuses `catSelects`-equivalent cascading sector/type/tier selects already built for P2's categories import wizard — check `src/app/regulator/settings/categories/import/page.tsx` for the pattern) gated on `CLASS_REQS` pending-request state; Licences is upload-only (no real file logic needed, matches regulator-side pattern already built); Group links lists `org.links` + "Add a link" (routes to org/welcome's group step); Settings is 3 toggle switches + "Save settings" (no real persistence needed, matches prototype's own no-op `savedToast`).
-   - `firm/profile` (`src/app/firm/profile/page.tsx`, 5 tabs: Details/Performance/Accreditations/Assessors/Advisory clients) — Performance tab reuses this session's `firmPerf`-equivalent logic in "firm" mode (`side !== 'reg'`: drop the peer-comparison chart and ratings table, add "What organisations said" — last 5 ratings, names hidden); Accreditations tab lists `FIRM_ACCREDITATIONS`/open `ACC_APPS` plus an "Apply for accreditation" button going to `firm/apply`; Assessors tab is a read-only version of firm/team's table; Advisory clients tab lists `firm.clients` + "Declare a client" form.
-   - `org/welcome` (`src/app/organisation/welcome/page.tsx`) and `firm/welcome` (`src/app/firm/welcome/page.tsx`) — 5-step and 4-step vertical-stepper wizards reusing the exact same mutators built for team/profile above (`obAdvance`/`fbAdvance` step-completion pattern: mark step done in `onboard`, jump to next incomplete step, redirect to dashboard once all done). Build these **last** since they're the most complex UI but reuse everything else.
-   - `firm/apply`: build the application form (per `docs/prototype/source` — not yet read this session, read before building) but leave it **unlinked from public nav**, per the already-agreed deliberate difference; only reachable via firm/profile's/firm/welcome's "Apply for accreditation" buttons.
-2. Once `org/welcome`/`firm/welcome` exist, update `src/lib/invites.ts`'s `INVITES.zenith.next`/`INVITES.deloitte.next` to point at them instead of the plain `/organisation`/`/firm` dashboards (noted as a follow-up when P1's invitation flow was built).
-3. Once all of the above is built and verified: tick checkboxes in `docs/prototype/PARITY_INVENTORY.md`'s P3 section, rewrite `docs/PARITY_AUDIT.md`'s P3 section (currently stale at 10/32 Matches — does not yet reflect this session's `organisations/category` / Compliance tab / pins-system / Performance-tab work), update the phase table below, commit as `ui-parity: P3 complete — X/32 Matches`, push/promote/verify per the standing rule, then move to P4.
-
-## Audit summary (from `docs/PARITY_AUDIT.md`, P1 and P2 now updated)
+## Audit summary (from `docs/PARITY_AUDIT.md`, P1–P3 now updated)
 
 | Phase | Matches | Different | Missing |
 |---|---|---|---|
 | P1 Public site and sign-in | **16** | **0** | **0** |
 | P2 Regulator setup, settings, account | **24** | **0** | **0** |
-| P3 Organisations and assurance firms | 10 | 4 | 18 |
+| P3 Organisations and assurance firms | **32** | **0** | **0** |
 | P4 Requirements library | 1 | 4 | 3 |
 | P5 Programmes and engagements | 3 | 6 | 2 |
 | P6 Answering and assessment | 0 | 5 | 6 |
@@ -98,20 +104,18 @@ P3 build order from here. `firms/profile`'s Performance tab (and the already-cor
 | P8 Data returns | 2 | 4 | 2 |
 | P9 Compliance and enforcement | 0 | 6 | 9 |
 | P10 Dashboards, search, cross-cutting | 1 | 5 | 1 |
-| **Total** | **64** | **39** | **46** |
+| **Total** | **87** | **35** | **28** |
 
-(Totals carry a ~1-row bookkeeping wrinkle from `organisations/invite` being listed in both P2's and P3's tables in the original Step-1 audit — not worth untangling further; both occurrences now correctly say Matches.)
+The 10 biggest gaps are listed in `docs/PARITY_AUDIT.md` — #3 (P3 self-service workspaces), #4 (P2 Settings), #6 (app shell) and #9 (P1 invitations/signin) are now all marked resolved there. **#1 (P9's org-side Compliance surface, 0/15 matches) is now the single biggest open item** — and per this session's P3 closing note, it also covers the nav/IA question (prototype's unified `org/compliance` vs. the app's standalone `/organisation/actions`) flagged while building P3's "Organisation" nav section. #2 (P6, assessors can't see organisation answers) is tied for biggest at 0/11 matches.
 
-The 10 biggest gaps are listed in `docs/PARITY_AUDIT.md` — #4 (P2 Settings), #6 (app shell) and #9 (P1 invitations/signin) are now all marked resolved there, so #1 (P9's org-side Compliance surface) and #3 (P3's missing org/firm self-service workspaces) are the two biggest open items, and #3 lines up with where P3 picks up.
-
-## Remaining Step 2 foundations (lower priority, not blocking Step 3)
+## Remaining Step 2 foundations (lower priority, not blocking later phases)
 
 - Sidebar brand block: prototype shows tenant logo+name+"Supervision workspace"/"Supervised by NITDA" subtitle + a collapse/rail toggle (`[` key). App still shows the SuperAtlas logo instead. Cosmetic, not blocking page builds.
-- Remaining phases still need to adopt the `crumbs` prop screen-by-screen as they're built (P2 is the first phase to actually pass it).
+- Remaining phases still need to adopt the `crumbs` prop screen-by-screen as they're built (P2 was the first phase to pass it; P3 did too, including the new self-service screens).
 - Toast: prototype auto-dismisses at 4200ms with an explicit × button; app dismisses at 3500ms with no × button.
 - Dialog: still missing auto-focus-of-first-field on open (prototype's `openDialog` does this).
-- Chart-kit drill/click interactivity (`data-act="drill"` → opens a drawer of organisations) was deliberately left out of the new `chBars`/`chColumns`/`chStack`/`chFunnel`/`chHeat`/`chDots` — build it when the first screen that needs it is reached, since the drawer content needed to design the drill API concretely only exists once there's a real caller.
-- `KTile`/`ChartCard`/the chart-kit functions are still unexercised by any real screen — first real use (and visual verification) will come whenever P5/P8/P9/P10's analytics/Insights/dashboard screens are built.
+- Chart-kit drill/click interactivity (`data-act="drill"` → opens a drawer of organisations) is still deliberately not built. P3 reached the first real case where the prototype uses it (the peer-comparison `chBars` on `firms/profile`/`firm/profile`'s Performance tab, click a bar to open that firm's own performance) and made the deliberate call to skip it rather than expand `chBars`'s shared API mid-phase — a secondary analytics affordance, not a blocking gap (the same firm is still reachable via the firms list). Revisit if a future phase's screen genuinely needs click-through (not just visual) drill-down.
+- `KTile`/`ChartCard`/the chart-kit functions are no longer unexercised — P3 put `chDots`, `chStack`, `chLine`, and `chBars` into real, live-verified screens (`organisations/category`, both Compliance tabs, both Performance tabs). Still unused: `chColumns`, `chFunnel`, `chHeat` — first real use (and visual verification) will come whenever a later phase's analytics/Insights screen needs one.
 
 ## How to resume cleanly
 
