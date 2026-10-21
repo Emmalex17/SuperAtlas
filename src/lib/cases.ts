@@ -1062,6 +1062,14 @@ function hintForChoice(q: NormQuestion): string {
   return "Short text";
 }
 
+/** Converts an AI-suggested (library-shaped) question into a programme qset's simpler
+ * {id, text, hint} shape — used when "Suggest with AI" adds drafts to a programme's own copy. */
+export function questionFromNorm(q: NormQuestion, id: string): Question {
+  return { id, text: q.q, hint: hintForChoice(q) };
+}
+
+export const QSET_HINTS = ["Yes / No / Not applicable", "Date", "Number", "Short text", "Long text"];
+
 /** A programme takes its own editable copy of the regulation's current requirement set — the
  * prototype's makeQSet() (bdata.js). Edited for this programme only; the library is unaffected. */
 export function makeQSet(reg: Regulation): QSet {
