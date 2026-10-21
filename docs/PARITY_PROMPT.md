@@ -4,6 +4,17 @@ Paste everything below the line into Claude Code, after the parity kit has been 
 
 ---
 
+## Standing rule: deployment identity and promotion (read before committing anything)
+
+This repository and its Vercel project belong to GitHub account **Emmalex17**. Vercel blocks any deployment whose commit author it can't match to the project owner/team, so:
+
+- At the start of every session, check `git config user.name` and `git config user.email` match the Emmalex17 identity before committing anything.
+- Every commit must be authored as Emmalex17, with **no `Co-authored-by` lines**.
+- After every screen, fix, or phase: commit as Emmalex17 → push to `staging` → confirm the staging Vercel deployment succeeds (not "Blocked", not failed) → promote to `main` through a pull request from `staging` into `main` (or a fast-forward) → confirm the production deployment succeeds → confirm `main` and `staging` point at the same commit and record that hash in `docs/PROGRESS.md`.
+- **Never** commit directly to `main`, **never** force-push, **never** promote `staging` → `main` while a check is red.
+
+---
+
 You are working in the SuperAtlas Next.js + TypeScript repository. Your job is to make the app match the approved clickable prototype exactly, page by page, with no outliers. Until now the app has drifted from the prototype. From this point on, the prototype is the specification, and "close enough" is not done.
 
 ## The source of truth (all in the repository)
