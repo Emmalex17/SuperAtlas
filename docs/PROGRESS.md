@@ -42,6 +42,8 @@ The earlier (now superseded) `ddf4619`/`2ec46d0` commits were never reverted or 
 - `docs/prototype/PARITY_INVENTORY.md`'s full P1 section (13 checkboxes) ticked; `docs/PARITY_AUDIT.md` updated (P1 section, overview table, gaps #6 and #9 marked resolved/fixed).
 - Verified: `tsc --noEmit`, `eslint src`, `npm run build` all clean on the final commit.
 
+**Confirmed final deploy state:** `origin/main` = `ca1a1db`, `origin/staging` = `d018a29` — `git diff origin/staging origin/main --stat` empty (zero content drift). Production (`superatlas-green.vercel.app`) deployment for `ca1a1db` reached `Ready`; spot-checked `/invitation/zenith` live on production, renders correctly.
+
 No WIP outstanding. Working tree clean as of this point in the session.
 
 ## Exact next step
