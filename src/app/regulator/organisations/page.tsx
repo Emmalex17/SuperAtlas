@@ -1,42 +1,93 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { AppShell } from "@/components/AppShell";
 import { PageHead, Button, Chip, Tile } from "@/components/ui";
+import { Dialog } from "@/components/Overlay";
 import { Popover, MenuItem } from "@/components/Popover";
 import { Icon, type IconName } from "@/lib/icons";
-import { ORGANISATIONS, STATUS_TONE, CLASS_REQS, type Organisation } from "@/lib/mockData";
+import { ORGANISATIONS, CATEGORIES, allCategoryTypes, STATUS_TONE, CLASS_REQS, type Organisation } from "@/lib/mockData";
+import { useToast } from "@/components/Toast";
 
 function orgStatus(o: Organisation): string {
   if (o.status === "Verified" && CLASS_REQS.some((r) => r.org === o.id && r.status === "Pending")) return "Change requested";
   return o.status;
 }
 
-const CARDS: { label: string; icon: IconName; match: (o: Organisation) => boolean }[] = [
-  { label: "Commercial banks", icon: "bank", match: (o) => o.type === "Commercial bank" },
-  { label: "Non-interest banks", icon: "bank", match: (o) => o.type === "Non-interest bank" },
-  { label: "Microfinance banks", icon: "bank", match: (o) => o.type === "Microfinance bank" },
-  { label: "Payments", icon: "credit-card", match: (o) => o.sector === "Payments" },
-  { label: "Digital economy", icon: "cloud", match: (o) => o.sector === "Digital economy" },
-];
+type CatOption = { key: string; label: string; kind: "sector" | "type"; value: string; icon: IconName; group: string };
+
+const SECTOR_IC: Record<string, IconName> = { Banking: "bank", Payments: "credit-card", "Digital economy": "cloud" };
+const TYPE_IC: Record<string, IconName> = {
+  "Microfinance bank": "piggy-bank",
+  "Mobile money operator": "device-mobile",
+  "Switching and processing": "arrows-left-right",
+  "Payment solution service provider": "credit-card",
+  "Data controller of major importance": "database",
+  "Cloud service provider": "cloud",
+  "Fintech platform": "lightning",
+};
+
+/** Every category, pinnable as a card: one option per sector, one per type — the prototype's catOptions(). */
+function catOptions(): CatOption[] {
+  return CATEGORIES.flatMap((c) => [
+    { key: `s:${c.name}`, label: c.name, kind: "sector" as const, value: c.name, icon: SECTOR_IC[c.name] ?? "squares-four", group: "Sectors" },
+    ...c.types.map((t) => ({ key: `t:${t.name}`, label: t.plural ?? t.name, kind: "type" as const, value: t.name, icon: TYPE_IC[t.name] ?? SECTOR_IC[c.name] ?? "buildings", group: c.name })),
+  ]);
+}
+
+const DEFAULT_PINS = ["t:Commercial bank", "t:Non-interest bank", "t:Merchant bank", "t:Microfinance bank", "s:Payments", "s:Digital economy"];
+const PINS_KEY = "sa-catpins";
+
+function inCard(o: Organisation, c: CatOption | undefined): boolean {
+  if (!c) return true;
+  return c.kind === "type" ? o.type === c.value : o.sector === c.value;
+}
+
+/** Organisations this regulator manages on SuperAtlas (invited onwards), excluding rejected ones. */
+function managed(): Organisation[] {
+  return ORGANISATIONS.filter((o) => o.status !== "Rejected");
+}
 
 const STATUSES = ["All", "Verified", "Invited", "Pending verification", "Info requested", "Change requested", "Invite expired", "Rejected"];
 
 export default function OrganisationsListPage() {
   const router = useRouter();
+  const toast = useToast();
   const [card, setCard] = useState<string | null>(null);
   const [status, setStatus] = useState("All");
   const [q, setQ] = useState("");
   const [menuFor, setMenuFor] = useState<string | null>(null);
   const menuAnchor = useRef<HTMLButtonElement | null>(null);
 
-  const activeCard = CARDS.find((c) => c.label === card);
-  const base = ORGANISATIONS.filter((o) => (!activeCard || activeCard.match(o)) && (!q || (o.name + o.officer + (o.web ?? "")).toLowerCase().includes(q.toLowerCase())));
-  const rows = base.filter((o) => status === "All" ? true : orgStatus(o) === status);
+  const [pinKeys, setPinKeys] = useState<string[] | null>(null);
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(PINS_KEY);
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time read of a browser-only store (localStorage) that cannot be observed during SSR.
+      if (saved) setPinKeys(JSON.parse(saved));
+    } catch {
+      // ignore malformed/unavailable storage
+    }
+  }, []);
+
+  const [allOpen, setAllOpen] = useState(false);
+  const allAnchor = useRef<HTMLButtonElement | null>(null);
+  const [customiseOpen, setCustomiseOpen] = useState(false);
+  const [draftPins, setDraftPins] = useState<string[]>([]);
+
+  const opts = catOptions();
+  const pins = (pinKeys ?? DEFAULT_PINS).map((k) => opts.find((o) => o.key === k)).filter((o): o is CatOption => !!o);
+  const groups = [...new Set(opts.map((o) => o.group))];
+  const activeCard = opts.find((c) => c.key === card);
+  const catCount = (c: CatOption) => managed().filter((o) => inCard(o, c)).length;
+
+  const base = ORGANISATIONS.filter((o) => inCard(o, activeCard) && (!q || (o.name + o.officer + (o.web ?? "")).toLowerCase().includes(q.toLowerCase())));
+  const rows = base.filter((o) => (status === "All" ? true : orgStatus(o) === status));
   const countFor = (s: string) => (s === "All" ? base.length : base.filter((o) => orgStatus(o) === s).length);
   const visibleStatuses = STATUSES.filter((s) => ["All", "Verified", "Invited", "Pending verification"].includes(s) || countFor(s) || s === status);
+  const insightsType = activeCard ? allCategoryTypes().find((t) => t.name === activeCard.label || t.plural === activeCard.label) : undefined;
 
   function rowAction(o: Organisation) {
     const st = orgStatus(o);
@@ -44,6 +95,42 @@ export default function OrganisationsListPage() {
     if (st === "Change requested") return <Button variant="secondary" size="sm" onClick={() => router.push(`/regulator/organisations/${o.id}?tab=classification`)}>Review change</Button>;
     if (st === "Invited" || st === "Invite expired") return <Button variant="tertiary" size="sm">Resend</Button>;
     return null;
+  }
+
+  function openCustomise() {
+    setAllOpen(false);
+    setDraftPins(pinKeys ?? DEFAULT_PINS);
+    setCustomiseOpen(true);
+  }
+
+  function toggleDraftPin(key: string, checked: boolean) {
+    setDraftPins((prev) => (checked ? [...prev, key] : prev.filter((k) => k !== key)));
+  }
+
+  function savePins() {
+    if (!draftPins.length) {
+      toast("Choose at least one card", "bad");
+      return;
+    }
+    setPinKeys(draftPins);
+    try {
+      localStorage.setItem(PINS_KEY, JSON.stringify(draftPins));
+    } catch {
+      // ignore unavailable storage
+    }
+    setCustomiseOpen(false);
+    toast("Category cards saved");
+  }
+
+  function resetPins() {
+    setPinKeys(null);
+    try {
+      localStorage.removeItem(PINS_KEY);
+    } catch {
+      // ignore unavailable storage
+    }
+    setCustomiseOpen(false);
+    toast("Category cards reset");
   }
 
   const menuOrg = ORGANISATIONS.find((o) => o.id === menuFor);
@@ -56,20 +143,50 @@ export default function OrganisationsListPage() {
         sub="Everyone you supervise, from invitation to verified. Open an organisation to verify it, review a category change or manage its invitation."
         actions={
           <>
+            <Link href="/regulator/settings/categories" className="icon-btn bordered" title="Category settings" aria-label="Category settings">
+              <Icon name="gear-six" />
+            </Link>
             <Button variant="outline" icon="export">Export</Button>
             <Link href="/regulator/organisations/invite"><Button icon="user-plus">Invite organisations</Button></Link>
           </>
         }
       />
 
-      <div className="cat-cards" style={{ ["--n" as string]: CARDS.length }}>
-        {CARDS.map((c) => (
-          <button key={c.label} className={`cat-card ${card === c.label ? "on" : ""}`} onClick={() => setCard(card === c.label ? null : c.label)}>
-            <Tile icon={c.icon} tone={card === c.label ? "brand" : ""} size="sm" />
+      <div className="cat-cards" style={{ ["--n" as string]: pins.length + 1 }}>
+        {pins.map((c) => (
+          <button key={c.key} className={`cat-card ${card === c.key ? "on" : ""}`} onClick={() => setCard(card === c.key ? null : c.key)} data-test={`cat-${c.value.split(" ")[0].toLowerCase()}`} title={c.label}>
+            <Tile icon={c.icon} tone={card === c.key ? "brand" : ""} size="sm" />
             <span className="cat-l">{c.label}</span>
-            <b className="tnum">{ORGANISATIONS.filter(c.match).length}</b>
+            <b className="tnum">{catCount(c)}</b>
           </button>
         ))}
+        <div style={{ position: "relative" }}>
+          <button ref={allAnchor} className={`cat-card more ${card && !pins.some((p) => p.key === card) ? "on" : ""}`} onClick={() => setAllOpen((o) => !o)} data-test="cat-all" style={{ width: "100%" }}>
+            <Tile icon="dots-three" size="sm" />
+            <span className="cat-l">All categories</span>
+            <span className="cat-more">{opts.length} to choose from <Icon name="caret-down" /></span>
+          </button>
+          <Popover open={allOpen} onClose={() => setAllOpen(false)} anchorRef={allAnchor}>
+            <div className="row between" style={{ padding: "6px 8px 8px" }}>
+              <b>All categories</b>
+              <button type="button" className="link-btn small" onClick={openCustomise}>Choose cards</button>
+            </div>
+            <div className="cat-pop">
+              {groups.map((g) => (
+                <div key={g}>
+                  <div className="overline" style={{ padding: "8px 10px 4px" }}>{g}</div>
+                  {opts.filter((o) => o.group === g).map((o) => (
+                    <button key={o.key} type="button" className={`menu-item ${card === o.key ? "on" : ""}`} onClick={() => { setCard(o.key); setAllOpen(false); }}>
+                      <Icon name={o.icon} />
+                      <span className="grow">{o.label}</span>
+                      <span className="tnum muted small">{catCount(o)}</span>
+                    </button>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </Popover>
+        </div>
       </div>
 
       <div className="card p0">
@@ -84,6 +201,11 @@ export default function OrganisationsListPage() {
               {activeCard.label}
               <button className="icon-btn" aria-label="Clear category filter" onClick={() => setCard(null)}><Icon name="x" /></button>
             </span>
+          ) : null}
+          {insightsType ? (
+            <Button variant="tertiary" size="sm" icon="chart-bar" testId="cat-insights" onClick={() => router.push(`/regulator/organisations/category/${encodeURIComponent(insightsType.name)}`)}>
+              Category insights
+            </Button>
           ) : null}
           <span className="grow" />
           <span className="cap muted">{rows.length} shown</span>
@@ -150,7 +272,7 @@ export default function OrganisationsListPage() {
             </tbody>
           </table>
         </div>
-        <div className="tbl-foot">{ORGANISATIONS.length} organisations managed on SuperAtlas</div>
+        <div className="tbl-foot">{managed().length} organisations managed on SuperAtlas</div>
       </div>
 
       <Popover open={!!menuFor} onClose={() => setMenuFor(null)} anchorRef={menuAnchor}>
@@ -172,6 +294,43 @@ export default function OrganisationsListPage() {
           </>
         ) : null}
       </Popover>
+
+      <Dialog open={customiseOpen} onClose={() => setCustomiseOpen(false)} wide>
+        <div className="row top">
+          <div className="grow">
+            <h2 className="h3">Choose your category cards</h2>
+            <p className="muted small">Pick up to 6 to show above the table. Every category stays available under All categories. This only changes your view.</p>
+          </div>
+          <button className="icon-btn" type="button" aria-label="Close" onClick={() => setCustomiseOpen(false)}>
+            <Icon name="x" />
+          </button>
+        </div>
+        <div className="pin-grid">
+          {groups.map((g) => (
+            <div key={g}>
+              <div className="overline" style={{ marginBottom: 6 }}>{g}</div>
+              {opts.filter((o) => o.group === g).map((o) => {
+                const checked = draftPins.includes(o.key);
+                const disabled = !checked && draftPins.length >= 6;
+                return (
+                  <label className="check" key={o.key}>
+                    <input type="checkbox" checked={checked} disabled={disabled} onChange={(e) => toggleDraftPin(o.key, e.target.checked)} />
+                    <span>{o.label} <span className="muted">· {catCount(o)}</span></span>
+                  </label>
+                );
+              })}
+            </div>
+          ))}
+        </div>
+        <p className="cap muted">{draftPins.length} of 6 chosen</p>
+        <div className="row between">
+          <Button variant="tertiary" onClick={resetPins}>Reset to default</Button>
+          <div className="row gap8">
+            <Button variant="outline" onClick={() => setCustomiseOpen(false)}>Cancel</Button>
+            <Button onClick={savePins} testId="pin-save">Save cards</Button>
+          </div>
+        </div>
+      </Dialog>
     </AppShell>
   );
 }
