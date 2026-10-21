@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Icon } from "@/lib/icons";
 import { useToast } from "@/components/Toast";
 
@@ -15,6 +15,23 @@ const DEMO_ACCTS: { workspace: string; name: string; email: string }[] = [
 export function DemoAccess({ onUse }: { onUse: (email: string) => void }) {
   const [open, setOpen] = useState(false);
   const toast = useToast();
+  const wrapRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    function onDocClick(e: MouseEvent) {
+      if (wrapRef.current && !wrapRef.current.contains(e.target as Node)) setOpen(false);
+    }
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") setOpen(false);
+    }
+    document.addEventListener("click", onDocClick, true);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("click", onDocClick, true);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
 
   function copy(email: string) {
     navigator.clipboard?.writeText(email).then(
@@ -24,7 +41,7 @@ export function DemoAccess({ onUse }: { onUse: (email: string) => void }) {
   }
 
   return (
-    <div className="demo-wrap" data-test="demo-accts">
+    <div className="demo-wrap" data-test="demo-accts" ref={wrapRef}>
       <button type="button" className="demo-link" aria-expanded={open} onClick={() => setOpen((v) => !v)} data-test="demo-link">
         Demo access <Icon name={open ? "caret-up" : "caret-down"} />
       </button>

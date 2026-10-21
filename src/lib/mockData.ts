@@ -357,6 +357,9 @@ export const TENANT = {
   full: "National Information Technology Development Agency",
   short: "NITDA",
   initials: "NI",
+  /** The tenant's own brand colour — distinct from the app-wide Navy/Forest/Ocean theme swatches, used for
+   * the tenant's logo mark (e.g. on invitation emails). Matches the prototype's tenant.col. */
+  col: "#0B7A3E",
   legal: "National Information Technology Development Agency",
   domain: "superatlas.nitda.gov.ng",
   mandate:

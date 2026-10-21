@@ -140,9 +140,6 @@ export default function SignInPage() {
 
       <div className="col gap6 small muted">
         <span>
-          Organisation not invited yet? <Link href="/register" className="strong">Register your organisation</Link>
-        </span>
-        <span>
           New to SuperAtlas? <Link href="/demo" className="strong">Book a demo</Link>
         </span>
       </div>

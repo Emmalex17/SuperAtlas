@@ -82,6 +82,18 @@ export function checkCredentials(email: string, password: string): Account | nul
   return account;
 }
 
+/** Accept-invitation flow: establishes the pending sign-in straight from the account's email, skipping
+ * password verification — the password was just set on the same accept-invitation form, so there is
+ * nothing to check it against. Mirrors checkCredentials's side effect so /verify picks it up the same way. */
+export function beginPendingSignIn(email: string): Account | null {
+  const account = ACCOUNTS[email.toLowerCase()];
+  if (!account) return null;
+  if (typeof window !== "undefined") {
+    window.sessionStorage.setItem(PENDING_KEY, account.email);
+  }
+  return account;
+}
+
 export function getPendingAccount(): Account | null {
   if (typeof window === "undefined") return null;
   const email = window.sessionStorage.getItem(PENDING_KEY);
