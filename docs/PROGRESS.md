@@ -31,11 +31,13 @@ The earlier (now superseded) `ddf4619`/`2ec46d0` commits were never reverted or 
   4. Confirm `main` and `staging` are in sync — `git diff origin/staging origin/main --stat` is empty (zero content drift). The hashes themselves (`git rev-parse origin/main` / `origin/staging`) will usually differ once any promotion has used a merge commit, which is expected, not a problem — see "Deployment-identity fix" above for why. Record both hashes and confirm the diff is empty here.
 - **Never** commit directly to `main`, **never** force-push, **never** promote `staging` → `main` while a check is red.
 
-## Current state (2026-10-21, ~13:30)
+## Current state (2026-10-21, ~14:15)
 
 **Phase:** Step 1 (audit) done. Step 2 (foundations) substantially done. **P1 and P2 (Step 3) are both fully closed: 16/16 and 24/24 Matches.** P3 (Organisations and assurance firms) now underway — see below for what's done.
 
-**Pushed to `staging` and `main` (PR #40, merge commit `6541c76`), both deployed `Ready` and verified live** — `origin/main` = `6541c76`, `origin/staging` = `fa77ffc`, `git diff origin/staging origin/main --stat` empty (zero content drift). Production (`superatlas-green.vercel.app`) and staging (`superatlas-git-staging-emmanueladedeji67-3967.vercel.app`) both return 200 at `/signin`.
+**Pushed to `staging` and `main` (PR #41, merge commit `716d57a`), both deployed `Ready` and verified live** — `origin/main` = `716d57a`, `origin/staging` = `10a9085`, `git diff origin/staging origin/main --stat` empty (zero content drift). Production (`superatlas-green.vercel.app`) and staging (`superatlas-git-staging-emmanueladedeji67-3967.vercel.app`) both return 200.
+
+- Built the category-cards pins system on `regulator/organisations/page.tsx`: up to 6 `localStorage`-persisted pinned cards (key `sa-catpins`, same key as the prototype), "All categories" overflow popover grouped by sector, "Choose cards" dialog with a 6-card max (unchecked boxes disable once 6 are checked), Reset/Save/Cancel, and a "Category insights" button that appears only for a type-level filter and links to `organisations/category/[type]`. Added the "Category settings" gear-icon link next to Export/Invite. Live-verified the full flow: card click → filter → insights → ranking screen; pin customisation persists across reload; reset restores `DEFAULT_PINS`. Committed as `10a9085`, promoted via PR #41 (merge commit `716d57a`).
 
 ### P3 progress this session
 
@@ -69,12 +71,11 @@ No WIP outstanding. Working tree clean as of this point in the session.
 
 P3 build order from here (all pending, none started unless noted):
 
-1. **Category-cards pins system** on `regulator/organisations/page.tsx` — 6 default pins (`DEFAULT_PINS` = Commercial bank, Non-interest bank, Merchant bank, Microfinance bank, Payments sector, Digital economy sector), `localStorage`-persisted customisation, "All categories N to choose from" overflow popover, "Choose cards" dialog (checkbox grid, max 6, Reset/Save), and a "Category insights" button (shown when a type-level card filter is active) linking to the now-built `/regulator/organisations/category/[type]`. Source: `docs/prototype/source/regulator.js` lines 48-87 (`DEFAULT_PINS`, `pins()`, `catOptions()`, `ACT.catAll`, `ACT.catCustomise`, `ACT.pinLimit`, `ACT.pinSave`, `ACT.pinReset`).
-2. `firms/profile`: fix the People tab label from "People" to "People 3" (wire the existing `count` badge support already in the `Tabs` component), then build the Performance tab (`firmPerf()` in prototype: ktiles, rating trend `chLine`, peer comparison `chBars`, ratings table — uses `RATINGS`, already exported from `cases.ts`).
-3. Build the 6 missing self-service workspace screens — the single largest remaining P3 chunk: `org/welcome`, `org/team`, `org/profile` (5 tabs: Details/Classification/Licences/Group links/Settings), `firm/welcome`, `firm/team`, `firm/profile` (5 tabs: Details/Performance/Accreditations/Assessors/Advisory clients). The org side will reuse this session's `mySeries`/`orgExposure`/`LV_TONE` (`src/lib/enforcement.ts`) and `orgDashBody`/`orgTodo` (prototype `c4.js`, not yet ported) for `org/dashboard`'s "what to do next" and "regulatory exposure" panels.
-4. Build `firm/apply` (keep it unlinked from the public site, per the already-agreed difference).
-5. Once `org/welcome`/`firm/welcome` exist, update `src/lib/invites.ts`'s `INVITES.zenith.next`/`INVITES.deloitte.next` to point at them instead of the plain `/organisation`/`/firm` dashboards (noted as a follow-up when P1's invitation flow was built).
-6. Once all of the above is built and verified: tick checkboxes in `docs/prototype/PARITY_INVENTORY.md`'s P3 section, rewrite `docs/PARITY_AUDIT.md`'s P3 section (currently stale at 10/32 Matches — does not yet reflect this session's `organisations/category` / Compliance tab work), update the phase table below, commit as `ui-parity: P3 complete — X/32 Matches`, push/promote/verify per the standing rule, then move to P4.
+1. `firms/profile`: fix the People tab label from "People" to "People 3" (wire the existing `count` badge support already in the `Tabs` component), then build the Performance tab (`firmPerf()` in prototype: ktiles, rating trend `chLine`, peer comparison `chBars`, ratings table — uses `RATINGS`, already exported from `cases.ts`).
+2. Build the 6 missing self-service workspace screens — the single largest remaining P3 chunk: `org/welcome`, `org/team`, `org/profile` (5 tabs: Details/Classification/Licences/Group links/Settings), `firm/welcome`, `firm/team`, `firm/profile` (5 tabs: Details/Performance/Accreditations/Assessors/Advisory clients). The org side will reuse this session's `mySeries`/`orgExposure`/`LV_TONE` (`src/lib/enforcement.ts`) and `orgDashBody`/`orgTodo` (prototype `c4.js`, not yet ported) for `org/dashboard`'s "what to do next" and "regulatory exposure" panels.
+3. Build `firm/apply` (keep it unlinked from the public site, per the already-agreed difference).
+4. Once `org/welcome`/`firm/welcome` exist, update `src/lib/invites.ts`'s `INVITES.zenith.next`/`INVITES.deloitte.next` to point at them instead of the plain `/organisation`/`/firm` dashboards (noted as a follow-up when P1's invitation flow was built).
+5. Once all of the above is built and verified: tick checkboxes in `docs/prototype/PARITY_INVENTORY.md`'s P3 section, rewrite `docs/PARITY_AUDIT.md`'s P3 section (currently stale at 10/32 Matches — does not yet reflect this session's `organisations/category` / Compliance tab / pins-system work), update the phase table below, commit as `ui-parity: P3 complete — X/32 Matches`, push/promote/verify per the standing rule, then move to P4.
 
 ## Audit summary (from `docs/PARITY_AUDIT.md`, P1 and P2 now updated)
 
