@@ -208,6 +208,12 @@ export function pct(n: number, d: number): number {
   return d ? Math.round((n / d) * 100) : 0;
 }
 
+/** A 1-decimal-place average — the prototype's avg1(), used for star ratings. */
+export function avg1(nums: number[]): number | null {
+  if (!nums.length) return null;
+  return Math.round((nums.reduce((a, v) => a + v, 0) / nums.length) * 10) / 10;
+}
+
 /** A nonconformity that's still open — the prototype's NC_OPEN(). */
 export const NC_OPEN = (f: CaseFinding) => ["MaNC", "MiNC"].includes(f.cls) && !["Closed", "Noted"].includes(f.status ?? "");
 
