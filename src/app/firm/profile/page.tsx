@@ -1,6 +1,6 @@
 "use client";
 
-import { useReducer, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AppShell } from "@/components/AppShell";
 import { ProfileHeader } from "@/components/ProfileHeader";
@@ -29,6 +29,14 @@ export default function FirmProfilePage() {
   const firm = FIRMS.find((f) => f.id === FIRM_ID)!;
   const [, bump] = useReducer((x: number) => x + 1, 0);
   const [tab, setTab] = useState<Tab>("details");
+
+  useEffect(() => {
+    const requested = new URLSearchParams(window.location.search).get("tab");
+    if (requested && ["details", "performance", "accreditations", "people", "clients"].includes(requested)) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time read of the browser-only URL query string, which cannot be observed during SSR.
+      setTab(requested as Tab);
+    }
+  }, []);
 
   const accs = FIRM_ACCREDITATIONS[firm.id] ?? [];
   const apps = ACC_APPS.filter((a) => a.firm === firm.id);

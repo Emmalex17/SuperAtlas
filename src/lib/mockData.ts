@@ -756,3 +756,24 @@ export function removeFirmClient(f: Firm, index: number) {
 export function completeFirmOnboardStep(f: Firm, step: keyof FirmOnboard) {
   ensureFirmOnboard(f)[step] = true;
 }
+
+/** A firm's own "Apply for accreditation" submission — the prototype's ACT.accNext (step 3 → 4). */
+export function submitAccreditationApplication(f: Firm, type: string, assessorNames: string[]): AccApplication {
+  const docsNeeded = ["DPCO licence from the data protection authority", "Professional indemnity insurance", "Methodology document", "Assessor CVs and certificates"];
+  const app: AccApplication = {
+    id: `acc-${Date.now()}`,
+    firm: f.id,
+    type,
+    submitted: "Today",
+    due: "16 Nov 2026",
+    status: "In review",
+    docs: docsNeeded.map((d) => [d, true] as [string, boolean]),
+    assessors: assessorNames.map((n) => {
+      const p = (f.people ?? []).find((x) => x.name === n);
+      return [n, p?.cred || "—", p?.status === "Active"] as [string, string, boolean];
+    }),
+    decl: `Independence declaration signed. Advisory clients declared: ${(f.clients ?? []).length}.`,
+  };
+  ACC_APPS.unshift(app);
+  return app;
+}
