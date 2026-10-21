@@ -14,7 +14,7 @@ const PHASES: [string, string][] = [
 
 const INCLUDED: [string, string, string][] = [
   ["identification-card", "A branded workspace", "Your name, colours and sign-in page."],
-  ["users", "Support from our team", "A product specialist and a weekly check-in."],
+  ["users", "Support from our team", "A product specialist and a weekly check in."],
   ["book-open-text", "One regulation, loaded", "Drafted with AI from your PDF, reviewed by your staff."],
   ["file-text", "A results pack", "Scores, findings, adoption and a rollout plan."],
 ];

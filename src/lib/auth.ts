@@ -10,6 +10,7 @@ export type Account = {
   entityName: string;
 };
 
+/** Prototype only: any password works, matching the source prototype's own demo auth exactly. */
 export const DEMO_PASSWORD = "Demo1234!";
 
 export const ACCOUNTS: Record<string, Account> = {
@@ -31,6 +32,24 @@ export const ACCOUNTS: Record<string, Account> = {
     workspace: "organisation",
     entityName: "Zenith Bank Plc",
   },
+  "c.obi@moniepoint.example": {
+    email: "c.obi@moniepoint.example",
+    name: "C. Obi",
+    first: "Chidi",
+    initials: "CO",
+    role: "Head of compliance",
+    workspace: "organisation",
+    entityName: "Moniepoint Microfinance Bank",
+  },
+  "k.sule@opay.example": {
+    email: "k.sule@opay.example",
+    name: "K. Sule",
+    first: "Kemi",
+    initials: "KS",
+    role: "Head of compliance",
+    workspace: "organisation",
+    entityName: "OPay Digital Services Ltd",
+  },
   "t.adebayo@deloitte.example": {
     email: "t.adebayo@deloitte.example",
     name: "T. Adebayo",
@@ -51,10 +70,12 @@ export const WORKSPACE_HOME: Record<Workspace, string> = {
 const SESSION_KEY = "superatlas.session";
 const PENDING_KEY = "superatlas.pending";
 
-/** Step 1 of sign-in: checks email + password only. Does not establish a session — MFA still has to pass. */
+/** Step 1 of sign-in: checks the account exists and a password was entered. Any password works — this is a
+ * prototype with no real backend, matching the source prototype's own behaviour. Does not establish a
+ * session — MFA still has to pass. */
 export function checkCredentials(email: string, password: string): Account | null {
   const account = ACCOUNTS[email.toLowerCase()];
-  if (!account || password !== DEMO_PASSWORD) return null;
+  if (!account || !password) return null;
   if (typeof window !== "undefined") {
     window.sessionStorage.setItem(PENDING_KEY, account.email);
   }
@@ -88,5 +109,6 @@ export function getSession(): Account | null {
 export function signOut() {
   if (typeof window !== "undefined") {
     window.localStorage.removeItem(SESSION_KEY);
+    window.sessionStorage.setItem("superatlas.signedOut", "1");
   }
 }
