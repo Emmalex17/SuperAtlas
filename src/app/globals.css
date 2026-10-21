@@ -1135,3 +1135,25 @@ button.link{background:none;border:0;color:var(--link);cursor:pointer;padding:4p
   .set-nav .set-g{display:none}
   .set-nav a{white-space:nowrap}
 }
+
+/* ---- ratings + scorecard exports (docs/prototype/source/c5.js + styles.css) ---- */
+.stars{display:inline-flex;gap:1px;font-size:14px;line-height:1}
+.stars i{font-style:normal;color:var(--border-strong,#c9ccd6)}
+.stars i.on{color:#e0a100}
+.star-pick{display:flex;align-items:center;gap:2px}
+.star-pick button{font-size:26px;line-height:1;padding:2px 3px;color:var(--border-strong,#c9ccd6);background:none;border:0;cursor:pointer;border-radius:6px}
+.star-pick button.on{color:#e0a100}
+.star-pick button:focus-visible{outline:2px solid var(--brand-500)}
+.star-pick .cap{margin-left:8px}
+.oa{padding:10px 0;border-top:1px solid var(--border)}
+.oa:first-of-type{border-top:0}
+.score-doc{display:flex;flex-direction:column;gap:14px}
+.sc-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.sc-kpis>div{border:1px solid var(--border);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:2px}
+.sc-kpis b{font-size:20px}
+@media (max-width:760px){.sc-kpis{grid-template-columns:1fr 1fr}}
+@media print{body *{visibility:hidden}#dlg,#dlg *{visibility:visible}#dlg{position:absolute;inset:0;background:#fff}#dlg .dialog{box-shadow:none;max-width:none;width:100%;max-height:none}.no-print{display:none!important}}
+.sc-list>div{padding:9px 0;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:2px}
+.sc-list>div:first-child{border-top:0}
+.sc-acts{flex-wrap:wrap}
+@media (max-width:760px){.sc-acts>*{flex:1 1 100%}}

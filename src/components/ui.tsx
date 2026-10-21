@@ -270,6 +270,26 @@ export function StatusChip({ status }: { status: string }) {
   );
 }
 
+const COMP_CHIP: Record<string, [ChipTone, IconName]> = {
+  Compliant: ["ok", "check-circle"],
+  "Compliant with conditions": ["warn", "warning"],
+  "Non-compliant": ["bad", "x-circle"],
+  "Not assessed": ["neu", "circle-dashed"],
+  "Enforcement watch": ["ai", "eye"],
+};
+
+/** A compliance-status chip — the prototype's compChip(). Separate from StatusChip since these four words
+ * ("Compliant", "Compliant with conditions", "Non-compliant", "Not assessed") carry their own tone/icon
+ * mapping distinct from the general ~45-word statusChip() vocabulary. */
+export function CompChip({ status }: { status: string }) {
+  const hit = COMP_CHIP[status];
+  return (
+    <Chip tone={hit ? hit[0] : "neu"} icon={hit?.[1]}>
+      {status}
+    </Chip>
+  );
+}
+
 /** One filter-pill row with counts, used inside a table card — the prototype's fpills(). Tones "warn"/"bad"
  * colour a pill's count badge when it needs attention (e.g. "Overdue 6"); omit `tone` for a plain pill. */
 export function FilterPills<T extends string>({

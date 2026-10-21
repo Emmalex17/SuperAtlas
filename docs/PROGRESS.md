@@ -35,7 +35,7 @@ The earlier (now superseded) `ddf4619`/`2ec46d0` commits were never reverted or 
 
 **Phase:** Step 1 (audit) done. Step 2 (foundations) substantially done. **P1 and P2 (Step 3) are both now fully closed: 16/16 and 24/24 Matches.** About to start P3.
 
-**Pushed to `staging` and `main` as of the last promotion (identity-fix commits through `ca1a1db`/`d018a29`), both deployed `Ready` and verified live.** The P2 work below is committed locally but **not yet pushed** — see "Exact next step" for the pending promotion.
+**Pushed to `staging` and `main`, both deployed `Ready` and verified live** — `origin/main` = `9aa18b4`, `origin/staging` = `3ddf379`, `git diff origin/staging origin/main --stat` empty (zero content drift). Production (`superatlas-green.vercel.app`) spot-checked live at `/regulator/settings/categories`: SettingsShell, breadcrumb, nav, and all category data render correctly.
 
 - App shell foundations, chart-kit/shared components, and P1 (16/16 Matches) — see git history, all previously pushed and confirmed live.
 - **P2 fully closed, 24/24 Matches** (was 2/24, 10 Different, 12 Missing):
@@ -51,13 +51,12 @@ The earlier (now superseded) `ddf4619`/`2ec46d0` commits were never reverted or 
 - `docs/prototype/PARITY_INVENTORY.md`'s full P2 section (23 checkboxes) ticked, plus `organisations/invite`'s checkbox (filed under P3 in that doc). `docs/PARITY_AUDIT.md` updated: P2 section rewritten, overview table, "10 biggest gaps" #4 marked resolved, P3's `organisations/invite` row (it was duplicated across both phase tables in the original audit) updated to Matches too.
 - Verified: `tsc --noEmit`, `eslint src`, `npm run build` all clean.
 
-No WIP outstanding beyond the pending commit/push/promote described next. Working tree has the P2 changes staged for commit as of this point.
+No WIP outstanding. Working tree clean as of this point in the session.
 
 ## Exact next step
 
-1. Commit the P2 work as Emmalex17 (check identity first) with message `ui-parity: P2 complete — 24/24 Matches`, push to `staging`, confirm the Vercel staging deployment is green, then promote to `main` via a merge-commit PR (per the standing rule), confirm production is green, and record the final `main`/`staging` hashes here (with a `git diff origin/staging origin/main --stat` empty-diff check, not literal hash equality — see the "Deployment-identity fix" section above for why).
-2. Move to Step 3, P3 (`docs/PARITY_AUDIT.md`'s P3 section — now 10/32 Matches, 4 Different, 18 Missing after today's `organisations/invite` fix). The biggest items: the entire org-side "Compliance" tabbed surface doesn't exist (tracked as gap #1, now the single biggest gap in the whole project); `org/welcome`, `org/team`, `org/profile` (5 tabs), `firm/welcome`, `firm/team`, `firm/profile` (5 tabs) are all missing — orgs/firms have no self-service workspace at all (gap #3); `organisations/category` (the category drill-down ranking screen) is missing; `organisations/profile`'s Compliance tab and `firms/profile`'s Performance tab are both missing. Read the full P3 section and its "Questions" before starting.
-3. Once P3's `org/welcome`/`firm/welcome` exist, update `src/lib/invites.ts`'s `INVITES.zenith.next`/`INVITES.deloitte.next` to point at them instead of the plain `/organisation`/`/firm` dashboards (noted as a follow-up when P1's invitation flow was built).
+1. Move to Step 3, P3 (`docs/PARITY_AUDIT.md`'s P3 section — now 10/32 Matches, 4 Different, 18 Missing after today's `organisations/invite` fix). The biggest items: the entire org-side "Compliance" tabbed surface doesn't exist (tracked as gap #1, now the single biggest gap in the whole project); `org/welcome`, `org/team`, `org/profile` (5 tabs), `firm/welcome`, `firm/team`, `firm/profile` (5 tabs) are all missing — orgs/firms have no self-service workspace at all (gap #3); `organisations/category` (the category drill-down ranking screen) is missing; `organisations/profile`'s Compliance tab and `firms/profile`'s Performance tab are both missing. Read the full P3 section and its "Questions" before starting.
+2. Once P3's `org/welcome`/`firm/welcome` exist, update `src/lib/invites.ts`'s `INVITES.zenith.next`/`INVITES.deloitte.next` to point at them instead of the plain `/organisation`/`/firm` dashboards (noted as a follow-up when P1's invitation flow was built).
 
 ## Audit summary (from `docs/PARITY_AUDIT.md`, P1 and P2 now updated)
 

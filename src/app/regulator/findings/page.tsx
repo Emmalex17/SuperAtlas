@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { AppShell } from "@/components/AppShell";
 import { PageHead, Chip, Button, Tile } from "@/components/ui";
 import { Icon } from "@/lib/icons";
-import { allFindings, fdCardsWithOverdue, fdOverdue, effDue, progOf, fcOf, fdLog, FD_STATUS_TONE, FINDING_CLASSES, TODAY, type FindingWithCase } from "@/lib/cases";
+import { allFindings, fdCardsWithOverdue, fdOverdue, effDue, progOf, fcOf, fdLog, FD_STATUS_CHIP, FINDING_CLASSES, TODAY, type FindingWithCase } from "@/lib/cases";
 import { ORGANISATIONS, FIRMS, catLabel } from "@/lib/mockData";
 
 function fdDue(x: FindingWithCase): React.ReactNode {
@@ -22,9 +22,10 @@ function fdDue(x: FindingWithCase): React.ReactNode {
 }
 
 function FdChips({ x }: { x: FindingWithCase }) {
+  const s = FD_STATUS_CHIP[x.f.status ?? ""];
   return (
     <div className="row wrap gap6">
-      <Chip tone={FD_STATUS_TONE[x.f.status ?? ""] ?? "neu"}>{x.f.status}</Chip>
+      <Chip tone={s?.tone ?? "neu"} icon={s?.icon}>{s?.label ?? x.f.status}</Chip>
       {fdOverdue(x.f, TODAY) ? <Chip tone="bad" icon="warning">Overdue</Chip> : null}
       {x.f.ext?.status === "Requested" ? <Chip tone="warn" icon="clock-clockwise">More time asked</Chip> : null}
     </div>

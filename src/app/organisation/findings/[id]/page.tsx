@@ -17,7 +17,7 @@ import {
   askExtension,
   progOf,
   fcOf,
-  FD_STATUS_TONE,
+  FD_STATUS_CHIP,
   TODAY,
   type RemediationPlan,
 } from "@/lib/cases";
@@ -121,7 +121,7 @@ export default function OrgFindingPage({ params }: { params: Promise<{ id: strin
       <div className="rh">
         <div className="rh-main">
           <div className="overline">{fc.name} · {f.ref}</div>
-          <div className="rh-title"><h1 className="h1">{f.title}</h1><span className="row wrap gap6"><span className={`chip ${fc.tone}`}>{f.cls}</span><Chip tone={FD_STATUS_TONE[f.status ?? ""] ?? "neu"}>{f.status}</Chip></span></div>
+          <div className="rh-title"><h1 className="h1">{f.title}</h1><span className="row wrap gap6"><span className={`chip ${fc.tone}`}>{f.cls}</span><Chip tone={FD_STATUS_CHIP[f.status ?? ""]?.tone ?? "neu"} icon={FD_STATUS_CHIP[f.status ?? ""]?.icon}>{FD_STATUS_CHIP[f.status ?? ""]?.label ?? f.status}</Chip></span></div>
           <div className="rh-meta">From the {p.name} report · published {c.published ?? ""}</div>
         </div>
       </div>
