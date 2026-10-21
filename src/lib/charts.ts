@@ -74,6 +74,91 @@ export function chLine(o: {
   return `<svg class="chsvg" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(o.label || "")}">${grid}${refs}${lines}${xt}</svg>${key}`;
 }
 
+/* Vertical bars (histogram), with an optional benchmark marker between bins — the prototype's chColumns(). */
+export function chColumns(o: { bins: { l: string; n: number; col?: string }[]; refAt?: number; refLabel?: string }): string {
+  const max = Math.max(1, ...o.bins.map((b) => b.n));
+  return `<div class="ch-cols" style="--n:${o.bins.length}">${o.bins
+    .map(
+      (b, i) =>
+        `<div class="ch-col" title="${esc(b.l)}: ${b.n}">${o.refAt === i ? `<span class="ch-ref"><b>${esc(o.refLabel || "")}</b></span>` : ""}<span class="ch-n tnum">${b.n || ""}</span><span class="ch-bar" style="height:${Math.max(b.n ? 4 : 0, (b.n / max) * 100)}%;background:${b.col || CH.brand}"></span><span class="ch-l">${esc(b.l)}</span></div>`
+    )
+    .join("")}</div>`;
+}
+
+/* Horizontal bars: label, value, optional tone colour — the prototype's chBars(). */
+export function chBars(rows: { l: string; v: number; vl?: string | number; col?: string }[], o: { max?: number } = {}): string {
+  const max = o.max || Math.max(1, ...rows.map((r) => r.v));
+  return `<div class="ch-hbars">${rows
+    .map(
+      (r) =>
+        `<div class="ch-hb"><span class="ch-hl" title="${esc(r.l)}">${esc(r.l)}</span><span class="ch-ht"><i style="width:${Math.max(r.v ? 2 : 0, (r.v / max) * 100)}%;background:${r.col || CH.brand}"></i></span><span class="ch-hv tnum">${r.vl ?? r.v}</span></div>`
+    )
+    .join("")}</div>`;
+}
+
+/* Stacked bars: parts of a whole per row — the prototype's chStack(). */
+export function chStack(rows: { l: string; vals: { n: number }[]; total?: number }[], parts: { l: string; col: string; ink?: string }[], o: { key?: boolean } = {}): string {
+  const key = o.key !== false ? `<div class="ch-key">${parts.map((p) => `<span><i style="background:${p.col}"></i>${esc(p.l)}</span>`).join("")}</div>` : "";
+  const body = rows
+    .map((r) => {
+      const tot = r.vals.reduce((a, v) => a + v.n, 0) || 1;
+      const segs = r.vals
+        .map((v, i) => (v.n ? `<i style="width:${(v.n / tot) * 100}%;background:${parts[i].col};color:${parts[i].ink || "#fff"}" title="${esc(parts[i].l)}: ${v.n}">${v.n / tot > 0.08 ? v.n : ""}</i>` : ""))
+        .join("");
+      return `<div class="ch-sr"><span class="ch-hl" title="${esc(r.l)}">${esc(r.l)}</span><span class="ch-st">${segs}</span><span class="ch-hv tnum">${r.total ?? tot}</span></div>`;
+    })
+    .join("");
+  return `<div class="ch-stack">${key}${body}</div>`;
+}
+
+/* Funnel: each stage as wide as its count against the first — the prototype's chFunnel(). */
+export function chFunnel(stages: { l: string; n: number }[]): string {
+  const first = Math.max(1, stages[0].n);
+  return `<div class="ch-funnel">${stages
+    .map(
+      (s, i) =>
+        `<div class="ch-fs"><span class="ch-fl">${esc(s.l)}</span><span class="ch-ft"><i style="width:${Math.max(s.n ? 3 : 0, (s.n / first) * 100)}%"></i></span><span class="ch-fv tnum"><b>${s.n}</b>${i ? `<span class="muted"> · ${Math.round((s.n / first) * 100)}%</span>` : ""}</span></div>`
+    )
+    .join("")}</div>`;
+}
+
+/* Heatmap: rows × columns of counts, coloured by count — the prototype's chHeat(). */
+export function chHeat(o: { cols: { l: string; t?: string; col?: string }[]; rows: { l: string; t?: string; sec?: boolean; cells: { n: number }[] }[] }): string {
+  const max = Math.max(1, ...o.rows.flatMap((r) => r.cells.map((c) => c.n)));
+  return `<div class="tbl-wrap"><table class="ch-heat"><thead><tr><th></th>${o.cols.map((c) => `<th title="${esc(c.t || c.l)}">${esc(c.l)}</th>`).join("")}</tr></thead><tbody>${o.rows
+    .map(
+      (r) =>
+        `<tr class="${r.sec ? "sec" : ""}"><th class="${r.sec ? "h-sec" : "h-req"}" title="${esc(r.t || r.l)}">${esc(r.l)}</th>${r.cells
+          .map((c, i) => {
+            const a = c.n / max;
+            const col = o.cols[i].col || CH.bad;
+            return `<td>${c.n ? `<span class="hc" style="background:color-mix(in srgb, ${col} ${Math.round(12 + a * 70)}%, var(--surface))" title="${esc(r.t || r.l)} · ${esc(o.cols[i].t || o.cols[i].l)}: ${c.n}">${c.n}</span>` : '<span class="hc z">·</span>'}</td>`;
+          })
+          .join("")}</tr>`
+    )
+    .join("")}</tbody></table></div>`;
+}
+
+/* Before/after per row (dot plot) — the prototype's chDots(). */
+export function chDots(rows: { l: string; a?: number; b?: number }[], o: { min: number; max: number; ref?: number; key?: [string, string] }): string {
+  const X = (v: number) => ((v - o.min) / (o.max - o.min)) * 100;
+  const key = o.key
+    ? `<div class="ch-key"><span><i style="background:${CH.prev}"></i>${esc(o.key[0])}</span><span><i style="background:${CH.brand}"></i>${esc(o.key[1])}</span>${
+        o.ref != null ? `<span><i style="background:${CH.warn}"></i>Benchmark ${o.ref}</span>` : ""
+      }</div>`
+    : "";
+  const body = rows
+    .map((r) => {
+      const ref = o.ref != null ? `<em style="left:${X(o.ref)}%"></em>` : "";
+      const seg = r.a != null && r.b != null ? `<s style="left:${Math.min(X(r.a), X(r.b))}%;width:${Math.abs(X(r.b) - X(r.a))}%;background:${r.b >= r.a ? "var(--ok-icon)" : "var(--bad-icon)"}"></s>` : "";
+      const pa = r.a != null ? `<i class="pa" style="left:${X(r.a)}%"></i>` : "";
+      const pb = r.b != null ? `<i class="pb" style="left:${X(r.b)}%"></i>` : "";
+      return `<div class="ch-dr"><span class="ch-hl" title="${esc(r.l)}">${esc(r.l)}</span><span class="ch-dt">${ref}${seg}${pa}${pb}</span><span class="ch-hv tnum">${r.a ?? "—"} → <b>${r.b ?? "—"}</b></span></div>`;
+    })
+    .join("");
+  return `<div class="ch-dots">${key}${body}</div>`;
+}
+
 export const Q = ["Q1 '25", "Q2 '25", "Q3 '25", "Q4 '25", "Q1 '26", "Q2 '26", "Q3 '26", "Q4 '26"];
 
 type Series = { vals: number[]; col: string };

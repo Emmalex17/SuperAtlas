@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { AuthShell } from "@/components/AuthShell";
 import { Button, Field, AlertBox, Lockup, Tile } from "@/components/ui";
 import { Icon } from "@/lib/icons";
@@ -16,6 +17,7 @@ const BackLink = () => (
 );
 
 export default function ResetPasswordPage() {
+  const router = useRouter();
   const [step, setStep] = useState<Step>("request");
   const [email, setEmail] = useState("");
   const [sends, setSends] = useState(0);
@@ -199,7 +201,17 @@ export default function ResetPasswordPage() {
             <h2 className="h1">Password changed</h2>
             <p className="muted" style={{ marginTop: 6 }}>Your new password is saved and other devices have been signed out. Sign in to continue.</p>
           </div>
-          <Link href="/signin"><Button size="lg" block>Go to sign in</Button></Link>
+          <Button
+            size="lg"
+            block
+            testId="reset-done"
+            onClick={() => {
+              window.sessionStorage.setItem("superatlas.resetBanner", "1");
+              router.push("/signin");
+            }}
+          >
+            Go to sign in
+          </Button>
         </>
       )}
     </AuthShell>

@@ -1,13 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { AuthShell } from "@/components/AuthShell";
 import { Button, Field, AlertBox, Lockup } from "@/components/ui";
+import { DemoAccess } from "@/components/DemoAccess";
 import { Icon } from "@/lib/icons";
 import { isEmail } from "@/lib/authHelpers";
-import { checkCredentials, DEMO_PASSWORD, ACCOUNTS } from "@/lib/auth";
+import { checkCredentials } from "@/lib/auth";
 
 export default function SignInPage() {
   const router = useRouter();
@@ -16,8 +17,28 @@ export default function SignInPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [fails, setFails] = useState(0);
   const [error, setError] = useState<{ email?: string; pw?: string; form?: boolean }>({});
+  const [signedOut, setSignedOut] = useState(false);
+  const [passwordChanged, setPasswordChanged] = useState(false);
 
   const locked = fails >= 5;
+
+  useEffect(() => {
+    if (window.sessionStorage.getItem("superatlas.resetBanner")) {
+      window.sessionStorage.removeItem("superatlas.resetBanner");
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time read of a browser-only, one-shot flag set by the reset-password flow on the previous page.
+      setPasswordChanged(true);
+    } else if (window.sessionStorage.getItem("superatlas.signedOut")) {
+      window.sessionStorage.removeItem("superatlas.signedOut");
+      setSignedOut(true);
+    }
+  }, []);
+
+  function useDemoAccount(demoEmail: string) {
+    setEmail(demoEmail);
+    setPassword("demo-password");
+    setError({});
+    setTimeout(() => document.querySelector<HTMLButtonElement>('[data-test="signin-submit"]')?.focus(), 0);
+  }
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -50,17 +71,6 @@ export default function SignInPage() {
         </p>
       </div>
 
-      <div className="note" style={{ fontSize: 13 }}>
-        <strong>Demo accounts</strong> (password: <code className="mono">{DEMO_PASSWORD}</code>)
-        <div className="col gap4" style={{ marginTop: 6 }}>
-          {Object.values(ACCOUNTS).map((a) => (
-            <div key={a.email}>
-              <span className="mono" style={{ fontSize: 12 }}>{a.email}</span> — {a.role} ({a.workspace})
-            </div>
-          ))}
-        </div>
-      </div>
-
       {locked ? (
         <AlertBox
           tone="bad"
@@ -74,6 +84,10 @@ export default function SignInPage() {
           title="Email or password is incorrect"
           body={`Check both and try again. ${5 - fails} attempt${5 - fails === 1 ? "" : "s"} left before the account locks for 15 minutes.`}
         />
+      ) : passwordChanged ? (
+        <AlertBox tone="ok" title="Password changed" body="Sign in with your new password. You were signed out of other devices." />
+      ) : signedOut ? (
+        <AlertBox tone="info" title="You have signed out" body="" />
       ) : null}
 
       <form className="col gap16" onSubmit={handleSubmit} noValidate>
@@ -121,17 +135,16 @@ export default function SignInPage() {
           </label>
           <Link href="/reset" className="small strong">Forgot password?</Link>
         </div>
-        <Button type="submit" size="lg" block disabled={locked}>Sign in</Button>
+        <Button type="submit" size="lg" block disabled={locked} testId="signin-submit">Sign in</Button>
       </form>
 
       <div className="col gap6 small muted">
         <span>
-          Organisation not invited yet? <Link href="/register" className="strong">Register your organisation</Link>
-        </span>
-        <span>
           New to SuperAtlas? <Link href="/demo" className="strong">Book a demo</Link>
         </span>
       </div>
+
+      <DemoAccess onUse={useDemoAccount} />
     </AuthShell>
   );
 }

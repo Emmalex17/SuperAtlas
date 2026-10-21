@@ -32,6 +32,12 @@ export default function VerifyPage() {
       router.replace("/signin");
       return;
     }
+    const inviteNext = window.sessionStorage.getItem("superatlas.inviteNext");
+    if (inviteNext) {
+      window.sessionStorage.removeItem("superatlas.inviteNext");
+      router.push(inviteNext);
+      return;
+    }
     router.push(WORKSPACE_HOME[account.workspace]);
   }
 

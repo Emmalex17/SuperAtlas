@@ -357,6 +357,9 @@ export const TENANT = {
   full: "National Information Technology Development Agency",
   short: "NITDA",
   initials: "NI",
+  /** The tenant's own brand colour — distinct from the app-wide Navy/Forest/Ocean theme swatches, used for
+   * the tenant's logo mark (e.g. on invitation emails). Matches the prototype's tenant.col. */
+  col: "#0B7A3E",
   legal: "National Information Technology Development Agency",
   domain: "superatlas.nitda.gov.ng",
   mandate:
@@ -438,3 +441,11 @@ export const PERMS: [string, boolean, boolean, boolean, boolean][] = [
   ["Manage branding and team", true, false, false, false],
   ["View dashboards", true, true, true, true],
 ];
+
+/** The signed-in account carries an entityName, not an id — these resolve which organisation/firm record it is. */
+export function orgIdFor(entityName: string): string | undefined {
+  return ORGANISATIONS.find((o) => o.name === entityName)?.id;
+}
+export function firmIdFor(entityName: string): string | undefined {
+  return FIRMS.find((f) => f.name === entityName)?.id;
+}

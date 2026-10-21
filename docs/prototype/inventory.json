@@ -1,0 +1,6041 @@
+[
+ {
+  "id": "home",
+  "ws": "public",
+  "layout": "public",
+  "title": "Landing page",
+  "signedInAs": null,
+  "screenshot": "home.jpg",
+  "docTitle": "Landing page · SuperAtlas",
+  "crumbs": "",
+  "headings": [
+   "See every organisation you supervise, and the evidence behind it.",
+   "Regulation moves faster when everything connects.",
+   "Who is compliant?",
+   "Where are the gaps?",
+   "What proves it?",
+   "What happens next?",
+   "See the whole picture. Find the detail that matters.",
+   "Every compliance claim. Backed by evidence.",
+   "Don't just find the gaps. Close them.",
+   "From identified to resolved",
+   "All your supervisory work, working together.",
+   "Regulatory reporting",
+   "Compliance monitoring",
+   "Evidence management",
+   "Audits & assessments",
+   "Risk-based supervision",
+   "Findings & remediation",
+   "Regulatory history",
+   "Management intelligence",
+   "Your rules. Your workflows. Your SuperAtlas.",
+   "Configured for your authority",
+   "One shared view. A better way to work together.",
+   "Confidence in every decision.",
+   "Clarity in every obligation.",
+   "Evidence for every assessment.",
+   "From obligations to insight, in four clear steps.",
+   "Define",
+   "Collect",
+   "Assess",
+   "Act",
+   "Built for the responsibilities of supervision.",
+   "Role-based access",
+   "Audit-ready history",
+   "Data governance",
+   "Controlled workspaces",
+   "See what better supervision looks like on your own terms.",
+   "Configure your framework",
+   "Run a real use case",
+   "Evaluate the evidence",
+   "Good questions deserve clear answers."
+  ],
+  "tabs": [
+   "CBN",
+   "SEC",
+   "NITDA"
+  ],
+  "buttons": [
+   "Sign in",
+   "Book a demo",
+   "Start a proof of value",
+   "CBN",
+   "SEC",
+   "NITDA"
+  ],
+  "fields": [],
+  "tableHeaders": [],
+  "pills": [],
+  "chips": [],
+  "tests": [
+   "nav-*",
+   "hero-*",
+   "mio",
+   "mio-*",
+   "mkv-*"
+  ],
+  "tabStates": [
+   {
+    "label": "SEC",
+    "file": "home__sec.jpg",
+    "docTitle": "Landing page · SuperAtlas",
+    "crumbs": "",
+    "headings": [
+     "See every organisation you supervise, and the evidence behind it.",
+     "Regulation moves faster when everything connects.",
+     "Who is compliant?",
+     "Where are the gaps?",
+     "What proves it?",
+     "What happens next?",
+     "See the whole picture. Find the detail that matters.",
+     "Every compliance claim. Backed by evidence.",
+     "Don't just find the gaps. Close them.",
+     "From identified to resolved",
+     "All your supervisory work, working together.",
+     "Regulatory reporting",
+     "Compliance monitoring",
+     "Evidence management",
+     "Audits & assessments",
+     "Risk-based supervision",
+     "Findings & remediation",
+     "Regulatory history",
+     "Management intelligence",
+     "Your rules. Your workflows. Your SuperAtlas.",
+     "Configured for your authority",
+     "One shared view. A better way to work together.",
+     "Confidence in every decision.",
+     "Clarity in every obligation.",
+     "Evidence for every assessment.",
+     "From obligations to insight, in four clear steps.",
+     "Define",
+     "Collect",
+     "Assess",
+     "Act",
+     "Built for the responsibilities of supervision.",
+     "Role-based access",
+     "Audit-ready history",
+     "Data governance",
+     "Controlled workspaces",
+     "See what better supervision looks like on your own terms.",
+     "Configure your framework",
+     "Run a real use case",
+     "Evaluate the evidence",
+     "Good questions deserve clear answers."
+    ],
+    "tabs": [
+     "CBN",
+     "SEC",
+     "NITDA"
+    ],
+    "buttons": [
+     "Sign in",
+     "Book a demo",
+     "Start a proof of value",
+     "CBN",
+     "SEC",
+     "NITDA"
+    ],
+    "fields": [],
+    "tableHeaders": [],
+    "pills": [],
+    "chips": [],
+    "tests": [
+     "nav-*",
+     "hero-*",
+     "mio",
+     "mio-*",
+     "mkv-*"
+    ]
+   },
+   {
+    "label": "NITDA",
+    "file": "home__nitda.jpg",
+    "docTitle": "Landing page · SuperAtlas",
+    "crumbs": "",
+    "headings": [
+     "See every organisation you supervise, and the evidence behind it.",
+     "Regulation moves faster when everything connects.",
+     "Who is compliant?",
+     "Where are the gaps?",
+     "What proves it?",
+     "What happens next?",
+     "See the whole picture. Find the detail that matters.",
+     "Every compliance claim. Backed by evidence.",
+     "Don't just find the gaps. Close them.",
+     "From identified to resolved",
+     "All your supervisory work, working together.",
+     "Regulatory reporting",
+     "Compliance monitoring",
+     "Evidence management",
+     "Audits & assessments",
+     "Risk-based supervision",
+     "Findings & remediation",
+     "Regulatory history",
+     "Management intelligence",
+     "Your rules. Your workflows. Your SuperAtlas.",
+     "Configured for your authority",
+     "One shared view. A better way to work together.",
+     "Confidence in every decision.",
+     "Clarity in every obligation.",
+     "Evidence for every assessment.",
+     "From obligations to insight, in four clear steps.",
+     "Define",
+     "Collect",
+     "Assess",
+     "Act",
+     "Built for the responsibilities of supervision.",
+     "Role-based access",
+     "Audit-ready history",
+     "Data governance",
+     "Controlled workspaces",
+     "See what better supervision looks like on your own terms.",
+     "Configure your framework",
+     "Run a real use case",
+     "Evaluate the evidence",
+     "Good questions deserve clear answers."
+    ],
+    "tabs": [
+     "CBN",
+     "SEC",
+     "NITDA"
+    ],
+    "buttons": [
+     "Sign in",
+     "Book a demo",
+     "Start a proof of value",
+     "CBN",
+     "SEC",
+     "NITDA"
+    ],
+    "fields": [],
+    "tableHeaders": [],
+    "pills": [],
+    "chips": [],
+    "tests": [
+     "nav-*",
+     "hero-*",
+     "mio",
+     "mio-*",
+     "mkv-*"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "demo",
+  "ws": "public",
+  "layout": "public",
+  "title": "Book a demo",
+  "signedInAs": null,
+  "screenshot": "demo.jpg",
+  "docTitle": "Book a demo · SuperAtlas",
+  "crumbs": "",
+  "headings": [
+   "See SuperAtlas on your own supervision work",
+   "Book a demo"
+  ],
+  "tabs": [],
+  "buttons": [
+   "Sign in",
+   "Book a demo",
+   "Request demo"
+  ],
+  "fields": [
+   "I am a",
+   "Full name",
+   "Work email",
+   "Organisation",
+   "Job title (optional)",
+   "Country",
+   "Preferred demo date",
+   "Preferred time",
+   "What would you like to see? (optional)",
+   "RegTech365 may contact me about this request."
+  ],
+  "tableHeaders": [],
+  "pills": [],
+  "chips": [],
+  "tests": [
+   "nav-*",
+   "demo-*"
+  ],
+  "tabStates": []
+ },
+ {
+  "id": "pilot",
+  "ws": "public",
+  "layout": "public",
+  "title": "Proof of value",
+  "signedInAs": null,
+  "screenshot": "pilot.jpg",
+  "docTitle": "Proof of value · SuperAtlas",
+  "crumbs": "",
+  "headings": [
+   "See it working on your own use case first",
+   "What is included",
+   "Request a proof of value"
+  ],
+  "tabs": [],
+  "buttons": [
+   "Sign in",
+   "Book a demo",
+   "Request a proof of value"
+  ],
+  "fields": [
+   "Regulator or authority",
+   "Your name",
+   "Work email",
+   "Institutions you supervise",
+   "Which regulation would you start with? (optional)"
+  ],
+  "tableHeaders": [],
+  "pills": [],
+  "chips": [],
+  "tests": [
+   "nav-*",
+   "pov-*"
+  ],
+  "tabStates": []
+ },
+ {
+  "id": "signin",
+  "ws": "public",
+  "layout": "public",
+  "title": "Sign in",
+  "signedInAs": null,
+  "screenshot": "signin.jpg",
+  "docTitle": "Sign in · SuperAtlas",
+  "crumbs": "",
+  "headings": [
+   "Supervision that shows its working.",
+   "Sign in"
+  ],
+  "tabs": [],
+  "buttons": [
+   "Sign in",
+   "Demo access"
+  ],
+  "fields": [
+   "Email",
+   "Password",
+   "Keep me signed in"
+  ],
+  "tableHeaders": [],
+  "pills": [],
+  "chips": [],
+  "tests": [
+   "forgot",
+   "signin-*",
+   "demo-*"
+  ],
+  "tabStates": []
+ },
+ {
+  "id": "verify",
+  "ws": "public",
+  "layout": "public",
+  "title": "Enter MFA code",
+  "signedInAs": null,
+  "screenshot": "verify.jpg",
+  "docTitle": "Enter MFA code · SuperAtlas",
+  "crumbs": "",
+  "headings": [
+   "Supervision that shows its working.",
+   "Enter your 6-digit code"
+  ],
+  "tabs": [],
+  "buttons": [
+   "Verify",
+   "Use a recovery code"
+  ],
+  "fields": [
+   "Trust this device for 30 days"
+  ],
+  "tableHeaders": [],
+  "pills": [],
+  "chips": [],
+  "tests": [
+   "mfa-*"
+  ],
+  "tabStates": []
+ },
+ {
+  "id": "mfa-setup",
+  "ws": "public",
+  "layout": "public",
+  "title": "Set up MFA",
+  "signedInAs": null,
+  "screenshot": "mfa-setup.jpg",
+  "docTitle": "Set up MFA · SuperAtlas",
+  "crumbs": "",
+  "headings": [
+   "Supervision that shows its working.",
+   "Set up multi-factor authentication"
+  ],
+  "tabs": [],
+  "buttons": [
+   "I have scanned the code"
+  ],
+  "fields": [],
+  "tableHeaders": [],
+  "pills": [],
+  "chips": [],
+  "tests": [
+   "mfa-*"
+  ],
+  "tabStates": []
+ },
+ {
+  "id": "invitation",
+  "ws": "public",
+  "layout": "public",
+  "title": "Accept invitation",
+  "signedInAs": null,
+  "screenshot": "invitation.jpg",
+  "docTitle": "Accept invitation · SuperAtlas",
+  "crumbs": "",
+  "headings": [],
+  "tabs": [],
+  "buttons": [
+   "Accept invitation"
+  ],
+  "fields": [],
+  "tableHeaders": [],
+  "pills": [],
+  "chips": [],
+  "tests": [
+   "inv-*"
+  ],
+  "tabStates": []
+ },
+ {
+  "id": "invitation/zenith",
+  "ws": "public",
+  "layout": "public",
+  "title": "Accept invitation",
+  "signedInAs": null,
+  "screenshot": "invitation_zenith.jpg",
+  "docTitle": "Accept invitation · SuperAtlas",
+  "crumbs": "",
+  "headings": [],
+  "tabs": [],
+  "buttons": [
+   "Accept invitation"
+  ],
+  "fields": [],
+  "tableHeaders": [],
+  "pills": [],
+  "chips": [],
+  "tests": [
+   "inv-*"
+  ],
+  "tabStates": []
+ },
+ {
+  "id": "invitation/deloitte",
+  "ws": "public",
+  "layout": "public",
+  "title": "Accept invitation",
+  "signedInAs": null,
+  "screenshot": "invitation_deloitte.jpg",
+  "docTitle": "Accept invitation · SuperAtlas",
+  "crumbs": "",
+  "headings": [],
+  "tabs": [],
+  "buttons": [
+   "Accept invitation"
+  ],
+  "fields": [],
+  "tableHeaders": [],
+  "pills": [],
+  "chips": [],
+  "tests": [
+   "inv-*"
+  ],
+  "tabStates": []
+ },
+ {
+  "id": "reset",
+  "ws": "public",
+  "layout": "public",
+  "title": "Reset password",
+  "signedInAs": null,
+  "screenshot": "reset.jpg",
+  "docTitle": "Reset password · SuperAtlas",
+  "crumbs": "",
+  "headings": [
+   "Supervision that shows its working.",
+   "Reset your password"
+  ],
+  "tabs": [],
+  "buttons": [
+   "Send reset link"
+  ],
+  "fields": [
+   "Email"
+  ],
+  "tableHeaders": [],
+  "pills": [],
+  "chips": [],
+  "tests": [
+   "reset-*"
+  ],
+  "tabStates": []
+ },
+ {
+  "id": "notifications",
+  "ws": "any",
+  "layout": "app",
+  "title": "Notifications",
+  "signedInAs": "m.bello@nitda.gov.ng",
+  "screenshot": "notifications.jpg",
+  "docTitle": "Notifications · NITDA · SuperAtlas",
+  "crumbs": "Notifications",
+  "headings": [
+   "Notifications"
+  ],
+  "tabs": [],
+  "buttons": [
+   "Mark all as read",
+   "Preferences",
+   "All 9",
+   "Unread 6",
+   "Approvals 5",
+   "Mentions 1",
+   "Reminders 2",
+   "Updates 1"
+  ],
+  "fields": [],
+  "tableHeaders": [],
+  "pills": [
+   "All 9",
+   "Unread 6",
+   "Approvals 5",
+   "Mentions 1",
+   "Reminders 2",
+   "Updates 1"
+  ],
+  "chips": [],
+  "tests": [
+   "notif-*"
+  ],
+  "tabStates": []
+ },
+ {
+  "id": "account",
+  "ws": "any",
+  "layout": "app",
+  "title": "My account",
+  "signedInAs": "m.bello@nitda.gov.ng",
+  "screenshot": "account.jpg",
+  "docTitle": "My account · NITDA · SuperAtlas",
+  "crumbs": "Account > My account",
+  "headings": [
+   "My account",
+   "M. Bello"
+  ],
+  "tabs": [
+   "Profile",
+   "Security",
+   "Notifications",
+   "Sessions 3"
+  ],
+  "buttons": [
+   "Profile",
+   "Security",
+   "Notifications",
+   "Sessions 3",
+   "Change photo",
+   "Save changes"
+  ],
+  "fields": [
+   "Full name",
+   "Job title",
+   "Email",
+   "Phone (optional)"
+  ],
+  "tableHeaders": [],
+  "pills": [],
+  "chips": [],
+  "tests": [],
+  "tabStates": [
+   {
+    "label": "Security",
+    "file": "account__security.jpg",
+    "docTitle": "My account · NITDA · SuperAtlas",
+    "crumbs": "Account > My account",
+    "headings": [
+     "My account",
+     "Password",
+     "Multi-factor authentication"
+    ],
+    "tabs": [
+     "Profile",
+     "Security",
+     "Notifications",
+     "Sessions 3"
+    ],
+    "buttons": [
+     "Profile",
+     "Security",
+     "Notifications",
+     "Sessions 3",
+     "Change password",
+     "Remove",
+     "Add another device",
+     "New recovery codes"
+    ],
+    "fields": [],
+    "tableHeaders": [],
+    "pills": [],
+    "chips": [
+     "On"
+    ],
+    "tests": []
+   },
+   {
+    "label": "Notifications",
+    "file": "account__notifications.jpg",
+    "docTitle": "My account · NITDA · SuperAtlas",
+    "crumbs": "Account > My account",
+    "headings": [
+     "My account"
+    ],
+    "tabs": [
+     "Profile",
+     "Security",
+     "Notifications",
+     "Sessions 3"
+    ],
+    "buttons": [
+     "Profile",
+     "Security",
+     "Notifications",
+     "Sessions 3",
+     "Save preferences"
+    ],
+    "fields": [
+     "Email digest"
+    ],
+    "tableHeaders": [
+     "EVENT",
+     "IN THE APP",
+     "EMAIL"
+    ],
+    "pills": [],
+    "chips": [],
+    "tests": []
+   },
+   {
+    "label": "Sessions 3",
+    "file": "account__sessions-3.jpg",
+    "docTitle": "My account · NITDA · SuperAtlas",
+    "crumbs": "Account > My account",
+    "headings": [
+     "My account"
+    ],
+    "tabs": [
+     "Profile",
+     "Security",
+     "Notifications",
+     "Sessions 3"
+    ],
+    "buttons": [
+     "Profile",
+     "Security",
+     "Notifications",
+     "Sessions 3",
+     "Sign out",
+     "Sign out of all other devices"
+    ],
+    "fields": [],
+    "tableHeaders": [
+     "DEVICE",
+     "LOCATION",
+     "LAST ACTIVE"
+    ],
+    "pills": [],
+    "chips": [
+     "This device"
+    ],
+    "tests": []
+   }
+  ]
+ },
+ {
+  "id": "audit",
+  "ws": "any",
+  "layout": "app",
+  "title": "Audit trail",
+  "signedInAs": "m.bello@nitda.gov.ng",
+  "screenshot": "audit.jpg",
+  "docTitle": "Audit trail · NITDA · SuperAtlas",
+  "crumbs": "Audit trail",
+  "headings": [
+   "Audit trail"
+  ],
+  "tabs": [],
+  "buttons": [
+   "Export CSV",
+   "Apply"
+  ],
+  "fields": [],
+  "tableHeaders": [
+   "WHEN",
+   "WHO",
+   "ACTION",
+   "RECORD"
+  ],
+  "pills": [],
+  "chips": [],
+  "tests": [],
+  "tabStates": []
+ },
+ {
+  "id": "search",
+  "ws": "any",
+  "layout": "app",
+  "title": "Search results",
+  "signedInAs": "m.bello@nitda.gov.ng",
+  "screenshot": "search.jpg",
+  "docTitle": "Search results · NITDA · SuperAtlas",
+  "crumbs": "Search",
+  "headings": [
+   "Search"
+  ],
+  "tabs": [],
+  "buttons": [],
+  "fields": [],
+  "tableHeaders": [],
+  "pills": [],
+  "chips": [],
+  "tests": [
+   "search-*"
+  ],
+  "tabStates": []
+ },
+ {
+  "id": "profile",
+  "ws": "regulator",
+  "layout": "app",
+  "title": "Profile",
+  "signedInAs": "m.bello@nitda.gov.ng",
+  "screenshot": "profile.jpg",
+  "docTitle": "Profile · NITDA · SuperAtlas",
+  "crumbs": "Profile > Details",
+  "headings": [
+   "Profile",
+   "Details",
+   "Logo",
+   "Preview"
+  ],
+  "tabs": [],
+  "buttons": [
+   "Save profile",
+   "Remove"
+  ],
+  "fields": [
+   "Name shown in SuperAtlas",
+   "Short name",
+   "Legal name",
+   "Mandate",
+   "Sectors you supervise",
+   "Banking",
+   "Payments",
+   "Digital economy",
+   "Insurance",
+   "Capital markets",
+   "Pensions",
+   "Supervision email",
+   "Phone",
+   "Address"
+  ],
+  "tableHeaders": [],
+  "pills": [
+   "Banking",
+   "Payments",
+   "Digital economy",
+   "Insurance",
+   "Capital markets",
+   "Pensions"
+  ],
+  "chips": [],
+  "tests": [
+   "set-*",
+   "set-profile-*",
+   "set-settings-*",
+   "set-settings-firm-*",
+   "save-*"
+  ],
+  "tabStates": []
+ },
+ {
+  "id": "profile/branding",
+  "ws": "regulator",
+  "layout": "app",
+  "title": "Branding",
+  "signedInAs": "m.bello@nitda.gov.ng",
+  "screenshot": "profile_branding.jpg",
+  "docTitle": "Branding · NITDA · SuperAtlas",
+  "crumbs": "Profile > Branding",
+  "headings": [
+   "Branding",
+   "Preview",
+   "Theme",
+   "Name and web address"
+  ],
+  "tabs": [
+   "Workspace",
+   "Invitation email"
+  ],
+  "buttons": [
+   "Workspace",
+   "Invitation email",
+   "SuperAtlas default Navy and indigo",
+   "Forest Deep green",
+   "Ocean Deep blue",
+   "Save branding"
+  ],
+  "fields": [
+   "Short name in status text",
+   "Web address"
+  ],
+  "tableHeaders": [],
+  "pills": [],
+  "chips": [
+   "DNS verified"
+  ],
+  "tests": [
+   "set-*",
+   "set-profile-*",
+   "set-settings-*",
+   "set-settings-firm-*",
+   "theme-*",
+   "save-*"
+  ],
+  "tabStates": [
+   {
+    "label": "Invitation email",
+    "file": "profile_branding__invitation-email.jpg",
+    "docTitle": "Branding · NITDA · SuperAtlas",
+    "crumbs": "Profile > Branding",
+    "headings": [
+     "Branding",
+     "Preview",
+     "Theme",
+     "Name and web address"
+    ],
+    "tabs": [
+     "Workspace",
+     "Invitation email"
+    ],
+    "buttons": [
+     "Workspace",
+     "Invitation email",
+     "SuperAtlas default Navy and indigo",
+     "Forest Deep green",
+     "Ocean Deep blue",
+     "Save branding"
+    ],
+    "fields": [
+     "Short name in status text",
+     "Web address"
+    ],
+    "tableHeaders": [],
+    "pills": [],
+    "chips": [
+     "DNS verified"
+    ],
+    "tests": [
+     "set-*",
+     "set-profile-*",
+     "set-settings-*",
+     "set-settings-firm-*",
+     "theme-*",
+     "save-*"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "team",
+  "ws": "regulator",
+  "layout": "app",
+  "title": "Team",
+  "signedInAs": "m.bello@nitda.gov.ng",
+  "screenshot": "team.jpg",
+  "docTitle": "Team · NITDA · SuperAtlas",
+  "crumbs": "Team",
+  "headings": [
+   "Team"
+  ],
+  "tabs": [
+   "People 4",
+   "Roles and permissions"
+  ],
+  "buttons": [
+   "Invite staff",
+   "People 4",
+   "Roles and permissions"
+  ],
+  "fields": [],
+  "tableHeaders": [
+   "NAME",
+   "ROLE",
+   "PORTFOLIO",
+   "STATUS",
+   "LAST ACTIVE"
+  ],
+  "pills": [],
+  "chips": [
+   "Admin",
+   "Active",
+   "Supervisor",
+   "Reviewer",
+   "Viewer"
+  ],
+  "tests": [
+   "set-*",
+   "set-profile-*",
+   "set-settings-*",
+   "set-settings-firm-*",
+   "invite-*"
+  ],
+  "tabStates": [
+   {
+    "label": "Roles and permissions",
+    "file": "team__roles-and-permissions.jpg",
+    "docTitle": "Team · NITDA · SuperAtlas",
+    "crumbs": "Team",
+    "headings": [
+     "Team"
+    ],
+    "tabs": [
+     "People 4",
+     "Roles and permissions"
+    ],
+    "buttons": [
+     "Invite staff",
+     "People 4",
+     "Roles and permissions"
+    ],
+    "fields": [],
+    "tableHeaders": [
+     "PERMISSION",
+     "ADMIN",
+     "SUPERVISOR",
+     "REVIEWER",
+     "VIEWER"
+    ],
+    "pills": [],
+    "chips": [],
+    "tests": [
+     "set-*",
+     "set-profile-*",
+     "set-settings-*",
+     "set-settings-firm-*",
+     "invite-*"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "settings/categories",
+  "ws": "regulator",
+  "layout": "app",
+  "title": "Categories",
+  "signedInAs": "m.bello@nitda.gov.ng",
+  "screenshot": "settings_categories.jpg",
+  "docTitle": "Categories · NITDA · SuperAtlas",
+  "crumbs": "Settings > Categories",
+  "headings": [
+   "Categories",
+   "How categories are used"
+  ],
+  "tabs": [
+   "Categories 13",
+   "Tags 4",
+   "Saved groups 2",
+   "History"
+  ],
+  "buttons": [
+   "Import spreadsheet",
+   "Add sector",
+   "Categories 13",
+   "Tags 4",
+   "Saved groups 2",
+   "History"
+  ],
+  "fields": [],
+  "tableHeaders": [],
+  "pills": [],
+  "chips": [
+   "International",
+   "National",
+   "Regional",
+   "State",
+   "Unit",
+   "PSSP",
+   "PTSP",
+   "Super-agent",
+   "Ultra-high level",
+   "Extra-high level",
+   "Ordinary-high level"
+  ],
+  "tests": [
+   "set-*",
+   "set-profile-*",
+   "set-settings-*",
+   "set-settings-firm-*",
+   "import-*"
+  ],
+  "tabStates": [
+   {
+    "label": "Tags 4",
+    "file": "settings_categories__tags-4.jpg",
+    "docTitle": "Categories · NITDA · SuperAtlas",
+    "crumbs": "Settings > Categories",
+    "headings": [
+     "Categories"
+    ],
+    "tabs": [
+     "Categories 13",
+     "Tags 4",
+     "Saved groups 2",
+     "History"
+    ],
+    "buttons": [
+     "Import spreadsheet",
+     "Add sector",
+     "Categories 13",
+     "Tags 4",
+     "Saved groups 2",
+     "History",
+     "Add tag"
+    ],
+    "fields": [],
+    "tableHeaders": [],
+    "pills": [],
+    "chips": [
+     "Listed",
+     "D-SIB",
+     "Systemically important",
+     "Foreign-owned"
+    ],
+    "tests": [
+     "set-*",
+     "set-profile-*",
+     "set-settings-*",
+     "set-settings-firm-*",
+     "import-*"
+    ]
+   },
+   {
+    "label": "Saved groups 2",
+    "file": "settings_categories__saved-groups-2.jpg",
+    "docTitle": "Categories · NITDA · SuperAtlas",
+    "crumbs": "Settings > Categories",
+    "headings": [
+     "Categories"
+    ],
+    "tabs": [
+     "Categories 13",
+     "Tags 4",
+     "Saved groups 2",
+     "History"
+    ],
+    "buttons": [
+     "Import spreadsheet",
+     "Add sector",
+     "Categories 13",
+     "Tags 4",
+     "Saved groups 2",
+     "History",
+     "Create saved group"
+    ],
+    "fields": [],
+    "tableHeaders": [
+     "GROUP",
+     "RULE",
+     "ORGANISATIONS"
+    ],
+    "pills": [],
+    "chips": [],
+    "tests": [
+     "set-*",
+     "set-profile-*",
+     "set-settings-*",
+     "set-settings-firm-*",
+     "import-*"
+    ]
+   },
+   {
+    "label": "History",
+    "file": "settings_categories__history.jpg",
+    "docTitle": "Categories · NITDA · SuperAtlas",
+    "crumbs": "Settings > Categories",
+    "headings": [
+     "Categories"
+    ],
+    "tabs": [
+     "Categories 13",
+     "Tags 4",
+     "Saved groups 2",
+     "History"
+    ],
+    "buttons": [
+     "Import spreadsheet",
+     "Add sector",
+     "Categories 13",
+     "Tags 4",
+     "Saved groups 2",
+     "History"
+    ],
+    "fields": [],
+    "tableHeaders": [],
+    "pills": [],
+    "chips": [],
+    "tests": [
+     "set-*",
+     "set-profile-*",
+     "set-settings-*",
+     "set-settings-firm-*",
+     "import-*"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "settings/categories/import",
+  "ws": "regulator",
+  "layout": "app",
+  "title": "Import categories",
+  "signedInAs": "m.bello@nitda.gov.ng",
+  "screenshot": "settings_categories_import.jpg",
+  "docTitle": "Import categories · NITDA · SuperAtlas",
+  "crumbs": "Settings > Categories > Import",
+  "headings": [
+   "Import categories from a spreadsheet"
+  ],
+  "tabs": [],
+  "buttons": [
+   "Download template (.xlsx)",
+   "Drop your spreadsheet here or click to choose a file"
+  ],
+  "fields": [],
+  "tableHeaders": [
+   "SECTOR",
+   "INSTITUTION_TYPE",
+   "TIER",
+   "CODE"
+  ],
+  "pills": [],
+  "chips": [],
+  "tests": [
+   "set-*",
+   "set-profile-*",
+   "set-settings-*",
+   "set-settings-firm-*",
+   "imp-*"
+  ],
+  "tabStates": []
+ },
+ {
+  "id": "library",
+  "ws": "regulator",
+  "layout": "app",
+  "title": "Requirements library",
+  "signedInAs": "m.bello@nitda.gov.ng",
+  "screenshot": "library.jpg",
+  "docTitle": "Requirements library · NITDA · SuperAtlas",
+  "crumbs": "Requirements library",
+  "headings": [
+   "Requirements library"
+  ],
+  "tabs": [],
+  "buttons": [
+   "Import spreadsheet",
+   "Add regulation",
+   "Add with AI",
+   "All",
+   "Published",
+   "Draft"
+  ],
+  "fields": [],
+  "tableHeaders": [
+   "REGULATION",
+   "VERSION",
+   "EFFECTIVE",
+   "SECTIONS",
+   "REQUIREMENTS",
+   "QUESTIONS",
+   "APPLIES TO",
+   "STATUS"
+  ],
+  "pills": [],
+  "chips": [
+   "Published",
+   "Draft"
+  ],
+  "tests": [
+   "reg-*",
+   "add-*"
+  ],
+  "tabStates": []
+ },
+ {
+  "id": "library/regulation",
+  "ws": "regulator",
+  "layout": "app",
+  "title": "Regulation",
+  "signedInAs": "m.bello@nitda.gov.ng",
+  "screenshot": "library_regulation.jpg",
+  "docTitle": "Regulation · NITDA · SuperAtlas",
+  "crumbs": "Requirements library > Information Security Regulation 2026",
+  "headings": [
+   "Details",
+   "Actions",
+   "Information Security Regulation 2026"
+  ],
+  "tabs": [
+   "Requirements 8",
+   "Questions 17",
+   "Evidence 13",
+   "Versions"
+  ],
+  "buttons": [
+   "Edit details",
+   "Add requirement",
+   "Create new version",
+   "Archive regulation",
+   "Requirements 8",
+   "Questions 17",
+   "Evidence 13",
+   "Versions",
+   "Expand all",
+   "Add section"
+  ],
+  "fields": [],
+  "tableHeaders": [],
+  "pills": [],
+  "chips": [
+   "Published"
+  ],
+  "tests": [
+   "regEdit",
+   "reqAdd",
+   "regVersion",
+   "regArchive",
+   "req-ISR-1.1",
+   "req-ISR-1.2",
+   "req-ISR-1.3",
+   "req-ISR-2.1"
+  ],
+  "tabStates": [
+   {
+    "label": "Questions 17",
+    "file": "library_regulation__questions-17.jpg",
+    "docTitle": "Regulation · NITDA · SuperAtlas",
+    "crumbs": "Requirements library > Information Security Regulation 2026",
+    "headings": [
+     "Details",
+     "Actions",
+     "Information Security Regulation 2026"
+    ],
+    "tabs": [
+     "Requirements 8",
+     "Questions 17",
+     "Evidence 13",
+     "Versions"
+    ],
+    "buttons": [
+     "Edit details",
+     "Add requirement",
+     "Create new version",
+     "Archive regulation",
+     "Requirements 8",
+     "Questions 17",
+     "Evidence 13",
+     "Versions",
+     "1. Governance 7",
+     "2. Asset management 2",
+     "4. Access control 5",
+     "7. Incident response 3",
+     "Add a section",
+     "Add question"
+    ],
+    "fields": [],
+    "tableHeaders": [],
+    "pills": [],
+    "chips": [
+     "Published"
+    ],
+    "tests": [
+     "regEdit",
+     "reqAdd",
+     "regVersion",
+     "regArchive"
+    ]
+   },
+   {
+    "label": "Evidence 13",
+    "file": "library_regulation__evidence-13.jpg",
+    "docTitle": "Regulation · NITDA · SuperAtlas",
+    "crumbs": "Requirements library > Information Security Regulation 2026",
+    "headings": [
+     "Details",
+     "Actions",
+     "Information Security Regulation 2026"
+    ],
+    "tabs": [
+     "Requirements 8",
+     "Questions 17",
+     "Evidence 13",
+     "Versions"
+    ],
+    "buttons": [
+     "Edit details",
+     "Add requirement",
+     "Create new version",
+     "Archive regulation",
+     "Requirements 8",
+     "Questions 17",
+     "Evidence 13",
+     "Versions"
+    ],
+    "fields": [],
+    "tableHeaders": [
+     "EVIDENCE ITEM",
+     "REQUIREMENT",
+     "SECTION"
+    ],
+    "pills": [],
+    "chips": [
+     "Published"
+    ],
+    "tests": [
+     "regEdit",
+     "reqAdd",
+     "regVersion",
+     "regArchive"
+    ]
+   },
+   {
+    "label": "Versions",
+    "file": "library_regulation__versions.jpg",
+    "docTitle": "Regulation · NITDA · SuperAtlas",
+    "crumbs": "Requirements library > Information Security Regulation 2026",
+    "headings": [
+     "Details",
+     "Actions",
+     "Information Security Regulation 2026"
+    ],
+    "tabs": [
+     "Requirements 8",
+     "Questions 17",
+     "Evidence 13",
+     "Versions"
+    ],
+    "buttons": [
+     "Edit details",
+     "Add requirement",
+     "Create new version",
+     "Archive regulation",
+     "Requirements 8",
+     "Questions 17",
+     "Evidence 13",
+     "Versions"
+    ],
+    "fields": [],
+    "tableHeaders": [],
+    "pills": [],
+    "chips": [
+     "Published"
+    ],
+    "tests": [
+     "regEdit",
+     "reqAdd",
+     "regVersion",
+     "regArchive"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "library/requirement",
+  "ws": "regulator",
+  "layout": "app",
+  "title": "Requirement",
+  "signedInAs": "m.bello@nitda.gov.ng",
+  "screenshot": "library_requirement.jpg",
+  "docTitle": "Requirement · NITDA · SuperAtlas",
+  "crumbs": "Requirements library > ISR > ISR-4.1",
+  "headings": [
+   "ISR-4.1 Multi-factor authentication for privileged access",
+   "Questions asked",
+   "Evidence required",
+   "Guidance for organisations",
+   "Details",
+   "Applies to"
+  ],
+  "tabs": [],
+  "buttons": [
+   "Previous",
+   "Next",
+   "Edit requirement",
+   "Suggest questions with AI"
+  ],
+  "fields": [],
+  "tableHeaders": [],
+  "pills": [],
+  "chips": [
+   "Required",
+   "Published"
+  ],
+  "tests": [
+   "req-*"
+  ],
+  "tabStates": []
+ },
+ {
+  "id": "library/edit",
+  "ws": "regulator",
+  "layout": "app",
+  "title": "Edit requirement",
+  "signedInAs": "m.bello@nitda.gov.ng",
+  "screenshot": "library_edit.jpg",
+  "docTitle": "Edit requirement · NITDA · SuperAtlas",
+  "crumbs": "Requirements library > ISR > New requirement",
+  "headings": [
+   "New requirement",
+   "Questions asked",
+   "Evidence required",
+   "Applies to"
+  ],
+  "tabs": [],
+  "buttons": [
+   "Suggest with AI",
+   "Add question",
+   "Add item",
+   "Cancel",
+   "Add requirement"
+  ],
+  "fields": [
+   "Reference",
+   "Title",
+   "Requirement text",
+   "Guidance for organisations",
+   "Comment",
+   "Evidence",
+   "Interview",
+   "Commercial bank",
+   "Non-interest bank",
+   "Merchant bank",
+   "Microfinance bank",
+   "Mobile money operator",
+   "Switching and processing",
+   "Payment solution service provider",
+   "Data controller of major importance",
+   "Cloud service provider",
+   "Fintech platform",
+   "Weight",
+   "Scoring scheme"
+  ],
+  "tableHeaders": [],
+  "pills": [],
+  "chips": [],
+  "tests": [
+   "ed-*",
+   "req-*"
+  ],
+  "tabStates": []
+ },
+ {
+  "id": "library/ai",
+  "ws": "regulator",
+  "layout": "app",
+  "title": "Add regulation with AI",
+  "signedInAs": "m.bello@nitda.gov.ng",
+  "screenshot": "library_ai.jpg",
+  "docTitle": "Add regulation with AI · NITDA · SuperAtlas",
+  "crumbs": "Requirements library > Add with AI",
+  "headings": [
+   "Add a regulation with AI",
+   "How it works"
+  ],
+  "tabs": [],
+  "buttons": [],
+  "fields": [
+   "Regulation name",
+   "Version",
+   "Effective date"
+  ],
+  "tableHeaders": [],
+  "pills": [],
+  "chips": [],
+  "tests": [
+   "ai-*"
+  ],
+  "tabStates": []
+ },
+ {
+  "id": "settings/scoring",
+  "ws": "regulator",
+  "layout": "app",
+  "title": "Scoring schemes",
+  "signedInAs": "m.bello@nitda.gov.ng",
+  "screenshot": "settings_scoring.jpg",
+  "docTitle": "Scoring schemes · NITDA · SuperAtlas",
+  "crumbs": "Settings > Scoring schemes",
+  "headings": [
+   "Scoring schemes",
+   "Rating bands"
+  ],
+  "tabs": [],
+  "buttons": [
+   "New scheme",
+   "Maturity scale Maturity · used in 1 programme",
+   "Pass / fail Binary · used in 0 programmes",
+   "Satisfactory scale Rating · used in 0 programmes",
+   "Edit bands"
+  ],
+  "fields": [],
+  "tableHeaders": [
+   "OUTCOME",
+   "POINTS",
+   "MEANING"
+  ],
+  "pills": [],
+  "chips": [
+   "Default",
+   "Default for new programmes",
+   "Compliant",
+   "Partially compliant",
+   "Non-compliant",
+   "Not applicable"
+  ],
+  "tests": [
+   "set-*",
+   "set-profile-*",
+   "set-settings-*",
+   "set-settings-firm-*",
+   "sch-*"
+  ],
+  "tabStates": []
+ },
+ {
+  "id": "settings/firm-types",
+  "ws": "regulator",
+  "layout": "app",
+  "title": "Firm types",
+  "signedInAs": "m.bello@nitda.gov.ng",
+  "screenshot": "settings_firm-types.jpg",
+  "docTitle": "Firm types · NITDA · SuperAtlas",
+  "crumbs": "Settings > Firm types",
+  "headings": [
+   "Firm types",
+   "Audit & assurance",
+   "Data protection (DPCO)",
+   "Cybersecurity assessor",
+   "Advisory & remediation",
+   "Rules for every type"
+  ],
+  "tabs": [],
+  "buttons": [
+   "Edit criteria",
+   "Save firm types"
+  ],
+  "fields": [
+   "Accreditation lasts",
+   "Renewal reminder",
+   "Independence window"
+  ],
+  "tableHeaders": [],
+  "pills": [],
+  "chips": [
+   "5 firms",
+   "3 firms",
+   "2 firms",
+   "1 firms"
+  ],
+  "tests": [
+   "set-*",
+   "set-profile-*",
+   "set-settings-*",
+   "set-settings-firm-*",
+   "save-*"
+  ],
+  "tabStates": []
+ },
+ {
+  "id": "settings/deadlines",
+  "ws": "regulator",
+  "layout": "app",
+  "title": "Deadlines and reminders",
+  "signedInAs": "m.bello@nitda.gov.ng",
+  "screenshot": "settings_deadlines.jpg",
+  "docTitle": "Deadlines and reminders · NITDA · SuperAtlas",
+  "crumbs": "Settings > Deadlines & reminders",
+  "headings": [
+   "Deadlines & reminders",
+   "Responses and returns",
+   "Invitations and digests",
+   "Example"
+  ],
+  "tabs": [],
+  "buttons": [
+   "Save deadlines"
+  ],
+  "fields": [
+   "Default response window",
+   "Grace period for returns",
+   "Send reminders",
+   "Escalate overdue work to the supervisor after",
+   "Invitations expire after",
+   "Supervisor digest",
+   "Time zone"
+  ],
+  "tableHeaders": [],
+  "pills": [],
+  "chips": [],
+  "tests": [
+   "set-*",
+   "set-profile-*",
+   "set-settings-*",
+   "set-settings-firm-*",
+   "save-*"
+  ],
+  "tabStates": []
+ },
+ {
+  "id": "organisations/invite",
+  "ws": "regulator",
+  "layout": "app",
+  "title": "Invite organisations",
+  "signedInAs": "m.bello@nitda.gov.ng",
+  "screenshot": "organisations_invite.jpg",
+  "docTitle": "Invite organisations · NITDA · SuperAtlas",
+  "crumbs": "Organisations > Invite",
+  "headings": [
+   "Invite organisations"
+  ],
+  "tabs": [],
+  "buttons": [
+   "Spreadsheet",
+   "One organisation",
+   "Download template (.xlsx)"
+  ],
+  "fields": [],
+  "tableHeaders": [
+   "ORGANISATION",
+   "EMAIL",
+   "INSTITUTION_TYPE",
+   "TIER"
+  ],
+  "pills": [],
+  "chips": [],
+  "tests": [
+   "mode-*",
+   "sheet-*"
+  ],
+  "tabStates": []
+ },
+ {
+  "id": "register",
+  "ws": "public",
+  "layout": "public",
+  "title": "Register and choose category",
+  "signedInAs": null,
+  "screenshot": "register.jpg",
+  "docTitle": "Register and choose category · SuperAtlas",
+  "crumbs": "",
+  "headings": [
+   "Join NITDA on SuperAtlas"
+  ],
+  "tabs": [],
+  "buttons": [
+   "Sign in",
+   "Book a demo",
+   "Continue"
+  ],
+  "fields": [
+   "Legal name",
+   "Trading name (optional)",
+   "Registration number",
+   "Website (optional)",
+   "Head office address"
+  ],
+  "tableHeaders": [],
+  "pills": [],
+  "chips": [],
+  "tests": [
+   "nav-*",
+   "reg-*"
+  ],
+  "tabStates": []
+ },
+ {
+  "id": "org/welcome",
+  "ws": "organisation",
+  "layout": "app",
+  "title": "Set up your organisation",
+  "signedInAs": "a.okonkwo@zenith.example",
+  "screenshot": "org_welcome.jpg",
+  "docTitle": "Set up your organisation · NITDA · SuperAtlas",
+  "crumbs": "Dashboard > Set up",
+  "headings": [
+   "Set up Zenith Bank Plc"
+  ],
+  "tabs": [],
+  "buttons": [
+   "Organisation profile",
+   "2 Logo",
+   "3 Key officers",
+   "4 Invite colleagues",
+   "5 Group links",
+   "View profile",
+   "Upload your logo SVG or PNG, square, at least 256 px",
+   "Skip for now",
+   "Continue"
+  ],
+  "fields": [],
+  "tableHeaders": [],
+  "pills": [],
+  "chips": [],
+  "tests": [
+   "ob-*",
+   "ob-logo-*"
+  ],
+  "tabStates": []
+ },
+ {
+  "id": "firm/apply",
+  "ws": "firm",
+  "layout": "app",
+  "title": "Apply for accreditation",
+  "signedInAs": "t.adebayo@deloitte.example",
+  "screenshot": "firm_apply.jpg",
+  "docTitle": "Apply for accreditation · NITDA · SuperAtlas",
+  "crumbs": "Profile > Apply for accreditation",
+  "headings": [
+   "Apply for accreditation",
+   "Current accreditations"
+  ],
+  "tabs": [],
+  "buttons": [
+   "Audit & assurance Already accredited",
+   "Cybersecurity assessor Already accredited",
+   "Advisory & remediation Registered consulting firm",
+   "Continue"
+  ],
+  "fields": [],
+  "tableHeaders": [],
+  "pills": [],
+  "chips": [
+   "Active"
+  ],
+  "tests": [
+   "acc-*"
+  ],
+  "tabStates": []
+ },
+ {
+  "id": "firm/welcome",
+  "ws": "firm",
+  "layout": "app",
+  "title": "Set up your firm",
+  "signedInAs": "t.adebayo@deloitte.example",
+  "screenshot": "firm_welcome.jpg",
+  "docTitle": "Set up your firm · NITDA · SuperAtlas",
+  "crumbs": "Dashboard > Set up",
+  "headings": [
+   "Set up Deloitte & Touche (Nigeria)"
+  ],
+  "tabs": [],
+  "buttons": [
+   "Firm profile",
+   "2 Logo",
+   "3 Lead auditor and assessors",
+   "4 Advisory clients",
+   "Apply for accreditation",
+   "Skip for now",
+   "Continue"
+  ],
+  "fields": [],
+  "tableHeaders": [],
+  "pills": [],
+  "chips": [],
+  "tests": [],
+  "tabStates": []
+ },
+ {
+  "id": "welcome",
+  "ws": "regulator",
+  "layout": "public",
+  "title": "Set up your workspace",
+  "signedInAs": "m.bello@nitda.gov.ng",
+  "screenshot": "welcome.jpg",
+  "docTitle": "Set up your workspace · SuperAtlas",
+  "crumbs": "",
+  "headings": [
+   "Confirm your profile"
+  ],
+  "tabs": [],
+  "buttons": [
+   "Replace logo",
+   "Save and continue"
+  ],
+  "fields": [
+   "Name shown in SuperAtlas",
+   "Short name",
+   "Legal name",
+   "Mandate",
+   "Supervision email",
+   "Phone"
+  ],
+  "tableHeaders": [],
+  "pills": [],
+  "chips": [],
+  "tests": [
+   "wiz-*"
+  ],
+  "tabStates": []
+ },
+ {
+  "id": "organisations",
+  "ws": "regulator",
+  "layout": "app",
+  "title": "Organisations",
+  "signedInAs": "m.bello@nitda.gov.ng",
+  "screenshot": "organisations.jpg",
+  "docTitle": "Organisations · NITDA · SuperAtlas",
+  "crumbs": "Organisations",
+  "headings": [
+   "Organisations"
+  ],
+  "tabs": [],
+  "buttons": [
+   "Export",
+   "Invite organisations",
+   "Commercial banks 14",
+   "Non-interest banks 1",
+   "Merchant banks 0",
+   "Microfinance banks 15",
+   "Payments 7",
+   "Digital economy 5",
+   "All categories 13 to choose from",
+   "All 43",
+   "Verified 35",
+   "Invited 2",
+   "Pending verification 2",
+   "Info requested 1",
+   "Change requested 1",
+   "Invite expired 1",
+   "Rejected 1",
+   "Review",
+   "Review change",
+   "Resend"
+  ],
+  "fields": [],
+  "tableHeaders": [
+   "ORGANISATION",
+   "CATEGORY",
+   "STATUS",
+   "LAST ACTIVITY"
+  ],
+  "pills": [
+   "All 43",
+   "Verified 35",
+   "Invited 2",
+   "Pending verification 2",
+   "Info requested 1",
+   "Change requested 1",
+   "Invite expired 1",
+   "Rejected 1"
+  ],
+  "chips": [
+   "Verified",
+   "Pending verification",
+   "Change requested",
+   "Info requested",
+   "Invited",
+   "Invite expired",
+   "Rejected"
+  ],
+  "tests": [
+   "go-*",
+   "cat-*",
+   "cat-non-*",
+   "st-*",
+   "st-Pending-*",
+   "st-Info-*",
+   "st-Change-*",
+   "st-Invite-*",
+   "org-*",
+   "row-review-*",
+   "row-change-*",
+   "row-resend-*"
+  ],
+  "tabStates": []
+ },
+ {
+  "id": "organisations/profile",
+  "ws": "regulator",
+  "layout": "app",
+  "title": "Organisation",
+  "signedInAs": "m.bello@nitda.gov.ng",
+  "screenshot": "organisations_profile.jpg",
+  "docTitle": "Organisation · NITDA · SuperAtlas",
+  "crumbs": "Organisations > Zenith Bank Plc",
+  "headings": [
+   "Zenith Bank Plc",
+   "Organisation details",
+   "Classification",
+   "Status",
+   "Key officers"
+  ],
+  "tabs": [
+   "Overview",
+   "Compliance",
+   "Classification",
+   "Invitations",
+   "People",
+   "Licences",
+   "Activity"
+  ],
+  "buttons": [
+   "Message",
+   "Change category",
+   "Overview",
+   "Compliance",
+   "Classification",
+   "Invitations",
+   "People",
+   "Licences",
+   "Activity",
+   "Manage"
+  ],
+  "fields": [],
+  "tableHeaders": [],
+  "pills": [],
+  "chips": [
+   "Verified"
+  ],
+  "tests": [
+   "org-tab-*"
+  ],
+  "tabStates": [
+   {
+    "label": "Compliance",
+    "file": "organisations_profile__compliance.jpg",
+    "docTitle": "Organisation · NITDA · SuperAtlas",
+    "crumbs": "Organisations > Zenith Bank Plc",
+    "headings": [
+     "Zenith Bank Plc",
+     "Status by programme",
+     "Score history",
+     "Section scores in ISR 2025 annual assessment",
+     "Findings",
+     "Returns and enforcement"
+    ],
+    "tabs": [
+     "Overview",
+     "Compliance",
+     "Classification",
+     "Invitations",
+     "People",
+     "Licences",
+     "Activity"
+    ],
+    "buttons": [
+     "Message",
+     "Change category",
+     "Overview",
+     "Compliance",
+     "Classification",
+     "Invitations",
+     "People",
+     "Licences",
+     "Activity",
+     "Export scorecard"
+    ],
+    "fields": [],
+    "tableHeaders": [
+     "PROGRAMME",
+     "LATEST CYCLE",
+     "SCORE",
+     "CHANGE",
+     "STATUS",
+     "FIRM",
+     "OPEN FINDINGS"
+    ],
+    "pills": [],
+    "chips": [
+     "Verified",
+     "Compliant",
+     "MiNC",
+     "Plan needed",
+     "OBS",
+     "In progress"
+    ],
+    "tests": [
+     "org-tab-*",
+     "org-*",
+     "oc-*",
+     "ch-oc-*"
+    ]
+   },
+   {
+    "label": "Classification",
+    "file": "organisations_profile__classification.jpg",
+    "docTitle": "Organisation · NITDA · SuperAtlas",
+    "crumbs": "Organisations > Zenith Bank Plc",
+    "headings": [
+     "Zenith Bank Plc",
+     "Current category",
+     "Request history"
+    ],
+    "tabs": [
+     "Overview",
+     "Compliance",
+     "Classification",
+     "Invitations",
+     "People",
+     "Licences",
+     "Activity"
+    ],
+    "buttons": [
+     "Message",
+     "Change category",
+     "Overview",
+     "Compliance",
+     "Classification",
+     "Invitations",
+     "People",
+     "Licences",
+     "Activity"
+    ],
+    "fields": [],
+    "tableHeaders": [],
+    "pills": [],
+    "chips": [
+     "Verified"
+    ],
+    "tests": [
+     "org-tab-*"
+    ]
+   },
+   {
+    "label": "Invitations",
+    "file": "organisations_profile__invitations.jpg",
+    "docTitle": "Organisation · NITDA · SuperAtlas",
+    "crumbs": "Organisations > Zenith Bank Plc",
+    "headings": [
+     "Zenith Bank Plc",
+     "Invitation history",
+     "Current invitation"
+    ],
+    "tabs": [
+     "Overview",
+     "Compliance",
+     "Classification",
+     "Invitations",
+     "People",
+     "Licences",
+     "Activity"
+    ],
+    "buttons": [
+     "Message",
+     "Change category",
+     "Overview",
+     "Compliance",
+     "Classification",
+     "Invitations",
+     "People",
+     "Licences",
+     "Activity",
+     "View email"
+    ],
+    "fields": [],
+    "tableHeaders": [],
+    "pills": [],
+    "chips": [
+     "Verified",
+     "Accepted"
+    ],
+    "tests": [
+     "org-tab-*"
+    ]
+   },
+   {
+    "label": "People",
+    "file": "organisations_profile__people.jpg",
+    "docTitle": "Organisation · NITDA · SuperAtlas",
+    "crumbs": "Organisations > Zenith Bank Plc",
+    "headings": [
+     "Zenith Bank Plc"
+    ],
+    "tabs": [
+     "Overview",
+     "Compliance",
+     "Classification",
+     "Invitations",
+     "People",
+     "Licences",
+     "Activity"
+    ],
+    "buttons": [
+     "Message",
+     "Change category",
+     "Overview",
+     "Compliance",
+     "Classification",
+     "Invitations",
+     "People",
+     "Licences",
+     "Activity"
+    ],
+    "fields": [],
+    "tableHeaders": [
+     "NAME",
+     "ROLE IN SUPERATLAS",
+     "STATUS"
+    ],
+    "pills": [],
+    "chips": [
+     "Verified",
+     "Active"
+    ],
+    "tests": [
+     "org-tab-*"
+    ]
+   },
+   {
+    "label": "Licences",
+    "file": "organisations_profile__licences.jpg",
+    "docTitle": "Organisation · NITDA · SuperAtlas",
+    "crumbs": "Organisations > Zenith Bank Plc",
+    "headings": [
+     "Zenith Bank Plc"
+    ],
+    "tabs": [
+     "Overview",
+     "Compliance",
+     "Classification",
+     "Invitations",
+     "People",
+     "Licences",
+     "Activity"
+    ],
+    "buttons": [
+     "Message",
+     "Change category",
+     "Overview",
+     "Compliance",
+     "Classification",
+     "Invitations",
+     "People",
+     "Licences",
+     "Activity"
+    ],
+    "fields": [],
+    "tableHeaders": [],
+    "pills": [],
+    "chips": [
+     "Verified"
+    ],
+    "tests": [
+     "org-tab-*"
+    ]
+   },
+   {
+    "label": "Activity",
+    "file": "organisations_profile__activity.jpg",
+    "docTitle": "Organisation · NITDA · SuperAtlas",
+    "crumbs": "Organisations > Zenith Bank Plc",
+    "headings": [
+     "Zenith Bank Plc",
+     "No activity yet"
+    ],
+    "tabs": [
+     "Overview",
+     "Compliance",
+     "Classification",
+     "Invitations",
+     "People",
+     "Licences",
+     "Activity"
+    ],
+    "buttons": [
+     "Message",
+     "Change category",
+     "Overview",
+     "Compliance",
+     "Classification",
+     "Invitations",
+     "People",
+     "Licences",
+     "Activity"
+    ],
+    "fields": [],
+    "tableHeaders": [],
+    "pills": [],
+    "chips": [
+     "Verified"
+    ],
+    "tests": [
+     "org-tab-*"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "firms",
+  "ws": "regulator",
+  "layout": "app",
+  "title": "Assurance firms",
+  "signedInAs": "m.bello@nitda.gov.ng",
+  "screenshot": "firms.jpg",
+  "docTitle": "Assurance firms · NITDA · SuperAtlas",
+  "crumbs": "Assurance firms",
+  "headings": [
+   "Assurance firms"
+  ],
+  "tabs": [],
+  "buttons": [
+   "Export",
+   "Invite a firm",
+   "Audit & assurance 5 3 accredited",
+   "Data protection (DPCO) 3 1 accredited",
+   "Cybersecurity assessor 2 1 accredited",
+   "Advisory & remediation 1 1 accredited",
+   "All 7",
+   "Accredited 3",
+   "Renewal due 1",
+   "In review 2",
+   "Suspended 1",
+   "Renew",
+   "Review application"
+  ],
+  "fields": [],
+  "tableHeaders": [
+   "FIRM",
+   "FIRM TYPES",
+   "STATUS",
+   "LEAD AUDITOR",
+   "ASSESSORS",
+   "ASSIGNED",
+   "RENEWS"
+  ],
+  "pills": [
+   "All 7",
+   "Accredited 3",
+   "Renewal due 1",
+   "In review 2",
+   "Suspended 1"
+  ],
+  "chips": [
+   "Accredited",
+   "Renewal due",
+   "In review",
+   "Suspended"
+  ],
+  "tests": [
+   "firm-*",
+   "row-acc-*"
+  ],
+  "tabStates": []
+ },
+ {
+  "id": "firms/profile",
+  "ws": "regulator",
+  "layout": "app",
+  "title": "Assurance firm",
+  "signedInAs": "m.bello@nitda.gov.ng",
+  "screenshot": "firms_profile.jpg",
+  "docTitle": "Assurance firm · NITDA · SuperAtlas",
+  "crumbs": "Assurance firms > Deloitte & Touche (Nigeria)",
+  "headings": [
+   "Deloitte & Touche (Nigeria)",
+   "Firm details",
+   "At a glance"
+  ],
+  "tabs": [
+   "Overview",
+   "Performance",
+   "Accreditations",
+   "People 3",
+   "Assignments",
+   "Activity"
+  ],
+  "buttons": [
+   "Renew accreditation",
+   "Overview",
+   "Performance",
+   "Accreditations",
+   "People 3",
+   "Assignments",
+   "Activity"
+  ],
+  "fields": [],
+  "tableHeaders": [],
+  "pills": [],
+  "chips": [
+   "Accredited"
+  ],
+  "tests": [
+   "more-firm-*",
+   "firm-tab-*"
+  ],
+  "tabStates": [
+   {
+    "label": "Performance",
+    "file": "firms_profile__performance.jpg",
+    "docTitle": "Assurance firm · NITDA · SuperAtlas",
+    "crumbs": "Assurance firms > Deloitte & Touche (Nigeria)",
+    "headings": [
+     "Deloitte & Touche (Nigeria)",
+     "Average rating 4.6 → 4.5",
+     "Compared with other firms",
+     "Ratings"
+    ],
+    "tabs": [
+     "Overview",
+     "Performance",
+     "Accreditations",
+     "People 3",
+     "Assignments",
+     "Activity"
+    ],
+    "buttons": [
+     "Renew accreditation",
+     "Overview",
+     "Performance",
+     "Accreditations",
+     "People 3",
+     "Assignments",
+     "Activity",
+     "Average rating 4.5 / 5 11 ratings",
+     "View as table",
+     "KPMG Professional Services 4.7",
+     "Deloitte & Touche (Nigeria) 4.5",
+     "PricewaterhouseCoopers Nigeria 4.1",
+     "Ernst & Young Nigeria 3.4"
+    ],
+    "fields": [],
+    "tableHeaders": [
+     "ORGANISATION",
+     "REPORT",
+     "RATING",
+     "COMMENT"
+    ],
+    "pills": [],
+    "chips": [
+     "Accredited"
+    ],
+    "tests": [
+     "more-firm-*",
+     "firm-tab-*",
+     "fp-*",
+     "ch-fp-*"
+    ]
+   },
+   {
+    "label": "Accreditations",
+    "file": "firms_profile__accreditations.jpg",
+    "docTitle": "Assurance firm · NITDA · SuperAtlas",
+    "crumbs": "Assurance firms > Deloitte & Touche (Nigeria)",
+    "headings": [
+     "Deloitte & Touche (Nigeria)",
+     "Accreditations"
+    ],
+    "tabs": [
+     "Overview",
+     "Performance",
+     "Accreditations",
+     "People 3",
+     "Assignments",
+     "Activity"
+    ],
+    "buttons": [
+     "Renew accreditation",
+     "Overview",
+     "Performance",
+     "Accreditations",
+     "People 3",
+     "Assignments",
+     "Activity"
+    ],
+    "fields": [],
+    "tableHeaders": [],
+    "pills": [],
+    "chips": [
+     "Accredited",
+     "Active"
+    ],
+    "tests": [
+     "more-firm-*",
+     "firm-tab-*"
+    ]
+   },
+   {
+    "label": "People 3",
+    "file": "firms_profile__people-3.jpg",
+    "docTitle": "Assurance firm · NITDA · SuperAtlas",
+    "crumbs": "Assurance firms > Deloitte & Touche (Nigeria)",
+    "headings": [
+     "Deloitte & Touche (Nigeria)"
+    ],
+    "tabs": [
+     "Overview",
+     "Performance",
+     "Accreditations",
+     "People 3",
+     "Assignments",
+     "Activity"
+    ],
+    "buttons": [
+     "Renew accreditation",
+     "Overview",
+     "Performance",
+     "Accreditations",
+     "People 3",
+     "Assignments",
+     "Activity"
+    ],
+    "fields": [],
+    "tableHeaders": [
+     "PERSON",
+     "ROLE",
+     "CREDENTIALS",
+     "CREDENTIAL EXPIRY",
+     "STATUS"
+    ],
+    "pills": [],
+    "chips": [
+     "Accredited",
+     "Lead auditor",
+     "Active",
+     "Assessor",
+     "Pending credential"
+    ],
+    "tests": [
+     "more-firm-*",
+     "firm-tab-*"
+    ]
+   },
+   {
+    "label": "Assignments",
+    "file": "firms_profile__assignments.jpg",
+    "docTitle": "Assurance firm · NITDA · SuperAtlas",
+    "crumbs": "Assurance firms > Deloitte & Touche (Nigeria)",
+    "headings": [
+     "Deloitte & Touche (Nigeria)",
+     "Assignments arrive with programmes"
+    ],
+    "tabs": [
+     "Overview",
+     "Performance",
+     "Accreditations",
+     "People 3",
+     "Assignments",
+     "Activity"
+    ],
+    "buttons": [
+     "Renew accreditation",
+     "Overview",
+     "Performance",
+     "Accreditations",
+     "People 3",
+     "Assignments",
+     "Activity"
+    ],
+    "fields": [],
+    "tableHeaders": [],
+    "pills": [],
+    "chips": [
+     "Accredited"
+    ],
+    "tests": [
+     "more-firm-*",
+     "firm-tab-*"
+    ]
+   },
+   {
+    "label": "Activity",
+    "file": "firms_profile__activity.jpg",
+    "docTitle": "Assurance firm · NITDA · SuperAtlas",
+    "crumbs": "Assurance firms > Deloitte & Touche (Nigeria)",
+    "headings": [
+     "Deloitte & Touche (Nigeria)"
+    ],
+    "tabs": [
+     "Overview",
+     "Performance",
+     "Accreditations",
+     "People 3",
+     "Assignments",
+     "Activity"
+    ],
+    "buttons": [
+     "Renew accreditation",
+     "Overview",
+     "Performance",
+     "Accreditations",
+     "People 3",
+     "Assignments",
+     "Activity"
+    ],
+    "fields": [],
+    "tableHeaders": [],
+    "pills": [],
+    "chips": [
+     "Accredited"
+    ],
+    "tests": [
+     "more-firm-*",
+     "firm-tab-*"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "org/dashboard",
+  "ws": "organisation",
+  "layout": "app",
+  "title": "My dashboard",
+  "signedInAs": "a.okonkwo@zenith.example",
+  "screenshot": "org_dashboard.jpg",
+  "docTitle": "My dashboard · NITDA · SuperAtlas",
+  "crumbs": "My dashboard",
+  "headings": [
+   "Good evening, Adaeze",
+   "Finish setting up",
+   "Compliance",
+   "Regulatory exposure",
+   "Your obligations"
+  ],
+  "tabs": [],
+  "buttons": [
+   "Finish answering ISR 2026 annual assessment Due 30 Nov 2026",
+   "See all 5 tasks",
+   "Export scorecard",
+   "Open compliance",
+   "Continue setup",
+   "Continue",
+   "Choose a firm"
+  ],
+  "fields": [],
+  "tableHeaders": [],
+  "pills": [],
+  "chips": [
+   "Compliant",
+   "Medium",
+   "Low",
+   "Answering",
+   "Firm to choose"
+  ],
+  "tests": [
+   "my-*",
+   "ht-*",
+   "hero-*",
+   "continue-*",
+   "cc-*",
+   "answer-*",
+   "engage-*"
+  ],
+  "tabStates": []
+ },
+ {
+  "id": "org/team",
+  "ws": "organisation",
+  "layout": "app",
+  "title": "Team",
+  "signedInAs": "a.okonkwo@zenith.example",
+  "screenshot": "org_team.jpg",
+  "docTitle": "Team · NITDA · SuperAtlas",
+  "crumbs": "Team",
+  "headings": [
+   "Team"
+  ],
+  "tabs": [],
+  "buttons": [
+   "Invite colleague"
+  ],
+  "fields": [],
+  "tableHeaders": [
+   "NAME",
+   "ROLE",
+   "STATUS"
+  ],
+  "pills": [],
+  "chips": [
+   "Organisation admin",
+   "Active",
+   "Contributor"
+  ],
+  "tests": [
+   "org-*"
+  ],
+  "tabStates": []
+ },
+ {
+  "id": "org/profile",
+  "ws": "organisation",
+  "layout": "app",
+  "title": "Profile",
+  "signedInAs": "a.okonkwo@zenith.example",
+  "screenshot": "org_profile.jpg",
+  "docTitle": "Profile · NITDA · SuperAtlas",
+  "crumbs": "Profile",
+  "headings": [
+   "Zenith Bank Plc",
+   "Organisation details",
+   "Logo",
+   "Key officers"
+  ],
+  "tabs": [
+   "Details",
+   "Classification",
+   "Licences",
+   "Group links",
+   "Settings"
+  ],
+  "buttons": [
+   "Details",
+   "Classification",
+   "Licences",
+   "Group links",
+   "Settings",
+   "Save changes",
+   "Upload logo"
+  ],
+  "fields": [
+   "Legal name",
+   "Registration number",
+   "Website",
+   "Head office",
+   "Compliance contact email"
+  ],
+  "tableHeaders": [],
+  "pills": [],
+  "chips": [
+   "Verified"
+  ],
+  "tests": [],
+  "tabStates": [
+   {
+    "label": "Classification",
+    "file": "org_profile__classification.jpg",
+    "docTitle": "Profile · NITDA · SuperAtlas",
+    "crumbs": "Profile",
+    "headings": [
+     "Zenith Bank Plc",
+     "Request a classification change",
+     "Current category",
+     "History"
+    ],
+    "tabs": [
+     "Details",
+     "Classification",
+     "Licences",
+     "Group links",
+     "Settings"
+    ],
+    "buttons": [
+     "Details",
+     "Classification",
+     "Licences",
+     "Group links",
+     "Settings",
+     "Attach the new licence Required · PDF up to 10 MB",
+     "Submit request"
+    ],
+    "fields": [
+     "Sector",
+     "Institution type",
+     "Tier",
+     "Why are you asking for this change?"
+    ],
+    "tableHeaders": [],
+    "pills": [],
+    "chips": [
+     "Verified"
+    ],
+    "tests": [
+     "cc-*"
+    ]
+   },
+   {
+    "label": "Licences",
+    "file": "org_profile__licences.jpg",
+    "docTitle": "Profile · NITDA · SuperAtlas",
+    "crumbs": "Profile",
+    "headings": [
+     "Zenith Bank Plc"
+    ],
+    "tabs": [
+     "Details",
+     "Classification",
+     "Licences",
+     "Group links",
+     "Settings"
+    ],
+    "buttons": [
+     "Details",
+     "Classification",
+     "Licences",
+     "Group links",
+     "Settings",
+     "Upload a licence"
+    ],
+    "fields": [],
+    "tableHeaders": [],
+    "pills": [],
+    "chips": [
+     "Verified"
+    ],
+    "tests": []
+   },
+   {
+    "label": "Group links",
+    "file": "org_profile__group-links.jpg",
+    "docTitle": "Profile · NITDA · SuperAtlas",
+    "crumbs": "Profile",
+    "headings": [
+     "Zenith Bank Plc"
+    ],
+    "tabs": [
+     "Details",
+     "Classification",
+     "Licences",
+     "Group links",
+     "Settings"
+    ],
+    "buttons": [
+     "Details",
+     "Classification",
+     "Licences",
+     "Group links",
+     "Settings",
+     "Add a link"
+    ],
+    "fields": [],
+    "tableHeaders": [],
+    "pills": [],
+    "chips": [
+     "Verified"
+    ],
+    "tests": []
+   },
+   {
+    "label": "Settings",
+    "file": "org_profile__settings.jpg",
+    "docTitle": "Profile · NITDA · SuperAtlas",
+    "crumbs": "Profile",
+    "headings": [
+     "Zenith Bank Plc"
+    ],
+    "tabs": [
+     "Details",
+     "Classification",
+     "Licences",
+     "Group links",
+     "Settings"
+    ],
+    "buttons": [
+     "Details",
+     "Classification",
+     "Licences",
+     "Group links",
+     "Settings",
+     "Save settings"
+    ],
+    "fields": [],
+    "tableHeaders": [],
+    "pills": [],
+    "chips": [
+     "Verified"
+    ],
+    "tests": []
+   }
+  ]
+ },
+ {
+  "id": "firm/dashboard",
+  "ws": "firm",
+  "layout": "app",
+  "title": "My dashboard",
+  "signedInAs": "t.adebayo@deloitte.example",
+  "screenshot": "firm_dashboard.jpg",
+  "docTitle": "My dashboard · NITDA · SuperAtlas",
+  "crumbs": "My dashboard",
+  "headings": [
+   "Good evening, Tunde",
+   "Finish setting up",
+   "Due soon",
+   "Team workload is even",
+   "3 active, 14 completed"
+  ],
+  "tabs": [],
+  "buttons": [
+   "1 assessment submitted and waiting for you",
+   "1 fix sent with proof, waiting for you to verify",
+   "See all 2 tasks",
+   "Engagements",
+   "Performance",
+   "Continue setup",
+   "Active engagements 3 1 submitted and waiting for you",
+   "Requests 0 None waiting",
+   "Fixes to verify 1 Organisations sent proof",
+   "View as table",
+   "T. Adebayo Lead auditor 3",
+   "I. Okafor Assessor 2",
+   "R. Salami Assessor 0",
+   "Requests 0",
+   "Active 2",
+   "Submitted 1",
+   "Completed 14"
+  ],
+  "fields": [],
+  "tableHeaders": [],
+  "pills": [],
+  "chips": [
+   "Answering",
+   "Submitted"
+  ],
+  "tests": [
+   "my-*",
+   "ht-*",
+   "hero-*",
+   "continue-*",
+   "fk-*",
+   "fsoon-*",
+   "ch-f-*"
+  ],
+  "tabStates": []
+ },
+ {
+  "id": "firm/team",
+  "ws": "firm",
+  "layout": "app",
+  "title": "Team",
+  "signedInAs": "t.adebayo@deloitte.example",
+  "screenshot": "firm_team.jpg",
+  "docTitle": "Team · NITDA · SuperAtlas",
+  "crumbs": "Team",
+  "headings": [
+   "Team"
+  ],
+  "tabs": [],
+  "buttons": [
+   "Add person"
+  ],
+  "fields": [],
+  "tableHeaders": [
+   "PERSON",
+   "ROLE",
+   "CREDENTIALS",
+   "CREDENTIAL EXPIRY",
+   "STATUS"
+  ],
+  "pills": [],
+  "chips": [
+   "Lead auditor",
+   "Active",
+   "Assessor",
+   "Pending credential"
+  ],
+  "tests": [
+   "firm-*"
+  ],
+  "tabStates": []
+ },
+ {
+  "id": "firm/profile",
+  "ws": "firm",
+  "layout": "app",
+  "title": "Profile",
+  "signedInAs": "t.adebayo@deloitte.example",
+  "screenshot": "firm_profile.jpg",
+  "docTitle": "Profile · NITDA · SuperAtlas",
+  "crumbs": "Profile",
+  "headings": [
+   "Deloitte & Touche (Nigeria)"
+  ],
+  "tabs": [
+   "Details",
+   "Performance",
+   "Accreditations",
+   "Assessors 3",
+   "Advisory clients 2"
+  ],
+  "buttons": [
+   "Details",
+   "Performance",
+   "Accreditations",
+   "Assessors 3",
+   "Advisory clients 2",
+   "Save changes"
+  ],
+  "fields": [
+   "Firm name",
+   "Website",
+   "Offices",
+   "Contact email"
+  ],
+  "tableHeaders": [],
+  "pills": [],
+  "chips": [
+   "Accredited"
+  ],
+  "tests": [
+   "my-*"
+  ],
+  "tabStates": [
+   {
+    "label": "Performance",
+    "file": "firm_profile__performance.jpg",
+    "docTitle": "Profile · NITDA · SuperAtlas",
+    "crumbs": "Profile",
+    "headings": [
+     "Deloitte & Touche (Nigeria)",
+     "Average rating 4.6 → 4.5",
+     "What organisations said"
+    ],
+    "tabs": [
+     "Details",
+     "Performance",
+     "Accreditations",
+     "Assessors 3",
+     "Advisory clients 2"
+    ],
+    "buttons": [
+     "Details",
+     "Performance",
+     "Accreditations",
+     "Assessors 3",
+     "Advisory clients 2",
+     "View as table"
+    ],
+    "fields": [],
+    "tableHeaders": [],
+    "pills": [],
+    "chips": [
+     "Accredited"
+    ],
+    "tests": [
+     "my-*",
+     "fp-*",
+     "ch-fp-*"
+    ]
+   },
+   {
+    "label": "Accreditations",
+    "file": "firm_profile__accreditations.jpg",
+    "docTitle": "Profile · NITDA · SuperAtlas",
+    "crumbs": "Profile",
+    "headings": [
+     "Deloitte & Touche (Nigeria)",
+     "Accreditations"
+    ],
+    "tabs": [
+     "Details",
+     "Performance",
+     "Accreditations",
+     "Assessors 3",
+     "Advisory clients 2"
+    ],
+    "buttons": [
+     "Details",
+     "Performance",
+     "Accreditations",
+     "Assessors 3",
+     "Advisory clients 2",
+     "Apply for accreditation"
+    ],
+    "fields": [],
+    "tableHeaders": [],
+    "pills": [],
+    "chips": [
+     "Accredited",
+     "Active"
+    ],
+    "tests": [
+     "my-*",
+     "go-*"
+    ]
+   },
+   {
+    "label": "Assessors 3",
+    "file": "firm_profile__assessors-3.jpg",
+    "docTitle": "Profile · NITDA · SuperAtlas",
+    "crumbs": "Profile",
+    "headings": [
+     "Deloitte & Touche (Nigeria)"
+    ],
+    "tabs": [
+     "Details",
+     "Performance",
+     "Accreditations",
+     "Assessors 3",
+     "Advisory clients 2"
+    ],
+    "buttons": [
+     "Details",
+     "Performance",
+     "Accreditations",
+     "Assessors 3",
+     "Advisory clients 2"
+    ],
+    "fields": [],
+    "tableHeaders": [
+     "PERSON",
+     "ROLE",
+     "CREDENTIALS",
+     "EXPIRES"
+    ],
+    "pills": [],
+    "chips": [
+     "Accredited",
+     "Lead auditor",
+     "Assessor"
+    ],
+    "tests": [
+     "my-*"
+    ]
+   },
+   {
+    "label": "Advisory clients 2",
+    "file": "firm_profile__advisory-clients-2.jpg",
+    "docTitle": "Profile · NITDA · SuperAtlas",
+    "crumbs": "Profile",
+    "headings": [
+     "Deloitte & Touche (Nigeria)"
+    ],
+    "tabs": [
+     "Details",
+     "Performance",
+     "Accreditations",
+     "Assessors 3",
+     "Advisory clients 2"
+    ],
+    "buttons": [
+     "Details",
+     "Performance",
+     "Accreditations",
+     "Assessors 3",
+     "Advisory clients 2",
+     "Declare client"
+    ],
+    "fields": [],
+    "tableHeaders": [],
+    "pills": [],
+    "chips": [
+     "Accredited"
+    ],
+    "tests": [
+     "my-*"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "programmes",
+  "ws": "regulator",
+  "layout": "app",
+  "title": "Programmes",
+  "signedInAs": "m.bello@nitda.gov.ng",
+  "screenshot": "programmes.jpg",
+  "docTitle": "Programmes · NITDA · SuperAtlas",
+  "crumbs": "Programmes",
+  "headings": [
+   "Programmes"
+  ],
+  "tabs": [],
+  "buttons": [
+   "New programme",
+   "List",
+   "Calendar",
+   "All 5",
+   "Draft 1",
+   "Scheduled 1",
+   "Open 2",
+   "In review 0",
+   "Closed 1",
+   "Continue setup"
+  ],
+  "fields": [],
+  "tableHeaders": [
+   "PROGRAMME",
+   "CURRENT CYCLE",
+   "WINDOW",
+   "ORGANISATIONS",
+   "SUBMITTED",
+   "STATUS"
+  ],
+  "pills": [
+   "All 5",
+   "Draft 1",
+   "Scheduled 1",
+   "Open 2",
+   "In review 0",
+   "Closed 1"
+  ],
+  "chips": [
+   "Open",
+   "Closed",
+   "Draft",
+   "Scheduled"
+  ],
+  "tests": [
+   "prog-*",
+   "view-*",
+   "pst-*",
+   "pst-In-*"
+  ],
+  "tabStates": []
+ },
+ {
+  "id": "programmes/new",
+  "ws": "regulator",
+  "layout": "app",
+  "title": "Programme setup",
+  "signedInAs": "m.bello@nitda.gov.ng",
+  "screenshot": "programmes_new.jpg",
+  "docTitle": "Programme setup · NITDA · SuperAtlas",
+  "crumbs": "Programmes > New programme",
+  "headings": [
+   "New programme"
+  ],
+  "tabs": [],
+  "buttons": [
+   "Cancel",
+   "Save draft",
+   "Continue"
+  ],
+  "fields": [
+   "Programme name",
+   "Regulation",
+   "Opens",
+   "Due",
+   "Description (optional)"
+  ],
+  "tableHeaders": [],
+  "pills": [],
+  "chips": [],
+  "tests": [
+   "pw-*"
+  ],
+  "tabStates": []
+ },
+ {
+  "id": "programmes/view",
+  "ws": "regulator",
+  "layout": "app",
+  "title": "Programme",
+  "signedInAs": "m.bello@nitda.gov.ng",
+  "screenshot": "programmes_view.jpg",
+  "docTitle": "Programme · NITDA · SuperAtlas",
+  "crumbs": "Programmes > ISR 2026 annual assessment",
+  "headings": [
+   "ISR annual assessment",
+   "Progress",
+   "Key dates",
+   "Recent activity"
+  ],
+  "tabs": [
+   "Overview",
+   "Analytics",
+   "Organisations",
+   "Firms",
+   "Questions 17",
+   "Cycles 3",
+   "Settings"
+  ],
+  "buttons": [
+   "Send reminder to all",
+   "Overview",
+   "Analytics",
+   "Organisations",
+   "Firms",
+   "Questions 17",
+   "Cycles 3",
+   "Settings"
+  ],
+  "fields": [],
+  "tableHeaders": [
+   "ORGANISATION",
+   "STAGE",
+   "ANSWERED"
+  ],
+  "pills": [],
+  "chips": [
+   "Open",
+   "Answering",
+   "Firm to assign",
+   "Submitted",
+   "Report submitted"
+  ],
+  "tests": [
+   "prog-*",
+   "more-prog-*",
+   "tab-*"
+  ],
+  "tabStates": [
+   {
+    "label": "Analytics",
+    "file": "programmes_view__analytics.jpg",
+    "docTitle": "Programme · NITDA · SuperAtlas",
+    "crumbs": "Programmes > ISR 2026 annual assessment",
+    "headings": [
+     "ISR annual assessment",
+     "11 of 26 submitted, 42 days before the deadline",
+     "Nothing published yet; 21 of 26 have a firm in place",
+     "Submission by category",
+     "Not submitted yet"
+    ],
+    "tabs": [
+     "Overview",
+     "Analytics",
+     "Organisations",
+     "Firms",
+     "Questions 17",
+     "Cycles 3",
+     "Settings"
+    ],
+    "buttons": [
+     "Send reminder to all",
+     "Overview",
+     "Analytics",
+     "Organisations",
+     "Firms",
+     "Questions 17",
+     "Cycles 3",
+     "Settings",
+     "Export",
+     "Progress",
+     "Results",
+     "Sections",
+     "Over time",
+     "Remediation",
+     "In scope 26 All categories",
+     "Submitted 11 · 42% +25 pts vs 2025 at this point",
+     "Not submitted yet 15 None late",
+     "View as table",
+     "In scope 26",
+     "Firm in place 21 · 81%",
+     "Started answering 21 · 81%",
+     "Submitted 11 · 42%",
+     "Assessed by the firm 3 · 12%",
+     "Reviewed by NITDA 0 · 0%",
+     "Published 0 · 0%",
+     "Remind all (15)"
+    ],
+    "fields": [
+     "Cycle 2026 (open) 2025 2024",
+     "Compare with 2025 (previous) No comparison 2025 2024",
+     "Category All categories Commercial bank Microfinance bank"
+    ],
+    "tableHeaders": [],
+    "pills": [],
+    "chips": [
+     "Open",
+     "Answering",
+     "Firm to assign",
+     "Awaiting firm"
+    ],
+    "tests": [
+     "prog-*",
+     "more-prog-*",
+     "tab-*",
+     "an-*",
+     "k-*",
+     "ch-prog-*"
+    ]
+   },
+   {
+    "label": "Organisations",
+    "file": "programmes_view__organisations.jpg",
+    "docTitle": "Programme · NITDA · SuperAtlas",
+    "crumbs": "Programmes > ISR 2026 annual assessment",
+    "headings": [
+     "ISR annual assessment"
+    ],
+    "tabs": [
+     "Overview",
+     "Analytics",
+     "Organisations",
+     "Firms",
+     "Questions 17",
+     "Cycles 3",
+     "Settings"
+    ],
+    "buttons": [
+     "Send reminder to all",
+     "Overview",
+     "Analytics",
+     "Organisations",
+     "Firms",
+     "Questions 17",
+     "Cycles 3",
+     "Settings",
+     "Send reminder",
+     "Assign firm"
+    ],
+    "fields": [],
+    "tableHeaders": [
+     "ORGANISATION",
+     "ASSURANCE FIRM",
+     "STAGE",
+     "ANSWERED",
+     "DUE"
+    ],
+    "pills": [],
+    "chips": [
+     "Open",
+     "Answering",
+     "Firm to assign",
+     "Submitted",
+     "Report submitted",
+     "Awaiting firm",
+     "Assessing",
+     "Signed off"
+    ],
+    "tests": [
+     "prog-*",
+     "more-prog-*",
+     "tab-*",
+     "bulk-*",
+     "sel-*"
+    ]
+   },
+   {
+    "label": "Firms",
+    "file": "programmes_view__firms.jpg",
+    "docTitle": "Programme · NITDA · SuperAtlas",
+    "crumbs": "Programmes > ISR 2026 annual assessment",
+    "headings": [
+     "ISR annual assessment"
+    ],
+    "tabs": [
+     "Overview",
+     "Analytics",
+     "Organisations",
+     "Firms",
+     "Questions 17",
+     "Cycles 3",
+     "Settings"
+    ],
+    "buttons": [
+     "Send reminder to all",
+     "Overview",
+     "Analytics",
+     "Organisations",
+     "Firms",
+     "Questions 17",
+     "Cycles 3",
+     "Settings"
+    ],
+    "fields": [],
+    "tableHeaders": [
+     "FIRM",
+     "ORGANISATIONS",
+     "ACCEPTED",
+     "LEAD AUDITORS"
+    ],
+    "pills": [],
+    "chips": [
+     "Open"
+    ],
+    "tests": [
+     "prog-*",
+     "more-prog-*",
+     "tab-*"
+    ]
+   },
+   {
+    "label": "Questions 17",
+    "file": "programmes_view__questions-17.jpg",
+    "docTitle": "Programme · NITDA · SuperAtlas",
+    "crumbs": "Programmes > ISR 2026 annual assessment",
+    "headings": [
+     "ISR annual assessment"
+    ],
+    "tabs": [
+     "Overview",
+     "Analytics",
+     "Organisations",
+     "Firms",
+     "Questions 17",
+     "Cycles 3",
+     "Settings"
+    ],
+    "buttons": [
+     "Send reminder to all",
+     "Overview",
+     "Analytics",
+     "Organisations",
+     "Firms",
+     "Questions 17",
+     "Cycles 3",
+     "Settings",
+     "1. Governance 7",
+     "2. Asset management 2",
+     "4. Access control 5",
+     "7. Incident response 3"
+    ],
+    "fields": [],
+    "tableHeaders": [],
+    "pills": [],
+    "chips": [
+     "Open"
+    ],
+    "tests": [
+     "prog-*",
+     "more-prog-*",
+     "tab-*"
+    ]
+   },
+   {
+    "label": "Cycles 3",
+    "file": "programmes_view__cycles-3.jpg",
+    "docTitle": "Programme · NITDA · SuperAtlas",
+    "crumbs": "Programmes > ISR 2026 annual assessment",
+    "headings": [
+     "ISR annual assessment",
+     "Cycles"
+    ],
+    "tabs": [
+     "Overview",
+     "Analytics",
+     "Organisations",
+     "Firms",
+     "Questions 17",
+     "Cycles 3",
+     "Settings"
+    ],
+    "buttons": [
+     "Send reminder to all",
+     "Overview",
+     "Analytics",
+     "Organisations",
+     "Firms",
+     "Questions 17",
+     "Cycles 3",
+     "Settings",
+     "Run next cycle"
+    ],
+    "fields": [],
+    "tableHeaders": [
+     "CYCLE",
+     "WINDOW",
+     "ORGANISATIONS",
+     "SUBMITTED",
+     "AVERAGE SCORE",
+     "MET BENCHMARK (70)",
+     "STATUS"
+    ],
+    "pills": [],
+    "chips": [
+     "Open",
+     "Viewing",
+     "Closed"
+    ],
+    "tests": [
+     "prog-*",
+     "more-prog-*",
+     "tab-*",
+     "cyc-*"
+    ]
+   },
+   {
+    "label": "Settings",
+    "file": "programmes_view__settings.jpg",
+    "docTitle": "Programme · NITDA · SuperAtlas",
+    "crumbs": "Programmes > ISR 2026 annual assessment",
+    "headings": [
+     "ISR annual assessment"
+    ],
+    "tabs": [
+     "Overview",
+     "Analytics",
+     "Organisations",
+     "Firms",
+     "Questions 17",
+     "Cycles 3",
+     "Settings"
+    ],
+    "buttons": [
+     "Send reminder to all",
+     "Overview",
+     "Analytics",
+     "Organisations",
+     "Firms",
+     "Questions 17",
+     "Cycles 3",
+     "Settings"
+    ],
+    "fields": [],
+    "tableHeaders": [],
+    "pills": [],
+    "chips": [
+     "Open"
+    ],
+    "tests": [
+     "prog-*",
+     "more-prog-*",
+     "tab-*"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "org/obligations",
+  "ws": "organisation",
+  "layout": "app",
+  "title": "Obligations",
+  "signedInAs": "a.okonkwo@zenith.example",
+  "screenshot": "org_obligations.jpg",
+  "docTitle": "Obligations · NITDA · SuperAtlas",
+  "crumbs": "Obligations",
+  "headings": [
+   "Obligations"
+  ],
+  "tabs": [],
+  "buttons": [
+   "Active 2",
+   "Completed 4",
+   "All 6",
+   "Continue",
+   "Choose a firm"
+  ],
+  "fields": [],
+  "tableHeaders": [
+   "PROGRAMME",
+   "ASSURANCE FIRM",
+   "STAGE",
+   "ANSWERED",
+   "DUE"
+  ],
+  "pills": [
+   "Active 2",
+   "Completed 4",
+   "All 6"
+  ],
+  "chips": [
+   "Answering",
+   "Firm to choose"
+  ],
+  "tests": [
+   "obl-*",
+   "answer-*",
+   "engage-*"
+  ],
+  "tabStates": []
+ },
+ {
+  "id": "firm/engagements",
+  "ws": "firm",
+  "layout": "app",
+  "title": "Engagements",
+  "signedInAs": "t.adebayo@deloitte.example",
+  "screenshot": "firm_engagements.jpg",
+  "docTitle": "Engagements · NITDA · SuperAtlas",
+  "crumbs": "Engagements",
+  "headings": [
+   "Engagements"
+  ],
+  "tabs": [],
+  "buttons": [
+   "All 17",
+   "Requests 0",
+   "Active 2",
+   "Submitted 1",
+   "Completed 14",
+   "Start assessment",
+   "Publish"
+  ],
+  "fields": [],
+  "tableHeaders": [
+   "ORGANISATION",
+   "PROGRAMME",
+   "TEAM",
+   "STAGE",
+   "DUE"
+  ],
+  "pills": [
+   "All 17",
+   "Requests 0",
+   "Active 2",
+   "Submitted 1",
+   "Completed 14"
+  ],
+  "chips": [
+   "Answering",
+   "Submitted",
+   "Published",
+   "Approved"
+  ],
+  "tests": [
+   "eg-*",
+   "assess-*",
+   "fpub-*"
+  ],
+  "tabStates": []
+ },
+ {
+  "id": "org/answer",
+  "ws": "organisation",
+  "layout": "app",
+  "title": "Answer",
+  "signedInAs": "a.okonkwo@zenith.example",
+  "screenshot": "org_answer.jpg",
+  "docTitle": "Answer · NITDA · SuperAtlas",
+  "crumbs": "Obligations > ISR 2026 annual assessment",
+  "headings": [
+   "ISR 2026 annual assessment"
+  ],
+  "tabs": [],
+  "buttons": [
+   "Assign questions (2)",
+   "Question 1 of 17All questions",
+   "All",
+   "Unanswered",
+   "Mine",
+   "Flagged",
+   "1. Governance 7/7 CE",
+   "2. On what date did the board last approve the policy? CE",
+   "3. Who owns the policy day to day? CE",
+   "5. To whom does the CISO report? CE",
+   "7. Describe the method used CE",
+   "2. Asset management 0/2 AO",
+   "4. Access control 0/5",
+   "7. Incident response 0/3",
+   "Review and submit",
+   "Explain this question",
+   "Rephrase with AI",
+   "Upload",
+   "Add a link",
+   "From evidence library",
+   "Previous answer",
+   "Save and next"
+  ],
+  "fields": [
+   "Your answer",
+   "Yes",
+   "No",
+   "Not applicable",
+   "Explain your answer (optional)",
+   "Attach the proof"
+  ],
+  "tableHeaders": [],
+  "pills": [],
+  "chips": [
+   "Answering",
+   "4 sections",
+   "Answered"
+  ],
+  "tests": [
+   "an-*",
+   "ans-*",
+   "aq-*",
+   "go-*",
+   "yn-*"
+  ],
+  "tabStates": []
+ },
+ {
+  "id": "org/submit",
+  "ws": "organisation",
+  "layout": "app",
+  "title": "Review and submit",
+  "signedInAs": "a.okonkwo@zenith.example",
+  "screenshot": "org_submit.jpg",
+  "docTitle": "Review and submit · NITDA · SuperAtlas",
+  "crumbs": "Obligations > ISR 2026 annual assessment > Review and submit",
+  "headings": [
+   "Review and submit",
+   "By section",
+   "Not answered yet",
+   "Answered No",
+   "Flagged for you",
+   "Submit"
+  ],
+  "tabs": [],
+  "buttons": [
+   "ISR-2.1 Is there a current inventory of critical assets?",
+   "ISR-2.1 How many critical assets are listed?",
+   "ISR-4.1 Is MFA enforced for all privileged access?",
+   "ISR-4.1 Is MFA enforced for all remote access?",
+   "ISR-4.1 List any approved exceptions",
+   "ISR-4.2 Are access rights reviewed every quarter?",
+   "ISR-4.2 Date of the last review",
+   "ISR-7.1 Is there a documented incident response plan?",
+   "ISR-7.2 Was the plan tested in the last 12 months?",
+   "Submit to assessor"
+  ],
+  "fields": [],
+  "tableHeaders": [],
+  "pills": [],
+  "chips": [],
+  "tests": [
+   "an-*"
+  ],
+  "tabStates": []
+ },
+ {
+  "id": "org/evidence",
+  "ws": "organisation",
+  "layout": "app",
+  "title": "Evidence library",
+  "signedInAs": "a.okonkwo@zenith.example",
+  "screenshot": "org_evidence.jpg",
+  "docTitle": "Evidence library · NITDA · SuperAtlas",
+  "crumbs": "Evidence library",
+  "headings": [
+   "Evidence library"
+  ],
+  "tabs": [],
+  "buttons": [
+   "Upload",
+   "All files 5",
+   "In use 2",
+   "Unused 3",
+   "Expiring by 31 Dec 2"
+  ],
+  "fields": [],
+  "tableHeaders": [
+   "FILE",
+   "TYPE",
+   "USED IN",
+   "ADDED",
+   "EXPIRES"
+  ],
+  "pills": [
+   "All files 5",
+   "In use 2",
+   "Unused 3",
+   "Expiring by 31 Dec 2"
+  ],
+  "chips": [
+   "31 Dec 2026",
+   "30 Nov 2026"
+  ],
+  "tests": [
+   "ev-*"
+  ],
+  "tabStates": []
+ },
+ {
+  "id": "firm/assess",
+  "ws": "firm",
+  "layout": "app",
+  "title": "Assessment",
+  "signedInAs": "t.adebayo@deloitte.example",
+  "screenshot": "firm_assess.jpg",
+  "docTitle": "Assessment · NITDA · SuperAtlas",
+  "crumbs": "Engagements > Zenith Bank Plc",
+  "headings": [
+   "Zenith Bank Plc",
+   "The organisation's answers",
+   "Outcome · 4-point compliance scale"
+  ],
+  "tabs": [
+   "Requirements 0/8",
+   "Information requests",
+   "Interviews",
+   "Findings",
+   "Report and sign-off"
+  ],
+  "buttons": [
+   "Requirements 0/8",
+   "Information requests",
+   "Interviews",
+   "Findings",
+   "Report and sign-off",
+   "ISR-1.1 Board-approved information security policy",
+   "ISR-1.2 Named chief information security officer",
+   "ISR-1.3 Annual information security risk assessment",
+   "ISR-2.1 Inventory of critical information assets",
+   "ISR-4.1 Multi-factor authentication for privileged access",
+   "ISR-4.2 Quarterly access review",
+   "ISR-7.1 Report major incidents within 24 hours",
+   "ISR-7.2 Test the incident response plan yearly",
+   "Ask",
+   "Raise a finding",
+   "Save and next"
+  ],
+  "fields": [
+   "Compliant 100 pts",
+   "Partially compliant 50 pts",
+   "Non-compliant 0 pts",
+   "Not applicable not scored",
+   "Assessor note"
+  ],
+  "tableHeaders": [],
+  "pills": [],
+  "chips": [
+   "Answering",
+   "Yes"
+  ],
+  "tests": [
+   "client-*",
+   "ar-*",
+   "ask-*",
+   "oc-*",
+   "oc-Non-*",
+   "fd-*"
+  ],
+  "tabStates": [
+   {
+    "label": "Information requests",
+    "file": "firm_assess__information-requests.jpg",
+    "docTitle": "Assessment · NITDA · SuperAtlas",
+    "crumbs": "Engagements > Zenith Bank Plc",
+    "headings": [
+     "Zenith Bank Plc",
+     "No information requests"
+    ],
+    "tabs": [
+     "Requirements 0/8",
+     "Information requests",
+     "Interviews",
+     "Findings",
+     "Report and sign-off"
+    ],
+    "buttons": [
+     "Requirements 0/8",
+     "Information requests",
+     "Interviews",
+     "Findings",
+     "Report and sign-off"
+    ],
+    "fields": [],
+    "tableHeaders": [],
+    "pills": [],
+    "chips": [
+     "Answering"
+    ],
+    "tests": [
+     "client-*"
+    ]
+   },
+   {
+    "label": "Interviews",
+    "file": "firm_assess__interviews.jpg",
+    "docTitle": "Assessment · NITDA · SuperAtlas",
+    "crumbs": "Engagements > Zenith Bank Plc",
+    "headings": [
+     "Zenith Bank Plc"
+    ],
+    "tabs": [
+     "Requirements 0/8",
+     "Information requests",
+     "Interviews",
+     "Findings",
+     "Report and sign-off"
+    ],
+    "buttons": [
+     "Requirements 0/8",
+     "Information requests",
+     "Interviews",
+     "Findings",
+     "Report and sign-off",
+     "Propose times"
+    ],
+    "fields": [],
+    "tableHeaders": [
+     "QUESTION",
+     "STATUS",
+     "WHEN"
+    ],
+    "pills": [],
+    "chips": [
+     "Answering",
+     "Not arranged"
+    ],
+    "tests": [
+     "client-*",
+     "iv-*"
+    ]
+   },
+   {
+    "label": "Findings",
+    "file": "firm_assess__findings.jpg",
+    "docTitle": "Assessment · NITDA · SuperAtlas",
+    "crumbs": "Engagements > Zenith Bank Plc",
+    "headings": [
+     "Zenith Bank Plc",
+     "No findings"
+    ],
+    "tabs": [
+     "Requirements 0/8",
+     "Information requests",
+     "Interviews",
+     "Findings",
+     "Report and sign-off"
+    ],
+    "buttons": [
+     "Requirements 0/8",
+     "Information requests",
+     "Interviews",
+     "Findings",
+     "Report and sign-off",
+     "Raise a finding"
+    ],
+    "fields": [],
+    "tableHeaders": [
+     "CLASS",
+     "FINDING",
+     "REQUIREMENT",
+     "FIX BY"
+    ],
+    "pills": [],
+    "chips": [
+     "Answering"
+    ],
+    "tests": [
+     "client-*"
+    ]
+   },
+   {
+    "label": "Report and sign-off",
+    "file": "firm_assess__report-and-sign-off.jpg",
+    "docTitle": "Assessment · NITDA · SuperAtlas",
+    "crumbs": "Engagements > Zenith Bank Plc",
+    "headings": [
+     "Zenith Bank Plc",
+     "Findings",
+     "Sign-off"
+    ],
+    "tabs": [
+     "Requirements 0/8",
+     "Information requests",
+     "Interviews",
+     "Findings",
+     "Report and sign-off"
+    ],
+    "buttons": [
+     "Requirements 0/8",
+     "Information requests",
+     "Interviews",
+     "Findings",
+     "Report and sign-off",
+     "Share outcome preview",
+     "Record quality review",
+     "Sign off and submit report"
+    ],
+    "fields": [],
+    "tableHeaders": [],
+    "pills": [],
+    "chips": [
+     "Answering"
+    ],
+    "tests": [
+     "client-*",
+     "pv-*",
+     "qr-*",
+     "so-*"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "org/assessment",
+  "ws": "organisation",
+  "layout": "app",
+  "title": "Assessment",
+  "signedInAs": "a.okonkwo@zenith.example",
+  "screenshot": "org_assessment.jpg",
+  "docTitle": "Assessment · NITDA · SuperAtlas",
+  "crumbs": "Obligations > ISR 2026 annual assessment",
+  "headings": [
+   "ISR 2026 annual assessment",
+   "No information requests"
+  ],
+  "tabs": [
+   "Requests from assessor",
+   "Interviews",
+   "Outcome preview",
+   "Your answers"
+  ],
+  "buttons": [
+   "Requests from assessor",
+   "Interviews",
+   "Outcome preview",
+   "Your answers"
+  ],
+  "fields": [],
+  "tableHeaders": [],
+  "pills": [],
+  "chips": [
+   "Answering"
+  ],
+  "tests": [],
+  "tabStates": [
+   {
+    "label": "Interviews",
+    "file": "org_assessment__interviews.jpg",
+    "docTitle": "Assessment · NITDA · SuperAtlas",
+    "crumbs": "Obligations > ISR 2026 annual assessment",
+    "headings": [
+     "ISR 2026 annual assessment",
+     "No interviews yet"
+    ],
+    "tabs": [
+     "Requests from assessor",
+     "Interviews",
+     "Outcome preview",
+     "Your answers"
+    ],
+    "buttons": [
+     "Requests from assessor",
+     "Interviews",
+     "Outcome preview",
+     "Your answers"
+    ],
+    "fields": [],
+    "tableHeaders": [],
+    "pills": [],
+    "chips": [
+     "Answering"
+    ],
+    "tests": []
+   },
+   {
+    "label": "Outcome preview",
+    "file": "org_assessment__outcome-preview.jpg",
+    "docTitle": "Assessment · NITDA · SuperAtlas",
+    "crumbs": "Obligations > ISR 2026 annual assessment",
+    "headings": [
+     "ISR 2026 annual assessment",
+     "No preview yet"
+    ],
+    "tabs": [
+     "Requests from assessor",
+     "Interviews",
+     "Outcome preview",
+     "Your answers"
+    ],
+    "buttons": [
+     "Requests from assessor",
+     "Interviews",
+     "Outcome preview",
+     "Your answers"
+    ],
+    "fields": [],
+    "tableHeaders": [],
+    "pills": [],
+    "chips": [
+     "Answering"
+    ],
+    "tests": []
+   },
+   {
+    "label": "Your answers",
+    "file": "org_assessment__your-answers.jpg",
+    "docTitle": "Assessment · NITDA · SuperAtlas",
+    "crumbs": "Obligations > ISR 2026 annual assessment",
+    "headings": [
+     "ISR 2026 annual assessment"
+    ],
+    "tabs": [
+     "Requests from assessor",
+     "Interviews",
+     "Outcome preview",
+     "Your answers"
+    ],
+    "buttons": [
+     "Requests from assessor",
+     "Interviews",
+     "Outcome preview",
+     "Your answers",
+     "Open your answers"
+    ],
+    "fields": [],
+    "tableHeaders": [],
+    "pills": [],
+    "chips": [
+     "Answering"
+    ],
+    "tests": []
+   }
+  ]
+ },
+ {
+  "id": "settings/findings",
+  "ws": "regulator",
+  "layout": "app",
+  "title": "Finding classes",
+  "signedInAs": "m.bello@nitda.gov.ng",
+  "screenshot": "settings_findings.jpg",
+  "docTitle": "Finding classes · NITDA · SuperAtlas",
+  "crumbs": "Settings > Finding classes",
+  "headings": [
+   "Finding classes"
+  ],
+  "tabs": [],
+  "buttons": [
+   "Add class",
+   "Save classes"
+  ],
+  "fields": [],
+  "tableHeaders": [
+   "CODE",
+   "NAME",
+   "MEANING",
+   "FIX WITHIN (DAYS)",
+   "COLOUR"
+  ],
+  "pills": [],
+  "chips": [],
+  "tests": [
+   "set-*",
+   "set-profile-*",
+   "set-settings-*",
+   "set-settings-firm-*",
+   "fc-*"
+  ],
+  "tabStates": []
+ },
+ {
+  "id": "reviews",
+  "ws": "regulator",
+  "layout": "app",
+  "title": "Reviews & publishing",
+  "signedInAs": "m.bello@nitda.gov.ng",
+  "screenshot": "reviews.jpg",
+  "docTitle": "Reviews & publishing · NITDA · SuperAtlas",
+  "crumbs": "Reviews & publishing",
+  "headings": [
+   "Reviews & publishing"
+  ],
+  "tabs": [
+   "Review queue 1",
+   "Approved 1",
+   "Scheduled 0",
+   "Held back 0",
+   "Published 56",
+   "Tracker"
+  ],
+  "buttons": [
+   "Review queue 1",
+   "Approved 1",
+   "Scheduled 0",
+   "Held back 0",
+   "Published 56",
+   "Tracker",
+   "Assign reviewer"
+  ],
+  "fields": [],
+  "tableHeaders": [
+   "ORGANISATION",
+   "PROGRAMME",
+   "FIRM",
+   "SCORE",
+   "REVIEWER",
+   "SUBMITTED"
+  ],
+  "pills": [],
+  "chips": [],
+  "tests": [
+   "rt-*",
+   "rev-*",
+   "rsel-*"
+  ],
+  "tabStates": [
+   {
+    "label": "Approved 1",
+    "file": "reviews__approved-1.jpg",
+    "docTitle": "Reviews & publishing · NITDA · SuperAtlas",
+    "crumbs": "Reviews & publishing",
+    "headings": [
+     "Reviews & publishing"
+    ],
+    "tabs": [
+     "Review queue 1",
+     "Approved 1",
+     "Scheduled 0",
+     "Held back 0",
+     "Published 56",
+     "Tracker"
+    ],
+    "buttons": [
+     "Review queue 1",
+     "Approved 1",
+     "Scheduled 0",
+     "Held back 0",
+     "Published 56",
+     "Tracker",
+     "Schedule",
+     "Publish now"
+    ],
+    "fields": [],
+    "tableHeaders": [
+     "ORGANISATION",
+     "PROGRAMME",
+     "FIRM",
+     "SCORE",
+     "APPROVED"
+    ],
+    "pills": [],
+    "chips": [],
+    "tests": [
+     "rt-*",
+     "pub-*",
+     "rev-*",
+     "rsel-*"
+    ]
+   },
+   {
+    "label": "Scheduled 0",
+    "file": "reviews__scheduled-0.jpg",
+    "docTitle": "Reviews & publishing · NITDA · SuperAtlas",
+    "crumbs": "Reviews & publishing",
+    "headings": [
+     "Reviews & publishing",
+     "Nothing here"
+    ],
+    "tabs": [
+     "Review queue 1",
+     "Approved 1",
+     "Scheduled 0",
+     "Held back 0",
+     "Published 56",
+     "Tracker"
+    ],
+    "buttons": [
+     "Review queue 1",
+     "Approved 1",
+     "Scheduled 0",
+     "Held back 0",
+     "Published 56",
+     "Tracker"
+    ],
+    "fields": [],
+    "tableHeaders": [
+     "ORGANISATION",
+     "PROGRAMME",
+     "FIRM",
+     "SCORE",
+     "PUBLISHES"
+    ],
+    "pills": [],
+    "chips": [],
+    "tests": [
+     "rt-*"
+    ]
+   },
+   {
+    "label": "Held back 0",
+    "file": "reviews__held-back-0.jpg",
+    "docTitle": "Reviews & publishing · NITDA · SuperAtlas",
+    "crumbs": "Reviews & publishing",
+    "headings": [
+     "Reviews & publishing",
+     "Nothing here"
+    ],
+    "tabs": [
+     "Review queue 1",
+     "Approved 1",
+     "Scheduled 0",
+     "Held back 0",
+     "Published 56",
+     "Tracker"
+    ],
+    "buttons": [
+     "Review queue 1",
+     "Approved 1",
+     "Scheduled 0",
+     "Held back 0",
+     "Published 56",
+     "Tracker",
+     "Review held reports"
+    ],
+    "fields": [],
+    "tableHeaders": [
+     "ORGANISATION",
+     "PROGRAMME",
+     "FIRM",
+     "SCORE",
+     "WHY HELD"
+    ],
+    "pills": [],
+    "chips": [],
+    "tests": [
+     "rt-*"
+    ]
+   },
+   {
+    "label": "Published 56",
+    "file": "reviews__published-56.jpg",
+    "docTitle": "Reviews & publishing · NITDA · SuperAtlas",
+    "crumbs": "Reviews & publishing",
+    "headings": [
+     "Reviews & publishing"
+    ],
+    "tabs": [
+     "Review queue 1",
+     "Approved 1",
+     "Scheduled 0",
+     "Held back 0",
+     "Published 56",
+     "Tracker"
+    ],
+    "buttons": [
+     "Review queue 1",
+     "Approved 1",
+     "Scheduled 0",
+     "Held back 0",
+     "Published 56",
+     "Tracker"
+    ],
+    "fields": [],
+    "tableHeaders": [
+     "ORGANISATION",
+     "PROGRAMME",
+     "FIRM",
+     "SCORE",
+     "PUBLISHED",
+     "OPENED"
+    ],
+    "pills": [],
+    "chips": [
+     "Opened",
+     "Not yet"
+    ],
+    "tests": [
+     "rt-*",
+     "rev-*",
+     "rev-gpI24-*",
+     "rev-gpI25-*",
+     "rev-gpC24-*"
+    ]
+   },
+   {
+    "label": "Tracker",
+    "file": "reviews__tracker.jpg",
+    "docTitle": "Reviews & publishing · NITDA · SuperAtlas",
+    "crumbs": "Reviews & publishing",
+    "headings": [
+     "Reviews & publishing"
+    ],
+    "tabs": [
+     "Review queue 1",
+     "Approved 1",
+     "Scheduled 0",
+     "Held back 0",
+     "Published 56",
+     "Tracker"
+    ],
+    "buttons": [
+     "Review queue 1",
+     "Approved 1",
+     "Scheduled 0",
+     "Held back 0",
+     "Published 56",
+     "Tracker"
+    ],
+    "fields": [],
+    "tableHeaders": [
+     "ORGANISATION",
+     "PROGRAMME",
+     "FIRM",
+     "SCORE",
+     "STATUS",
+     "OPENED BY ORGANISATION"
+    ],
+    "pills": [],
+    "chips": [
+     "Published",
+     "Opened 21 Feb 2026",
+     "Not opened yet",
+     "Approved",
+     "Opened 21 Feb 2025",
+     "Opened 18 Feb 2026",
+     "Opened 20 Feb 2025"
+    ],
+    "tests": [
+     "rt-*",
+     "rev-*",
+     "rev-gpI24-*",
+     "rev-gpI25-*",
+     "rev-gpC24-*"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "reviews/report",
+  "ws": "regulator",
+  "layout": "app",
+  "title": "Review report",
+  "signedInAs": "m.bello@nitda.gov.ng",
+  "screenshot": "reviews_report.jpg",
+  "docTitle": "Review report · NITDA · SuperAtlas",
+  "crumbs": "Reviews & publishing > Wema Bank Plc",
+  "headings": [
+   "Wema Bank Plc",
+   "Outcomes",
+   "Findings",
+   "Decision",
+   "Engagement"
+  ],
+  "tabs": [],
+  "buttons": [
+   "Change",
+   "Approve report",
+   "Return to firm"
+  ],
+  "fields": [
+   "Reviewer",
+   "Note"
+  ],
+  "tableHeaders": [
+   "REQUIREMENT",
+   "ORGANISATION SAID",
+   "FIRM OUTCOME",
+   "NOTE"
+  ],
+  "pills": [],
+  "chips": [
+   "Report submitted",
+   "5 Compliant",
+   "2 Partially compliant",
+   "1 Non-compliant",
+   "Yes",
+   "Compliant",
+   "No",
+   "Partially compliant",
+   "Non-compliant",
+   "MiNC",
+   "OBS"
+  ],
+  "tests": [
+   "ov-ISR-1.1",
+   "ov-ISR-1.2",
+   "ov-ISR-1.3",
+   "ov-ISR-2.1",
+   "ov-ISR-4.1",
+   "ov-ISR-4.2",
+   "ov-ISR-7.1",
+   "ov-ISR-7.2",
+   "rv-*"
+  ],
+  "tabStates": []
+ },
+ {
+  "id": "org/report",
+  "ws": "organisation",
+  "layout": "app",
+  "title": "Report",
+  "signedInAs": "a.okonkwo@zenith.example",
+  "screenshot": "org_report.jpg",
+  "docTitle": "Report · NITDA · SuperAtlas",
+  "crumbs": "Obligations > Consumer protection review 2025",
+  "headings": [
+   "Zenith Bank Plc",
+   "By section",
+   "Outcomes",
+   "Findings",
+   "How did Deloitte & Touche (Nigeria) do?"
+  ],
+  "tabs": [],
+  "buttons": [
+   "Plan your fixes",
+   "★",
+   "Send rating",
+   "Download report (PDF)"
+  ],
+  "fields": [
+   "Comment (optional)"
+  ],
+  "tableHeaders": [
+   "REQUIREMENT",
+   "OUTCOME",
+   "ASSESSOR NOTE"
+  ],
+  "pills": [],
+  "chips": [
+   "1 Compliant",
+   "Compliant",
+   "OBS",
+   "MiNC"
+  ],
+  "tests": [
+   "to-*",
+   "rate-*",
+   "rate-star-*"
+  ],
+  "tabStates": []
+ },
+ {
+  "id": "returns",
+  "ws": "regulator",
+  "layout": "app",
+  "title": "Data returns",
+  "signedInAs": "m.bello@nitda.gov.ng",
+  "screenshot": "returns.jpg",
+  "docTitle": "Data returns · NITDA · SuperAtlas",
+  "crumbs": "Data returns",
+  "headings": [
+   "Data returns"
+  ],
+  "tabs": [
+   "Filings 4",
+   "Insights",
+   "Templates 4",
+   "Schedule"
+  ],
+  "buttons": [
+   "New template",
+   "Filings 4",
+   "Insights",
+   "Templates 4",
+   "Schedule",
+   "Show late filings",
+   "Export",
+   "All 30",
+   "Due 11",
+   "To review 4",
+   "Queried 1",
+   "Late 2",
+   "Accepted 12",
+   "Review",
+   "Remind"
+  ],
+  "fields": [],
+  "tableHeaders": [
+   "ORGANISATION",
+   "RETURN",
+   "PERIOD",
+   "DUE",
+   "STATUS"
+  ],
+  "pills": [
+   "All 30",
+   "Due 11",
+   "To review 4",
+   "Queried 1",
+   "Late 2",
+   "Accepted 12"
+  ],
+  "chips": [
+   "Submitted",
+   "Late",
+   "Queried",
+   "Not started",
+   "Draft",
+   "Accepted"
+  ],
+  "tests": [
+   "rt-*",
+   "ret-*",
+   "show-*",
+   "rf-*",
+   "fil-*",
+   "remind-*"
+  ],
+  "tabStates": [
+   {
+    "label": "Insights",
+    "file": "returns__insights.jpg",
+    "docTitle": "Data returns · NITDA · SuperAtlas",
+    "crumbs": "Data returns",
+    "headings": [
+     "Data returns",
+     "Filing on time by return and period",
+     "4 organisations late at least once"
+    ],
+    "tabs": [
+     "Filings 4",
+     "Insights",
+     "Templates 4",
+     "Schedule"
+    ],
+    "buttons": [
+     "New template",
+     "Filings 4",
+     "Insights",
+     "Templates 4",
+     "Schedule",
+     "Filings due so far 17",
+     "Late or not filed 4 Past the due date",
+     "Queried 7% 1 of 15 filed returns",
+     "View as table",
+     "Unity Community Microfinance Bank 1",
+     "United Bank for Africa Plc 1",
+     "Jaiz Bank Plc 1",
+     "Lagoon Microfinance Bank Ltd 1"
+    ],
+    "fields": [],
+    "tableHeaders": [],
+    "pills": [],
+    "chips": [],
+    "tests": [
+     "rt-*",
+     "ret-*",
+     "ri-*",
+     "ch-ri-*"
+    ]
+   },
+   {
+    "label": "Templates 4",
+    "file": "returns__templates-4.jpg",
+    "docTitle": "Data returns · NITDA · SuperAtlas",
+    "crumbs": "Data returns",
+    "headings": [
+     "Data returns",
+     "Return templates"
+    ],
+    "tabs": [
+     "Filings 4",
+     "Insights",
+     "Templates 4",
+     "Schedule"
+    ],
+    "buttons": [
+     "New template",
+     "Filings 4",
+     "Insights",
+     "Templates 4",
+     "Schedule",
+     "Upload a template",
+     "Edit",
+     "Continue"
+    ],
+    "fields": [],
+    "tableHeaders": [
+     "TEMPLATE",
+     "FREQUENCY",
+     "WHO FILES",
+     "FIELDS",
+     "BUILT",
+     "STATUS"
+    ],
+    "pills": [],
+    "chips": [
+     "Active",
+     "Draft"
+    ],
+    "tests": [
+     "rt-*",
+     "ret-*"
+    ]
+   },
+   {
+    "label": "Schedule",
+    "file": "returns__schedule.jpg",
+    "docTitle": "Data returns · NITDA · SuperAtlas",
+    "crumbs": "Data returns",
+    "headings": [
+     "Data returns",
+     "Schedule and reminders"
+    ],
+    "tabs": [
+     "Filings 4",
+     "Insights",
+     "Templates 4",
+     "Schedule"
+    ],
+    "buttons": [
+     "New template",
+     "Filings 4",
+     "Insights",
+     "Templates 4",
+     "Schedule",
+     "Edit"
+    ],
+    "fields": [],
+    "tableHeaders": [
+     "RETURN",
+     "FREQUENCY",
+     "DUE",
+     "GRACE PERIOD",
+     "REMINDERS",
+     "NEXT DUE"
+    ],
+    "pills": [],
+    "chips": [],
+    "tests": [
+     "rt-*",
+     "ret-*",
+     "sched-*"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "returns/template",
+  "ws": "regulator",
+  "layout": "app",
+  "title": "Return template",
+  "signedInAs": "m.bello@nitda.gov.ng",
+  "screenshot": "returns_template.jpg",
+  "docTitle": "Return template · NITDA · SuperAtlas",
+  "crumbs": "Data returns > New template",
+  "headings": [
+   "New return template",
+   "Basics",
+   "Fields"
+  ],
+  "tabs": [],
+  "buttons": [
+   "Edit",
+   "Preview",
+   "Add field",
+   "Cancel",
+   "Save draft",
+   "Publish template"
+  ],
+  "fields": [
+   "Name",
+   "Short code",
+   "Frequency",
+   "Due, days after period end",
+   "Description (optional)",
+   "Who files",
+   "Commercial bank",
+   "Non-interest bank",
+   "Merchant bank",
+   "Microfinance bank",
+   "Mobile money operator",
+   "Switching and processing",
+   "Payment solution service provider",
+   "Data controller of major importance",
+   "Cloud service provider",
+   "Fintech platform"
+  ],
+  "tableHeaders": [
+   "LABEL",
+   "TYPE",
+   "UNIT",
+   "MIN",
+   "MAX",
+   "NOT MORE THAN",
+   "REQUIRED"
+  ],
+  "pills": [],
+  "chips": [
+   "Draft"
+  ],
+  "tests": [
+   "rtv-*",
+   "rt-*",
+   "rf-l-*"
+  ],
+  "tabStates": []
+ },
+ {
+  "id": "returns/filing",
+  "ws": "regulator",
+  "layout": "app",
+  "title": "Filing",
+  "signedInAs": "m.bello@nitda.gov.ng",
+  "screenshot": "returns_filing.jpg",
+  "docTitle": "Filing · NITDA · SuperAtlas",
+  "crumbs": "Data returns > Moniepoint Microfinance Bank · MQR Q3 2026",
+  "headings": [
+   "Lagoon Microfinance Bank Ltd",
+   "Figures",
+   "History",
+   "Decision",
+   "Filing",
+   "Other periods"
+  ],
+  "tabs": [],
+  "buttons": [
+   "Query",
+   "Accept return",
+   "Query a figure",
+   "Ask to resubmit",
+   "Q2 2026 Accepted"
+  ],
+  "fields": [],
+  "tableHeaders": [
+   "FIELD",
+   "Q3 2026",
+   "Q2 2026",
+   "CHANGE"
+  ],
+  "pills": [],
+  "chips": [
+   "Submitted",
+   "Accepted"
+  ],
+  "tests": [
+   "q-*",
+   "ret-*"
+  ],
+  "tabStates": []
+ },
+ {
+  "id": "org/returns",
+  "ws": "organisation",
+  "layout": "app",
+  "title": "Data returns",
+  "signedInAs": "a.okonkwo@zenith.example",
+  "screenshot": "org_returns.jpg",
+  "docTitle": "Data returns · NITDA · SuperAtlas",
+  "crumbs": "Data returns",
+  "headings": [
+   "Data returns",
+   "To do",
+   "Filed"
+  ],
+  "tabs": [],
+  "buttons": [
+   "All 3",
+   "Due soon 1",
+   "Overdue 0",
+   "Queried 0",
+   "Filed 2",
+   "Start",
+   "View"
+  ],
+  "fields": [],
+  "tableHeaders": [
+   "RETURN",
+   "PERIOD",
+   "DUE",
+   "STATUS"
+  ],
+  "pills": [
+   "All 3",
+   "Due soon 1",
+   "Overdue 0",
+   "Queried 0",
+   "Filed 2"
+  ],
+  "chips": [
+   "Not started",
+   "Accepted"
+  ],
+  "tests": [
+   "orc-*",
+   "oret-*"
+  ],
+  "tabStates": []
+ },
+ {
+  "id": "org/return",
+  "ws": "organisation",
+  "layout": "app",
+  "title": "Return",
+  "signedInAs": "a.okonkwo@zenith.example",
+  "screenshot": "org_return.jpg",
+  "docTitle": "Return · NITDA · SuperAtlas",
+  "crumbs": "Data returns > Monthly cyber incident return · Sep 2026",
+  "headings": [
+   "Monthly cyber incident return · Sep 2026",
+   "What you filed",
+   "Receipt",
+   "History"
+  ],
+  "tabs": [],
+  "buttons": [
+   "Download filed copy"
+  ],
+  "fields": [],
+  "tableHeaders": [
+   "FIELD",
+   "SEP 2026"
+  ],
+  "pills": [],
+  "chips": [
+   "Accepted"
+  ],
+  "tests": [
+   "ret-*"
+  ],
+  "tabStates": []
+ },
+ {
+  "id": "findings",
+  "ws": "regulator",
+  "layout": "app",
+  "title": "Findings",
+  "signedInAs": "m.bello@nitda.gov.ng",
+  "screenshot": "findings.jpg",
+  "docTitle": "Findings · NITDA · SuperAtlas",
+  "crumbs": "Findings",
+  "headings": [
+   "Findings"
+  ],
+  "tabs": [
+   "Register",
+   "Insights"
+  ],
+  "buttons": [
+   "Export",
+   "Register",
+   "Insights",
+   "All open 30",
+   "Plan needed 13",
+   "In progress 15",
+   "With firm to verify 1",
+   "Ready to close 1",
+   "Overdue 26",
+   "More time asked 1",
+   "Remind",
+   "Decide",
+   "Close"
+  ],
+  "fields": [
+   "Show closed and noted"
+  ],
+  "tableHeaders": [
+   "FINDING",
+   "ORGANISATION",
+   "FROM",
+   "FIX BY",
+   "STATUS"
+  ],
+  "pills": [
+   "All open 30",
+   "Plan needed 13",
+   "In progress 15",
+   "With firm to verify 1",
+   "Ready to close 1",
+   "Overdue 26",
+   "More time asked 1"
+  ],
+  "chips": [
+   "MaNC",
+   "In progress",
+   "Overdue",
+   "Plan needed",
+   "MiNC",
+   "More time asked",
+   "OBS",
+   "Verified fixed",
+   "Fix submitted"
+  ],
+  "tests": [
+   "fd-*",
+   "fc-*",
+   "fd-f-*"
+  ],
+  "tabStates": [
+   {
+    "label": "Insights",
+    "file": "findings__insights.jpg",
+    "docTitle": "Findings · NITDA · SuperAtlas",
+    "crumbs": "Findings",
+    "headings": [
+     "Findings",
+     "Open findings by category and class",
+     "26 fixes overdue today"
+    ],
+    "tabs": [
+     "Register",
+     "Insights"
+    ],
+    "buttons": [
+     "Register",
+     "Insights",
+     "Open findings 30 Across all programmes",
+     "Overdue 26 6 major",
+     "Closed 127 All time",
+     "View as table"
+    ],
+    "fields": [],
+    "tableHeaders": [],
+    "pills": [],
+    "chips": [],
+    "tests": [
+     "fd-*",
+     "fi-*",
+     "ch-fi-*"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "findings/view",
+  "ws": "regulator",
+  "layout": "app",
+  "title": "Finding",
+  "signedInAs": "m.bello@nitda.gov.ng",
+  "screenshot": "findings_view.jpg",
+  "docTitle": "Finding · NITDA · SuperAtlas",
+  "crumbs": "Findings > Complaint acknowledgement slipped past 48 hours in December",
+  "headings": [
+   "Complaint acknowledgement slipped past 48 hours in December",
+   "The finding",
+   "Action plan",
+   "Proof of the fix",
+   "Verification",
+   "Activity",
+   "Decision",
+   "Details"
+  ],
+  "tabs": [],
+  "buttons": [],
+  "fields": [],
+  "tableHeaders": [],
+  "pills": [],
+  "chips": [
+   "OBS",
+   "Closed",
+   "Verified fixed"
+  ],
+  "tests": [],
+  "tabStates": []
+ },
+ {
+  "id": "org/finding",
+  "ws": "organisation",
+  "layout": "app",
+  "title": "Finding",
+  "signedInAs": "a.okonkwo@zenith.example",
+  "screenshot": "org_finding.jpg",
+  "docTitle": "Finding · NITDA · SuperAtlas",
+  "crumbs": "Findings > Complaint acknowledgement slipped past 48 hours in December",
+  "headings": [
+   "Complaint acknowledgement slipped past 48 hours in December",
+   "The finding",
+   "Action plan",
+   "Proof of the fix",
+   "Verification",
+   "Activity",
+   "Next step",
+   "Details"
+  ],
+  "tabs": [],
+  "buttons": [],
+  "fields": [],
+  "tableHeaders": [],
+  "pills": [],
+  "chips": [
+   "OBS",
+   "Closed",
+   "Verified fixed"
+  ],
+  "tests": [],
+  "tabStates": []
+ },
+ {
+  "id": "firm/finding",
+  "ws": "firm",
+  "layout": "app",
+  "title": "Finding",
+  "signedInAs": "t.adebayo@deloitte.example",
+  "screenshot": "firm_finding.jpg",
+  "docTitle": "Finding · NITDA · SuperAtlas",
+  "crumbs": "Findings > Complaint acknowledgement slipped past 48 hours in December",
+  "headings": [
+   "Complaint acknowledgement slipped past 48 hours in December",
+   "The finding",
+   "Action plan",
+   "Proof of the fix",
+   "Verification",
+   "Activity",
+   "Details"
+  ],
+  "tabs": [],
+  "buttons": [],
+  "fields": [],
+  "tableHeaders": [],
+  "pills": [],
+  "chips": [
+   "OBS",
+   "Closed",
+   "Verified fixed"
+  ],
+  "tests": [],
+  "tabStates": []
+ },
+ {
+  "id": "org/findings",
+  "ws": "organisation",
+  "layout": "app",
+  "title": "Findings",
+  "signedInAs": "a.okonkwo@zenith.example",
+  "screenshot": "org_findings.jpg",
+  "docTitle": "Findings · NITDA · SuperAtlas",
+  "crumbs": "Findings",
+  "headings": [
+   "Findings"
+  ],
+  "tabs": [],
+  "buttons": [
+   "Open 2",
+   "To plan 1",
+   "In progress 1",
+   "With assessor 0",
+   "Closed 5",
+   "Plan fix",
+   "Update"
+  ],
+  "fields": [],
+  "tableHeaders": [
+   "FINDING",
+   "FROM",
+   "FIX BY",
+   "STATUS"
+  ],
+  "pills": [
+   "Open 2",
+   "To plan 1",
+   "In progress 1",
+   "With assessor 0",
+   "Closed 5"
+  ],
+  "chips": [
+   "MiNC",
+   "Plan needed",
+   "OBS",
+   "In progress"
+  ],
+  "tests": [
+   "ofc-*",
+   "fd-f-*"
+  ],
+  "tabStates": []
+ },
+ {
+  "id": "firm/findings",
+  "ws": "firm",
+  "layout": "app",
+  "title": "Findings",
+  "signedInAs": "t.adebayo@deloitte.example",
+  "screenshot": "firm_findings.jpg",
+  "docTitle": "Findings · NITDA · SuperAtlas",
+  "crumbs": "Findings",
+  "headings": [
+   "Findings"
+  ],
+  "tabs": [
+   "Fixes to verify 1",
+   "Being fixed 8",
+   "Verified and closed 31"
+  ],
+  "buttons": [
+   "Fixes to verify 1",
+   "Being fixed 8",
+   "Verified and closed 31",
+   "Verify"
+  ],
+  "fields": [],
+  "tableHeaders": [
+   "FINDING",
+   "ORGANISATION",
+   "FROM",
+   "FIX BY",
+   "STATUS"
+  ],
+  "pills": [],
+  "chips": [
+   "OBS",
+   "Fix submitted"
+  ],
+  "tests": [
+   "fd-f-*"
+  ],
+  "tabStates": [
+   {
+    "label": "Being fixed 8",
+    "file": "firm_findings__being-fixed-8.jpg",
+    "docTitle": "Findings · NITDA · SuperAtlas",
+    "crumbs": "Findings",
+    "headings": [
+     "Findings"
+    ],
+    "tabs": [
+     "Fixes to verify 1",
+     "Being fixed 8",
+     "Verified and closed 31"
+    ],
+    "buttons": [
+     "Fixes to verify 1",
+     "Being fixed 8",
+     "Verified and closed 31"
+    ],
+    "fields": [],
+    "tableHeaders": [
+     "FINDING",
+     "ORGANISATION",
+     "FROM",
+     "FIX BY",
+     "STATUS"
+    ],
+    "pills": [],
+    "chips": [
+     "MiNC",
+     "Plan needed",
+     "OBS",
+     "In progress",
+     "Overdue",
+     "MaNC"
+    ],
+    "tests": [
+     "fd-f-*",
+     "fd-*"
+    ]
+   },
+   {
+    "label": "Verified and closed 31",
+    "file": "firm_findings__verified-and-closed-31.jpg",
+    "docTitle": "Findings · NITDA · SuperAtlas",
+    "crumbs": "Findings",
+    "headings": [
+     "Findings"
+    ],
+    "tabs": [
+     "Fixes to verify 1",
+     "Being fixed 8",
+     "Verified and closed 31"
+    ],
+    "buttons": [
+     "Fixes to verify 1",
+     "Being fixed 8",
+     "Verified and closed 31"
+    ],
+    "fields": [],
+    "tableHeaders": [
+     "FINDING",
+     "ORGANISATION",
+     "FROM",
+     "FIX BY",
+     "STATUS"
+    ],
+    "pills": [],
+    "chips": [
+     "OBS",
+     "Closed",
+     "OFI",
+     "Noted",
+     "MaNC",
+     "MiNC"
+    ],
+    "tests": [
+     "fd-f-*",
+     "fd-*"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "settings/compliance",
+  "ws": "regulator",
+  "layout": "app",
+  "title": "Compliance status",
+  "signedInAs": "m.bello@nitda.gov.ng",
+  "screenshot": "settings_compliance.jpg",
+  "docTitle": "Compliance status · NITDA · SuperAtlas",
+  "crumbs": "Settings > Compliance status",
+  "headings": [
+   "Compliance status",
+   "How status is worked out",
+   "Benchmarks",
+   "Enforcement watch"
+  ],
+  "tabs": [],
+  "buttons": [
+   "Save"
+  ],
+  "fields": [
+   "ISR annual assessment",
+   "Data protection compliance",
+   "Consumer protection review",
+   "AML guidelines readiness",
+   "Cloud and payments security check",
+   "Major nonconformity overdue by more than (days)",
+   "Non-compliant in this many cycles running",
+   "Late with the same return this many periods running"
+  ],
+  "tableHeaders": [
+   "STATUS",
+   "RULE"
+  ],
+  "pills": [],
+  "chips": [
+   "Compliant",
+   "Compliant with conditions",
+   "Non-compliant",
+   "Enforcement watch"
+  ],
+  "tests": [
+   "set-*",
+   "set-profile-*",
+   "set-settings-*",
+   "set-settings-firm-*",
+   "bench-*",
+   "cw-*",
+   "comp-*"
+  ],
+  "tabStates": []
+ },
+ {
+  "id": "enforcement",
+  "ws": "regulator",
+  "layout": "app",
+  "title": "Enforcement",
+  "signedInAs": "m.bello@nitda.gov.ng",
+  "screenshot": "enforcement.jpg",
+  "docTitle": "Enforcement · NITDA · SuperAtlas",
+  "crumbs": "Enforcement",
+  "headings": [
+   "Enforcement",
+   "Watchlist"
+  ],
+  "tabs": [
+   "Watchlist 8",
+   "Cases 2",
+   "Insights"
+  ],
+  "buttons": [
+   "Open a case",
+   "Watchlist 8",
+   "Cases 2",
+   "Insights",
+   "Set it in Settings",
+   "Add an organisation",
+   "Dismiss"
+  ],
+  "fields": [],
+  "tableHeaders": [
+   "ORGANISATION",
+   "WHY IT IS FLAGGED",
+   "CASE"
+  ],
+  "pills": [],
+  "chips": [
+   "Awaiting payment"
+  ],
+  "tests": [
+   "enf-*",
+   "et-*",
+   "enf-set-*",
+   "watch-*",
+   "dismiss-*",
+   "enf-new-*"
+  ],
+  "tabStates": [
+   {
+    "label": "Cases 2",
+    "file": "enforcement__cases-2.jpg",
+    "docTitle": "Enforcement · NITDA · SuperAtlas",
+    "crumbs": "Enforcement",
+    "headings": [
+     "Enforcement"
+    ],
+    "tabs": [
+     "Watchlist 8",
+     "Cases 2",
+     "Insights"
+    ],
+    "buttons": [
+     "Open a case",
+     "Watchlist 8",
+     "Cases 2",
+     "Insights",
+     "Open 2",
+     "Closed 3",
+     "All 5"
+    ],
+    "fields": [],
+    "tableHeaders": [
+     "CASE",
+     "ORGANISATION",
+     "ACTION",
+     "OPENED",
+     "RESPOND BY",
+     "STATUS"
+    ],
+    "pills": [
+     "Open 2",
+     "Closed 3",
+     "All 5"
+    ],
+    "chips": [
+     "Response received",
+     "Awaiting payment"
+    ],
+    "tests": [
+     "enf-*",
+     "et-*",
+     "ef-*",
+     "case-*"
+    ]
+   },
+   {
+    "label": "Insights",
+    "file": "enforcement__insights.jpg",
+    "docTitle": "Enforcement · NITDA · SuperAtlas",
+    "crumbs": "Enforcement",
+    "headings": [
+     "Enforcement",
+     "1 case waiting for a decision",
+     "Penalties: ₦0 paid, ₦5,000,000 outstanding"
+    ],
+    "tabs": [
+     "Watchlist 8",
+     "Cases 2",
+     "Insights"
+    ],
+    "buttons": [
+     "Open a case",
+     "Watchlist 8",
+     "Cases 2",
+     "Insights",
+     "Open cases 2 1 waiting for your decision",
+     "Closed 3 All time",
+     "Repeat organisations 1 More than one case",
+     "View as table",
+     "Response received 1",
+     "Awaiting payment 1",
+     "Closed 3",
+     "Advisory letter 1",
+     "Warning letter 2",
+     "Compliance directive 1",
+     "Monetary penalty 1",
+     "Restriction or suspension 0",
+     "Referral 0"
+    ],
+    "fields": [],
+    "tableHeaders": [],
+    "pills": [],
+    "chips": [],
+    "tests": [
+     "enf-*",
+     "et-*",
+     "ek-*",
+     "ch-enf-*"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "enforcement/new",
+  "ws": "regulator",
+  "layout": "app",
+  "title": "Open a case",
+  "signedInAs": "m.bello@nitda.gov.ng",
+  "screenshot": "enforcement_new.jpg",
+  "docTitle": "Open a case · NITDA · SuperAtlas",
+  "crumbs": "Enforcement > Open a case",
+  "headings": [
+   "Open a case",
+   "1. Organisation",
+   "2. Action",
+   "3. Evidence",
+   "4. Notice",
+   "Sign-off"
+  ],
+  "tabs": [],
+  "buttons": [
+   "Compliance directive Orders specific steps by a set date.",
+   "Send for sign-off",
+   "Cancel"
+  ],
+  "fields": [
+   "Approver"
+  ],
+  "tableHeaders": [],
+  "pills": [],
+  "chips": [],
+  "tests": [
+   "en-*",
+   "en-type-*"
+  ],
+  "tabStates": []
+ },
+ {
+  "id": "enforcement/case",
+  "ws": "regulator",
+  "layout": "app",
+  "title": "Enforcement case",
+  "signedInAs": "m.bello@nitda.gov.ng",
+  "screenshot": "enforcement_case.jpg",
+  "docTitle": "Enforcement case · NITDA · SuperAtlas",
+  "crumbs": "Enforcement > EC-2025-011",
+  "headings": [
+   "Ironwood Bank Ltd",
+   "Notice",
+   "Evidence",
+   "Response from Ironwood Bank Ltd",
+   "Decision",
+   "Timeline",
+   "Next step",
+   "Case"
+  ],
+  "tabs": [],
+  "buttons": [
+   "Open organisation",
+   "Download notice (PDF)"
+  ],
+  "fields": [],
+  "tableHeaders": [],
+  "pills": [],
+  "chips": [
+   "Closed",
+   "Result",
+   "Accepted"
+  ],
+  "tests": [],
+  "tabStates": []
+ },
+ {
+  "id": "org/actions",
+  "ws": "organisation",
+  "layout": "app",
+  "title": "Regulatory actions",
+  "signedInAs": "a.okonkwo@zenith.example",
+  "screenshot": "org_actions.jpg",
+  "docTitle": "Regulatory actions · NITDA · SuperAtlas",
+  "crumbs": "Compliance > Regulatory actions",
+  "headings": [
+   "Compliance",
+   "No regulatory actions"
+  ],
+  "tabs": [
+   "Programmes",
+   "Exposure",
+   "Regulatory actions"
+  ],
+  "buttons": [
+   "Export scorecard"
+  ],
+  "fields": [],
+  "tableHeaders": [
+   "NOTICE",
+   "ISSUED",
+   "RESPOND BY",
+   "STATUS"
+  ],
+  "pills": [],
+  "chips": [],
+  "tests": [
+   "my-*"
+  ],
+  "tabStates": [
+   {
+    "label": "Exposure",
+    "file": "org_actions__exposure.jpg",
+    "docTitle": "Exposure · NITDA · SuperAtlas",
+    "crumbs": "Compliance > Exposure",
+    "headings": [
+     "Compliance"
+    ],
+    "tabs": [
+     "Programmes",
+     "Exposure",
+     "Regulatory actions"
+    ],
+    "buttons": [
+     "Export scorecard",
+     "All 3",
+     "High 0",
+     "Medium 2",
+     "Low 1"
+    ],
+    "fields": [],
+    "tableHeaders": [],
+    "pills": [
+     "All 3",
+     "High 0",
+     "Medium 2",
+     "Low 1"
+    ],
+    "chips": [
+     "Medium",
+     "Low"
+    ],
+    "tests": [
+     "my-*",
+     "ex-*"
+    ]
+   },
+   {
+    "label": "Regulatory actions",
+    "file": "org_actions__regulatory-actions.jpg",
+    "docTitle": "Regulatory actions · NITDA · SuperAtlas",
+    "crumbs": "Compliance > Regulatory actions",
+    "headings": [
+     "Compliance",
+     "No regulatory actions"
+    ],
+    "tabs": [
+     "Programmes",
+     "Exposure",
+     "Regulatory actions"
+    ],
+    "buttons": [
+     "Export scorecard"
+    ],
+    "fields": [],
+    "tableHeaders": [
+     "NOTICE",
+     "ISSUED",
+     "RESPOND BY",
+     "STATUS"
+    ],
+    "pills": [],
+    "chips": [],
+    "tests": [
+     "my-*"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "org/action",
+  "ws": "organisation",
+  "layout": "app",
+  "title": "Regulatory action",
+  "signedInAs": "a.okonkwo@zenith.example",
+  "screenshot": "org_action.jpg",
+  "docTitle": "Regulatory action · NITDA · SuperAtlas",
+  "crumbs": "Compliance > Regulatory actions > EC-2025-011",
+  "headings": [
+   "Warning letter",
+   "Notice",
+   "Evidence",
+   "Your response",
+   "Decision",
+   "Timeline",
+   "Status"
+  ],
+  "tabs": [],
+  "buttons": [
+   "Download notice (PDF)"
+  ],
+  "fields": [],
+  "tableHeaders": [],
+  "pills": [],
+  "chips": [
+   "Closed",
+   "Result",
+   "Accepted"
+  ],
+  "tests": [],
+  "tabStates": []
+ },
+ {
+  "id": "settings/actions",
+  "ws": "regulator",
+  "layout": "app",
+  "title": "Action types",
+  "signedInAs": "m.bello@nitda.gov.ng",
+  "screenshot": "settings_actions.jpg",
+  "docTitle": "Action types · NITDA · SuperAtlas",
+  "crumbs": "Settings > Action types",
+  "headings": [
+   "Action types"
+  ],
+  "tabs": [],
+  "buttons": [
+   "Add action type"
+  ],
+  "fields": [],
+  "tableHeaders": [
+   "ACTION",
+   "DAYS TO RESPOND",
+   "PENALTY",
+   "CASES"
+  ],
+  "pills": [],
+  "chips": [
+   "Has a penalty"
+  ],
+  "tests": [
+   "set-*",
+   "set-profile-*",
+   "set-settings-*",
+   "set-settings-firm-*",
+   "at-*"
+  ],
+  "tabStates": []
+ },
+ {
+  "id": "dashboard",
+  "ws": "regulator",
+  "layout": "app",
+  "title": "My dashboard",
+  "signedInAs": "m.bello@nitda.gov.ng",
+  "screenshot": "dashboard.jpg",
+  "docTitle": "My dashboard · NITDA · SuperAtlas",
+  "crumbs": "My dashboard",
+  "headings": [
+   "Good evening, Musa",
+   "9 organisations non-compliant in at least one programme",
+   "Average score by category",
+   "Watchlist",
+   "5 biggest drops since the previous cycle"
+  ],
+  "tabs": [],
+  "buttons": [
+   "1 enforcement decision waiting for you",
+   "1 report to review before publishing",
+   "4 returns to review",
+   "See all 12 tasks",
+   "Board pack",
+   "New programme",
+   "Issue a regulatory action",
+   "ORGANISATIONS 36 9 compliant · 11 not assessed yet",
+   "NON-COMPLIANT 9 7 more compliant with conditions",
+   "OPEN FINDINGS 30 26 overdue · 7 major",
+   "RETURNS ON TIME 76% 13 of 17 in the latest period",
+   "View as table",
+   "Commercial bank (12) 69",
+   "Microfinance bank (14) 69",
+   "Mobile money operator (3) 59",
+   "Cloud service provider 1",
+   "Commercial bank 12",
+   "Fintech platform 2",
+   "Microfinance bank 14",
+   "Mobile money operator 3",
+   "Non-interest bank 1",
+   "Payment solution service provider 3",
+   "Tidewater Bank Plc 58 → 26",
+   "Wema Bank Plc 84 → 55",
+   "Savannah Microfinance Bank Ltd 74 → 50",
+   "Unity Community Microfinance Bank 68 → 53",
+   "Zenith Bank Plc 95 → 87"
+  ],
+  "fields": [],
+  "tableHeaders": [],
+  "pills": [
+   "Cloud service provider 1",
+   "Commercial bank 12",
+   "Fintech platform 2",
+   "Microfinance bank 14",
+   "Mobile money operator 3",
+   "Non-interest bank 1",
+   "Payment solution service provider 3"
+  ],
+  "chips": [
+   "Awaiting payment",
+   "No case"
+  ],
+  "tests": [
+   "my-*",
+   "ht-*",
+   "hero-*",
+   "board-*",
+   "dk-*",
+   "ch-dash-*",
+   "cat-Cloud-service-*",
+   "cat-Commercial-*",
+   "cat-Fintech-*",
+   "cat-Microfinance-*",
+   "cat-Mobile-money-*",
+   "cat-Non-interest-*",
+   "cat-Payment-solution-service-*"
+  ],
+  "tabStates": []
+ },
+ {
+  "id": "organisations/category",
+  "ws": "regulator",
+  "layout": "app",
+  "title": "Category",
+  "signedInAs": "m.bello@nitda.gov.ng",
+  "screenshot": "organisations_category.jpg",
+  "docTitle": "Category · NITDA · SuperAtlas",
+  "crumbs": "Organisations > Category",
+  "headings": [
+   "Microfinance banks",
+   "Section scores: microfinance banks against all organisations",
+   "Compliance status",
+   "Ranking"
+  ],
+  "tabs": [],
+  "buttons": [
+   "Export scorecard",
+   "Organisations 14",
+   "Assessed 12 2 not assessed yet",
+   "Met the benchmark (70) 5 · 42%",
+   "View as table"
+  ],
+  "fields": [],
+  "tableHeaders": [
+   "#",
+   "ORGANISATION",
+   "SCORE",
+   "CHANGE",
+   "STATUS",
+   "GOVERNANCE",
+   "ASSET",
+   "ACCESS",
+   "INCIDENT",
+   "OPEN FINDINGS"
+  ],
+  "pills": [],
+  "chips": [
+   "14 organisations",
+   "Compliant",
+   "Compliant with conditions",
+   "Non-compliant",
+   "Not assessed"
+  ],
+  "tests": [
+   "cat-*",
+   "ck-*",
+   "ch-cat-*",
+   "rank-*"
+  ],
+  "tabStates": []
+ },
+ {
+  "id": "org/compliance",
+  "ws": "organisation",
+  "layout": "app",
+  "title": "Compliance",
+  "signedInAs": "a.okonkwo@zenith.example",
+  "screenshot": "org_compliance.jpg",
+  "docTitle": "Compliance · NITDA · SuperAtlas",
+  "crumbs": "Compliance",
+  "headings": [
+   "Compliance",
+   "In progress"
+  ],
+  "tabs": [
+   "Programmes",
+   "Exposure",
+   "Regulatory actions"
+  ],
+  "buttons": [
+   "Export scorecard"
+  ],
+  "fields": [],
+  "tableHeaders": [
+   "PROGRAMME",
+   "LATEST RESULT",
+   "SCORE",
+   "CHANGE",
+   "CATEGORY AVERAGE",
+   "STATUS",
+   "FIXES LEFT"
+  ],
+  "pills": [],
+  "chips": [
+   "Compliant",
+   "Firm to choose"
+  ],
+  "tests": [
+   "my-*",
+   "mc-*"
+  ],
+  "tabStates": [
+   {
+    "label": "Exposure",
+    "file": "org_compliance__exposure.jpg",
+    "docTitle": "Exposure · NITDA · SuperAtlas",
+    "crumbs": "Compliance > Exposure",
+    "headings": [
+     "Compliance"
+    ],
+    "tabs": [
+     "Programmes",
+     "Exposure",
+     "Regulatory actions"
+    ],
+    "buttons": [
+     "Export scorecard",
+     "All 3",
+     "High 0",
+     "Medium 2",
+     "Low 1"
+    ],
+    "fields": [],
+    "tableHeaders": [],
+    "pills": [
+     "All 3",
+     "High 0",
+     "Medium 2",
+     "Low 1"
+    ],
+    "chips": [
+     "Medium",
+     "Low"
+    ],
+    "tests": [
+     "my-*",
+     "ex-*"
+    ]
+   },
+   {
+    "label": "Regulatory actions",
+    "file": "org_compliance__regulatory-actions.jpg",
+    "docTitle": "Regulatory actions · NITDA · SuperAtlas",
+    "crumbs": "Compliance > Regulatory actions",
+    "headings": [
+     "Compliance",
+     "No regulatory actions"
+    ],
+    "tabs": [
+     "Programmes",
+     "Exposure",
+     "Regulatory actions"
+    ],
+    "buttons": [
+     "Export scorecard"
+    ],
+    "fields": [],
+    "tableHeaders": [
+     "NOTICE",
+     "ISSUED",
+     "RESPOND BY",
+     "STATUS"
+    ],
+    "pills": [],
+    "chips": [],
+    "tests": [
+     "my-*"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "org/compliance/programme",
+  "ws": "organisation",
+  "layout": "app",
+  "title": "Programme compliance",
+  "signedInAs": "a.okonkwo@zenith.example",
+  "screenshot": "org_compliance_programme.jpg",
+  "docTitle": "Programme compliance · NITDA · SuperAtlas",
+  "crumbs": "Compliance > Programme",
+  "headings": [
+   "ISR annual assessment",
+   "87 in 2025, down from 95",
+   "Sections against your category",
+   "Trace a gap to its fix"
+  ],
+  "tabs": [],
+  "buttons": [
+   "Open the report",
+   "View as table"
+  ],
+  "fields": [],
+  "tableHeaders": [],
+  "pills": [],
+  "chips": [
+   "Compliant",
+   "Below benchmark",
+   "Partially compliant",
+   "OBS",
+   "Closed"
+  ],
+  "tests": [
+   "k-*",
+   "ch-oc-*",
+   "tr-*",
+   "trf-*"
+  ],
+  "tabStates": []
+ },
+ {
+  "id": "org/exposure",
+  "ws": "organisation",
+  "layout": "app",
+  "title": "Exposure",
+  "signedInAs": "a.okonkwo@zenith.example",
+  "screenshot": "org_exposure.jpg",
+  "docTitle": "Exposure · NITDA · SuperAtlas",
+  "crumbs": "Compliance > Exposure",
+  "headings": [
+   "Compliance"
+  ],
+  "tabs": [
+   "Programmes",
+   "Exposure",
+   "Regulatory actions"
+  ],
+  "buttons": [
+   "Export scorecard",
+   "All 3",
+   "High 0",
+   "Medium 2",
+   "Low 1"
+  ],
+  "fields": [],
+  "tableHeaders": [],
+  "pills": [
+   "All 3",
+   "High 0",
+   "Medium 2",
+   "Low 1"
+  ],
+  "chips": [
+   "Medium",
+   "Low"
+  ],
+  "tests": [
+   "my-*",
+   "ex-*"
+  ],
+  "tabStates": [
+   {
+    "label": "Exposure",
+    "file": "org_exposure__exposure.jpg",
+    "docTitle": "Exposure · NITDA · SuperAtlas",
+    "crumbs": "Compliance > Exposure",
+    "headings": [
+     "Compliance"
+    ],
+    "tabs": [
+     "Programmes",
+     "Exposure",
+     "Regulatory actions"
+    ],
+    "buttons": [
+     "Export scorecard",
+     "All 3",
+     "High 0",
+     "Medium 2",
+     "Low 1"
+    ],
+    "fields": [],
+    "tableHeaders": [],
+    "pills": [
+     "All 3",
+     "High 0",
+     "Medium 2",
+     "Low 1"
+    ],
+    "chips": [
+     "Medium",
+     "Low"
+    ],
+    "tests": [
+     "my-*",
+     "ex-*"
+    ]
+   },
+   {
+    "label": "Regulatory actions",
+    "file": "org_exposure__regulatory-actions.jpg",
+    "docTitle": "Regulatory actions · NITDA · SuperAtlas",
+    "crumbs": "Compliance > Regulatory actions",
+    "headings": [
+     "Compliance",
+     "No regulatory actions"
+    ],
+    "tabs": [
+     "Programmes",
+     "Exposure",
+     "Regulatory actions"
+    ],
+    "buttons": [
+     "Export scorecard"
+    ],
+    "fields": [],
+    "tableHeaders": [
+     "NOTICE",
+     "ISSUED",
+     "RESPOND BY",
+     "STATUS"
+    ],
+    "pills": [],
+    "chips": [],
+    "tests": [
+     "my-*"
+    ]
+   }
+  ]
+ }
+]

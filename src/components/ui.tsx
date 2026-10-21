@@ -1,5 +1,9 @@
-import { Fragment, type ReactNode } from "react";
+"use client";
+
+import { Fragment, useState, type ReactNode } from "react";
 import { Icon, type IconName } from "@/lib/icons";
+
+export type ChipTone = "ok" | "warn" | "bad" | "info" | "neu" | "ai" | "brand";
 
 export function LogoMark({ size = 28, variant = "navy" }: { size?: number; variant?: "navy" | "white" }) {
   const shield = variant === "white" ? "#ffffff" : "#1B2056";
@@ -64,7 +68,7 @@ export function Button({
   );
 }
 
-export function Chip({ children, tone = "neu", icon }: { children: ReactNode; tone?: "ok" | "warn" | "bad" | "info" | "neu" | "ai" | "brand"; icon?: IconName }) {
+export function Chip({ children, tone = "neu", icon }: { children: ReactNode; tone?: ChipTone; icon?: IconName }) {
   return (
     <span className={`chip ${tone}`}>
       {icon ? <Icon name={icon} /> : null}
@@ -192,4 +196,240 @@ export function TrendChip({ delta }: { delta: number }) {
   if (delta > 0) return <Chip tone="ok" icon="trend-up">+{delta} pts</Chip>;
   if (delta < 0) return <Chip tone="bad" icon="trend-down">{delta} pts</Chip>;
   return <Chip tone="neu" icon="minus">0 pts</Chip>;
+}
+
+/** Maps a status word to a consistent (tone, icon) pair — one shared vocabulary for every status chip in the
+ * app, ported from the prototype's statusChip() (docs/prototype/source/core.js). An unrecognised status
+ * falls back to a plain neutral chip with no icon, rather than guessing. */
+const STATUS_TONE: Record<string, [ChipTone, IconName]> = {
+  Verified: ["ok", "seal-check"],
+  Accredited: ["ok", "seal-check"],
+  Active: ["ok", "seal-check"],
+  Accepted: ["ok", "check-circle"],
+  Approved: ["ok", "check-circle"],
+  Published: ["ok", "check-circle"],
+  Live: ["ok", "seal-check"],
+  "Pending verification": ["warn", "hourglass"],
+  "Renewal due": ["warn", "clock"],
+  "Change requested": ["warn", "git-diff"],
+  "In review": ["info", "hourglass"],
+  "Under review": ["info", "hourglass"],
+  Pending: ["info", "clock"],
+  Invited: ["info", "envelope-simple"],
+  "Info requested": ["warn", "chat-circle-dots"],
+  Draft: ["neu", "note-pencil"],
+  Expired: ["neu", "clock"],
+  Open: ["ok", "play-circle"],
+  Scheduled: ["info", "calendar-blank"],
+  Closed: ["neu", "lock-simple"],
+  "Firm to assign": ["warn", "user-plus"],
+  "Firm to choose": ["warn", "handshake"],
+  "Firm approval": ["warn", "hourglass"],
+  "Awaiting firm": ["info", "hourglass"],
+  Answering: ["info", "pencil-simple"],
+  Submitted: ["info", "paper-plane-tilt"],
+  Assessing: ["info", "magnifying-glass"],
+  "Report submitted": ["info", "file-text"],
+  "Held back": ["warn", "pause-circle"],
+  Requested: ["warn", "hourglass"],
+  Assigned: ["info", "user-plus"],
+  "Not started": ["neu", "circle-dashed"],
+  Answered: ["ok", "check-circle"],
+  "Changes requested": ["warn", "arrow-u-up-left"],
+  "In preview": ["info", "eye"],
+  "Signed off": ["ok", "seal-check"],
+  Returned: ["warn", "arrow-u-up-left"],
+  Overdue: ["bad", "warning"],
+  Filed: ["ok", "check-circle"],
+  Queried: ["warn", "chat-circle-dots"],
+  Due: ["info", "clock"],
+  Late: ["bad", "clock"],
+  "Fix in progress": ["info", "wrench"],
+  "Fix submitted": ["info", "paper-plane-tilt"],
+  "Verified fixed": ["ok", "check-circle"],
+  "Extension requested": ["warn", "clock-clockwise"],
+  "Invite expired": ["neu", "clock"],
+  "Pending credential": ["warn", "hourglass"],
+  Revoked: ["neu", "x-circle"],
+  Suspended: ["bad", "warning-octagon"],
+  Rejected: ["bad", "x-circle"],
+  Declined: ["bad", "x-circle"],
+};
+
+export function statusTone(status: string): { tone: ChipTone; icon?: IconName } {
+  const hit = STATUS_TONE[status];
+  return hit ? { tone: hit[0], icon: hit[1] } : { tone: "neu" };
+}
+
+export function StatusChip({ status }: { status: string }) {
+  const { tone, icon } = statusTone(status);
+  return (
+    <Chip tone={tone} icon={icon}>
+      {status}
+    </Chip>
+  );
+}
+
+/** One filter-pill row with counts, used inside a table card — the prototype's fpills(). Tones "warn"/"bad"
+ * colour a pill's count badge when it needs attention (e.g. "Overdue 6"); omit `tone` for a plain pill. */
+export function FilterPills<T extends string>({
+  items,
+  active,
+  onChange,
+}: {
+  items: { key: T; label: string; count?: number; tone?: "warn" | "bad"; testId?: string }[];
+  active: T;
+  onChange: (key: T) => void;
+}) {
+  return (
+    <div className="tbl-sub">
+      <div className="pills">
+        {items.map((it) => (
+          <button
+            key={it.key}
+            type="button"
+            className={`pill ${active === it.key ? "on" : ""} ${it.tone && it.count ? `tone-${it.tone}` : ""}`}
+            onClick={() => onChange(it.key)}
+            data-test={it.testId}
+          >
+            {it.label}
+            {it.count !== undefined ? <span className="count">{it.count}</span> : null}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/** Headline KPI figure with a delta chip against a comparison period — the prototype's kTile(). Pass
+ * `onClick` to make it open a drill-down (matches the prototype's "click a figure to see the list" pattern). */
+export function KTile({
+  label,
+  value,
+  delta,
+  unit,
+  sub,
+  vs,
+  goodUp = true,
+  onClick,
+  testId,
+}: {
+  label: string;
+  value: ReactNode;
+  delta?: number;
+  unit?: string;
+  sub?: string;
+  vs?: string;
+  goodUp?: boolean;
+  onClick?: () => void;
+  testId?: string;
+}) {
+  const hasDelta = delta !== undefined && !Number.isNaN(delta);
+  const good = hasDelta ? (goodUp ? delta! > 0 : delta! < 0) : false;
+  const content = (
+    <>
+      <span className="kt-l">{label}</span>
+      <span className="kt-v tnum">{value}</span>
+      <span className="kt-s">
+        {!hasDelta ? (
+          <span className="muted">{sub || " "}</span>
+        ) : (
+          <>
+            <span className={`kt-d ${delta === 0 ? "" : good ? "up" : "down"}`}>
+              <Icon name={delta! > 0 ? "arrow-up-right" : delta! < 0 ? "arrow-down-right" : "minus"} />
+              {delta! > 0 ? "+" : ""}
+              {delta}
+              {unit || ""}
+            </span>{" "}
+            <span className="muted">{vs || "vs last cycle"}</span>
+          </>
+        )}
+      </span>
+    </>
+  );
+  if (onClick) {
+    return (
+      <button type="button" className="ktile click" onClick={onClick} data-test={testId}>
+        {content}
+      </button>
+    );
+  }
+  return (
+    <div className="ktile" data-test={testId}>
+      {content}
+    </div>
+  );
+}
+
+/** Chart card: title states the finding; "View as table" swaps the drawing for its numbers — the
+ * prototype's chCard(). Pass `table` only when a table equivalent is meaningful for that chart. */
+export function ChartCard({
+  title,
+  sub,
+  chart,
+  table,
+  foot,
+  testId,
+  className,
+}: {
+  title: string;
+  sub?: string;
+  chart: ReactNode;
+  table?: ReactNode;
+  foot?: ReactNode;
+  testId?: string;
+  className?: string;
+}) {
+  const [asTable, setAsTable] = useState(false);
+  return (
+    <div className={`card col gap12 chcard ${className || ""}`} data-test={testId ? `ch-${testId}` : undefined}>
+      <div className="row top">
+        <div className="grow">
+          <div className="h4">{title}</div>
+          {sub ? (
+            <div className="cap muted" style={{ marginTop: 2 }}>
+              {sub}
+            </div>
+          ) : null}
+        </div>
+        {table ? (
+          <button type="button" className="link-btn small" onClick={() => setAsTable((v) => !v)}>
+            {asTable ? "View as chart" : "View as table"}
+          </button>
+        ) : null}
+      </div>
+      {asTable && table ? table : chart}
+      {foot ? <div className="cap muted">{foot}</div> : null}
+    </div>
+  );
+}
+
+/** The numbers behind a ChartCard's "View as table" toggle — the prototype's miniTable(). */
+export function MiniTable({ head, rows }: { head: string[]; rows: ReactNode[][] }) {
+  return (
+    <div className="tbl-wrap">
+      <table className="tbl keep">
+        <thead>
+          <tr>
+            {head.map((h, i) => (
+              <th key={h} className={i ? "num" : ""}>
+                {h}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((r, ri) => (
+            <tr key={ri}>
+              {r.map((v, i) => (
+                <td key={i} className={i ? "num tnum" : "small"}>
+                  {v}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
 }
