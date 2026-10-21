@@ -1,7 +1,7 @@
 import actionTypesData from "./data/actionTypes.json";
 import enfCasesData from "./data/enfCases.json";
 import { ORGANISATIONS } from "./mockData";
-import { CASES, SERIES, COMPLIANCE_SETTINGS, allFindings, effDue, progOf, TODAY } from "./cases";
+import { CASES, SERIES, COMPLIANCE_SETTINGS, allFindings, effDue, progOf, fdOverdue, caseScore, compStatus, fcOf, latestResult, liveSeries, fmtD, TODAY, type ProgrammeSeries } from "./cases";
 import { FILINGS, tplOf, isFiled, retStatus } from "./returns";
 
 export type ActionType = { id: string; name: string; d: string; days: number; penalty: boolean; level: number };
@@ -263,4 +263,63 @@ export function saveActionType(id: string | undefined, patch: Omit<ActionType, "
   const next: ActionType = { id: `at${ACTION_TYPES.length + 1}`, level: Math.max(0, ...ACTION_TYPES.map((a) => a.level)) + 1, ...patch };
   ACTION_TYPES.push(next);
   return next;
+}
+
+/* ================= Organisation compliance exposure =================
+ * An organisation's own live programme series, and what could draw regulatory action against
+ * it — the prototype's mySeries()/orgExposure() (c4.js). Lives here, not in cases.ts, because
+ * it reads enforcement cases and cases.ts must not import this module (it's the other way round). */
+
+export function mySeries(orgId: string): ProgrammeSeries[] {
+  return liveSeries().filter((sr) => CASES.some((c) => c.org === orgId && progOf(c.prog).series === sr.id && c.stage === "Published"));
+}
+
+export type ExposureLevel = "High" | "Medium" | "Low";
+export type ExposureItem = { lv: ExposureLevel; t: string; why: string; go: string };
+
+export const LV_TONE: Record<ExposureLevel, "bad" | "warn" | "neu"> = { High: "bad", Medium: "warn", Low: "neu" };
+
+export function orgExposure(orgId: string): ExposureItem[] {
+  const out: ExposureItem[] = [];
+  const add = (lv: ExposureLevel, t: string, why: string, go: string) => out.push({ lv, t, why, go });
+
+  ENF_CASES.filter((c) => c.org === orgId && OPEN_ENF.includes(c.status) && c.issued).forEach((c) =>
+    add("High", `Open regulatory notice ${c.ref}`, `${atOf(c.type).name}${c.respondBy ? ", respond by " + fmtD(c.respondBy) : ""}`, `/regulator/enforcement/${c.id}`)
+  );
+
+  allFindings()
+    .filter((x) => x.c.org === orgId && !["Closed", "Noted"].includes(x.f.status ?? "") && x.f.cls !== "OFI")
+    .forEach((x) => {
+      const f = x.f;
+      const ov = fdOverdue(f, TODAY);
+      if (f.cls === "MaNC" || ov) add("High", f.title, `${fcOf(f.cls).name}${ov ? ", fix overdue" : ""} · ${progOf(x.c.prog).name}`, `/regulator/findings/${f.id}`);
+      else if (f.cls === "MiNC") add("Medium", f.title, `Minor nonconformity, fix by ${fmtD(effDue(f))}`, `/regulator/findings/${f.id}`);
+      else add("Low", f.title, `Observation, fix by ${fmtD(effDue(f))}`, `/regulator/findings/${f.id}`);
+    });
+
+  mySeries(orgId).forEach((sr) => {
+    const c = latestResult(orgId, sr.id);
+    if (!c) return;
+    const st = compStatus(c);
+    const b = +(COMPLIANCE_SETTINGS.bench[sr.id] ?? 70);
+    if (st === "Non-compliant") add("High", `Non-compliant in ${sr.name}`, `Score ${c.score} against a benchmark of ${b}`, `/regulator/organisations/category/${encodeURIComponent(sr.id)}`);
+    else if (st === "Compliant with conditions")
+      add("Medium", `Compliant with conditions in ${sr.name}`, c.score! < b ? `Score ${c.score} is below the benchmark of ${b}` : "A major nonconformity is still open", `/regulator/organisations/category/${encodeURIComponent(sr.id)}`);
+    progOf(c.prog)
+      .qset.sections.filter((s) => s.on)
+      .forEach((s) => {
+        const v = caseScore(c, s.id);
+        if (v != null && v < b && st !== "Non-compliant") add("Medium", `${s.name.replace(/^\d+\.\s*/, "")} below the benchmark`, `${v} in ${progOf(c.prog).name}`, `/regulator/organisations/category/${encodeURIComponent(sr.id)}`);
+      });
+  });
+
+  FILINGS.filter((f) => f.org === orgId && tplOf(f.tpl).status === "Active").forEach((f) => {
+    const st = retStatus(f);
+    if (st === "Late") add("High", `${tplOf(f.tpl).name} (${f.period}) not filed`, "Past the due date and the grace period", `/regulator/returns/${f.id}`);
+    else if (st === "Overdue") add("Medium", `${tplOf(f.tpl).name} (${f.period}) overdue`, "Inside the grace period", `/regulator/returns/${f.id}`);
+    else if (f.status === "Queried") add("Medium", `Query on ${tplOf(f.tpl).name} (${f.period})`, "Answer and resubmit", `/regulator/returns/${f.id}`);
+  });
+
+  const rank: Record<ExposureLevel, number> = { High: 0, Medium: 1, Low: 2 };
+  return out.sort((a, b) => rank[a.lv] - rank[b.lv]);
 }

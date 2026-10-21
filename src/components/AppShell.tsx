@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useReducer, useState, type ReactNode } from "react";
+import { useEffect, useReducer, useRef, useState, type ReactNode } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import { Lockup, LogoMark, Button, Tile } from "@/components/ui";
@@ -8,6 +8,7 @@ import { Dialog, Drawer, Popover } from "@/components/Overlay";
 import { useToast } from "@/components/Toast";
 import { Icon, type IconName } from "@/lib/icons";
 import { getSession, signOut, type Account, type Workspace } from "@/lib/auth";
+import { polishDom } from "@/lib/polishDom";
 import { NOTIFICATIONS } from "@/lib/mockData";
 import { myTasks, taskTotal, dueText } from "@/lib/tasks";
 import { searchIndex, searchRun } from "@/lib/search";
@@ -129,6 +130,28 @@ export function AppShell({ workspace, crumbs, children }: { workspace: Workspace
   const [idleWarn, setIdleWarn] = useState(false);
   const [idleSeconds, setIdleSeconds] = useState(60);
   const [, bump] = useReducer((x: number) => x + 1, 0);
+  const rootRef = useRef<HTMLDivElement>(null);
+
+  // Keeps "—" placeholders dressed as words everywhere in the app shell, matching the
+  // prototype's polishDom() pass, which re-runs after every render/dialog/drawer open.
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+    let pending = false;
+    const run = () => {
+      pending = false;
+      polishDom(root);
+    };
+    const schedule = () => {
+      if (pending) return;
+      pending = true;
+      queueMicrotask(run);
+    };
+    const observer = new MutationObserver(schedule);
+    observer.observe(root, { childList: true, subtree: true, characterData: true });
+    schedule();
+    return () => observer.disconnect();
+  }, [checked, account]);
 
   useEffect(() => {
     if (checked && (!account || account.workspace !== workspace)) {
@@ -241,7 +264,7 @@ export function AppShell({ workspace, crumbs, children }: { workspace: Workspace
   }
 
   return (
-    <div className="app">
+    <div className="app" ref={rootRef}>
       <aside className="sb">
         <div className="sb-brand">
           <Lockup dark size={24} />

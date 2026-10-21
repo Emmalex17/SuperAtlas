@@ -9,6 +9,7 @@ import complianceData from "./data/compliance.json";
 import schemesData from "./data/schemes.json";
 import deadlinesData from "./data/deadlines.json";
 import { ORGANISATIONS } from "./mockData";
+import type { IconName } from "./icons";
 
 /** A requirement's raw question, as the regulation text states it: the question itself, plus a hint describing the expected kind of answer (e.g. "Yes / No / Not applicable", "Date", "Short text"). */
 export type RawQuestion = [string, string];
@@ -197,6 +198,61 @@ export const DEADLINES = deadlinesData as unknown as Deadlines;
 
 /** The prototype's fixed "today" — all its seed data (due dates, "X days ago" activity, etc.) is written relative to this date. */
 export const TODAY = "2026-10-19";
+
+export function avg(nums: number[]): number | null {
+  if (!nums.length) return null;
+  return Math.round(nums.reduce((a, v) => a + v, 0) / nums.length);
+}
+
+export function pct(n: number, d: number): number {
+  return d ? Math.round((n / d) * 100) : 0;
+}
+
+/** A nonconformity that's still open — the prototype's NC_OPEN(). */
+export const NC_OPEN = (f: CaseFinding) => ["MaNC", "MiNC"].includes(f.cls) && !["Closed", "Noted"].includes(f.status ?? "");
+
+/** Programme series that have at least one Published case — the ones that actually drive compliance status. */
+export function liveSeries(): ProgrammeSeries[] {
+  return SERIES.filter((sr) => CASES.some((c) => c.stage === "Published" && progOf(c.prog).series === sr.id));
+}
+
+/** The latest Published result for one organisation in one programme series — the prototype's latestResult(). */
+export function latestResult(orgId: string, seriesId: string): Case | undefined {
+  return CASES.filter((c) => c.org === orgId && c.stage === "Published" && progOf(c.prog).series === seriesId).sort((a, b) => String(progOf(b.prog).cycle).localeCompare(String(progOf(a.prog).cycle)))[0];
+}
+
+/** The result before the latest one, for computing a score change — the prototype's prevResult(). */
+export function prevResult(orgId: string, seriesId: string): Case | undefined {
+  return CASES.filter((c) => c.org === orgId && c.stage === "Published" && c.score != null && progOf(c.prog).series === seriesId).sort((a, b) => +progOf(b.prog).cycle - +progOf(a.prog).cycle)[1];
+}
+
+export function benchOf(p: Programme): number {
+  return +(COMPLIANCE_SETTINGS.bench[p.series] ?? 70);
+}
+
+export const COMP_STATUSES = ["Compliant", "Compliant with conditions", "Non-compliant", "Not assessed"] as const;
+export type CompStatusValue = (typeof COMP_STATUSES)[number];
+
+/** Compliance status for one published result — the prototype's compStatus(). */
+export function compStatus(c: Case | undefined): CompStatusValue {
+  if (!c || c.stage !== "Published" || c.score == null) return "Not assessed";
+  const b = benchOf(progOf(c.prog));
+  const fs = c.findings || [];
+  const openMa = fs.some((f) => f.cls === "MaNC" && !["Closed", "Noted"].includes(f.status ?? ""));
+  const openNC = fs.some(NC_OPEN);
+  if (c.score >= b) return openMa ? "Compliant with conditions" : "Compliant";
+  return openNC ? "Non-compliant" : "Compliant with conditions";
+}
+
+const COMP_SEV: Record<CompStatusValue, number> = { "Non-compliant": 3, "Compliant with conditions": 2, Compliant: 1, "Not assessed": 0 };
+
+/** Worst compliance status across an organisation's latest result in each live series — the prototype's orgOverall(). */
+export function orgOverall(orgId: string): CompStatusValue {
+  const statuses = liveSeries()
+    .map((sr) => compStatus(latestResult(orgId, sr.id)))
+    .filter((s) => s !== "Not assessed");
+  return statuses.sort((a, b) => COMP_SEV[b] - COMP_SEV[a])[0] ?? "Not assessed";
+}
 
 export function schemeOf(id: string): ScoringScheme {
   return SCHEMES.find((s) => s.id === id) ?? SCHEMES[0];
@@ -476,13 +532,15 @@ export function fdCardsWithOverdue(today: string): [string, string, string, (x: 
   ];
 }
 
-export const FD_STATUS_TONE: Record<string, "warn" | "info" | "ok" | "neu"> = {
-  Open: "warn",
-  "In progress": "info",
-  "Fix submitted": "info",
-  "Verified fixed": "ok",
-  Closed: "neu",
-  Noted: "neu",
+/** A finding's status chip — tone, icon and label — the prototype's fdChip() map. "Open"
+ * reads as "Plan needed": the organisation hasn't started a fix yet. */
+export const FD_STATUS_CHIP: Record<string, { tone: "warn" | "info" | "ok" | "neu"; icon: IconName; label: string }> = {
+  Open: { tone: "warn", icon: "flag", label: "Plan needed" },
+  "In progress": { tone: "info", icon: "wrench", label: "In progress" },
+  "Fix submitted": { tone: "info", icon: "paper-plane-tilt", label: "Fix submitted" },
+  "Verified fixed": { tone: "ok", icon: "seal-check", label: "Verified fixed" },
+  Closed: { tone: "neu", icon: "lock-simple", label: "Closed" },
+  Noted: { tone: "neu", icon: "note", label: "Noted" },
 };
 
 /* ---- mutators (see note above the Reviews mutators for why these live here) ---- */

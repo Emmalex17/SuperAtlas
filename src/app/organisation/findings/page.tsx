@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { AppShell } from "@/components/AppShell";
 import { PageHead, Chip, AlertBox, Tile, Button } from "@/components/ui";
-import { allFindings, effDue, fdOverdue, progOf, fcOf, FD_STATUS_TONE, TODAY, type FindingWithCase } from "@/lib/cases";
+import { allFindings, effDue, fdOverdue, progOf, fcOf, FD_STATUS_CHIP, TODAY, type FindingWithCase } from "@/lib/cases";
 import { FIRMS } from "@/lib/mockData";
 
 const ORG_FD: [string, string, string, (x: FindingWithCase) => boolean][] = [
@@ -55,7 +55,7 @@ export default function OrgFindingsPage() {
                       </td>
                       <td className="small">{progOf(x.c.prog).name}<div className="cap muted">{fm?.name ?? ""}</div></td>
                       <td className="small">{effDue(x.f) || "No deadline"}</td>
-                      <td><Chip tone={FD_STATUS_TONE[x.f.status ?? ""] ?? "neu"}>{x.f.status}</Chip>{fdOverdue(x.f, TODAY) ? <Chip tone="bad">Overdue</Chip> : null}</td>
+                      <td><Chip tone={FD_STATUS_CHIP[x.f.status ?? ""]?.tone ?? "neu"} icon={FD_STATUS_CHIP[x.f.status ?? ""]?.icon}>{FD_STATUS_CHIP[x.f.status ?? ""]?.label ?? x.f.status}</Chip>{fdOverdue(x.f, TODAY) ? <Chip tone="bad">Overdue</Chip> : null}</td>
                       <td className="act-col" onClick={(e) => e.stopPropagation()}>
                         {x.f.status === "Open" ? <Button size="sm" onClick={() => router.push(`/organisation/findings/${x.f.id}`)}>Plan fix</Button> : x.f.status === "In progress" ? <Button variant="secondary" size="sm" onClick={() => router.push(`/organisation/findings/${x.f.id}`)}>Update</Button> : null}
                       </td>

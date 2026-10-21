@@ -13,7 +13,7 @@ export function Dialog({ open, onClose, children, wide, sticky }: { open: boolea
   }, [open, sticky, onClose]);
   if (!open) return null;
   return (
-    <div className="scrim" onClick={sticky ? undefined : onClose}>
+    <div className="scrim" id="dlg" onClick={sticky ? undefined : onClose}>
       <div className={`dialog ${wide ? "wide" : ""}`} onClick={(e) => e.stopPropagation()}>
         {children}
       </div>

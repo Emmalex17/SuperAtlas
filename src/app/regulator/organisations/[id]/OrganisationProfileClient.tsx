@@ -2,20 +2,25 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { AppShell } from "@/components/AppShell";
 import { ProfileHeader } from "@/components/ProfileHeader";
-import { Button, Chip, Tile, Kv, Tabs, AlertBox } from "@/components/ui";
+import { Button, Chip, Tile, Kv, Tabs, AlertBox, ChartCard, CompChip } from "@/components/ui";
+import { Scorecard, type ScorecardData } from "@/components/Scorecard";
 import { Icon } from "@/lib/icons";
 import { useToast } from "@/components/Toast";
-import { STATUS_TONE, CLASS_REQS, AUDIT, catLabel, type Organisation } from "@/lib/mockData";
+import { STATUS_TONE, CLASS_REQS, AUDIT, catLabel, FIRMS, type Organisation } from "@/lib/mockData";
+import { chLine, chBars, CH } from "@/lib/charts";
+import { CASES, liveSeries, latestResult, prevResult, compStatus, orgOverall, progOf, caseScore, allFindings, fdOverdue, fcOf, FD_STATUS_CHIP, NC_OPEN, TODAY, pct } from "@/lib/cases";
+import { atOf, OPEN_ENF, mySeries, orgExposure, ENF_CASES } from "@/lib/enforcement";
+import { FILINGS, isFiled, retStatus } from "@/lib/returns";
 
 function orgStatus(o: Organisation): string {
   if (o.status === "Verified" && CLASS_REQS.some((r) => r.org === o.id && r.status === "Pending")) return "Change requested";
   return o.status;
 }
 
-type Tab = "overview" | "verification" | "classification" | "invitations" | "people" | "licences" | "activity";
+type Tab = "overview" | "verification" | "classification" | "compliance" | "invitations" | "people" | "licences" | "activity";
 
 function statusNarrative(o: Organisation): string {
   switch (o.status) {
@@ -50,6 +55,7 @@ export function OrganisationProfileClient({ org }: { org: Organisation }) {
   const activity = AUDIT.filter((a) => a.record.includes(org.name.split(" ")[0]));
 
   const tabItems: { id: Tab; label: string; count?: number }[] = [{ id: "overview", label: "Overview" }];
+  if (org.status === "Verified") tabItems.push({ id: "compliance", label: "Compliance" });
   if (org.application) tabItems.push({ id: "verification", label: "Verification", count: status === "Pending verification" || status === "Info requested" ? 1 : undefined });
   tabItems.push(
     { id: "classification", label: "Classification", count: pending ? 1 : undefined },
@@ -161,6 +167,8 @@ export function OrganisationProfileClient({ org }: { org: Organisation }) {
           </div>
         </div>
       )}
+
+      {tab === "compliance" && <OrgComplianceTab org={org} />}
 
       {tab === "verification" && org.application && (
         <div className="grid side">
@@ -441,5 +449,223 @@ export function OrganisationProfileClient({ org }: { org: Organisation }) {
         </div>
       )}
     </AppShell>
+  );
+}
+
+/** The regulator's compliance view on a verified organisation — status by programme, score
+ * history, section scores, open findings, and returns/enforcement — the prototype's
+ * orgComplianceReg(). Shown only once an organisation is verified. */
+function OrgComplianceTab({ org }: { org: Organisation }) {
+  const router = useRouter();
+  const [scorecardOpen, setScorecardOpen] = useState(false);
+
+  const sers = liveSeries().filter((sr) => CASES.some((c) => c.org === org.id && progOf(c.prog).series === sr.id));
+  const cyc = (seriesId: string) => CASES.filter((c) => c.org === org.id && progOf(c.prog).series === seriesId).sort((a, b) => +progOf(a.prog).cycle - +progOf(b.prog).cycle);
+  const years = [...new Set(sers.flatMap((sr) => cyc(sr.id).map((c) => +progOf(c.prog).cycle)))].sort((a, b) => a - b);
+  const cols = [CH.brand, CH.ai, CH.ok, CH.warn];
+
+  const isr = latestResult(org.id, "isr");
+  const fs = allFindings().filter((x) => x.c.org === org.id && x.f.cls !== "OFI");
+  const openF = fs.filter((x) => !["Closed", "Noted"].includes(x.f.status ?? ""));
+  const fl = FILINGS.filter((f) => f.org === org.id && (isFiled(f) || f.due < TODAY));
+  const onT = fl.filter((f) => isFiled(f) && !f.lateBy);
+  const enf = ENF_CASES.filter((c) => c.org === org.id);
+
+  function scorecardData(): ScorecardData {
+    const scSers = mySeries(org.id);
+    const scFs = allFindings().filter((x) => x.c.org === org.id && x.f.cls !== "OFI");
+    const scFl = FILINGS.filter((f) => f.org === org.id && (isFiled(f) || f.due < TODAY));
+    return {
+      title: org.name,
+      sub: `Compliance scorecard · ${catLabel(org.type, org.tier)}`,
+      kpis: [
+        ["Overall status", orgOverall(org.id)],
+        ["Open findings", scFs.filter((x) => !["Closed", "Noted"].includes(x.f.status ?? "")).length],
+        ["Returns on time", scFl.length ? `${pct(scFl.filter((f) => isFiled(f) && !f.lateBy).length, scFl.length)}%` : "—"],
+        ["Open enforcement cases", ENF_CASES.filter((c) => c.org === org.id && OPEN_ENF.includes(c.status)).length],
+      ],
+      head: ["Programme", "Cycle", "Score", "Benchmark", "Status", "Open nonconformities"],
+      rows: scSers.map((sr) => {
+        const c = latestResult(org.id, sr.id)!;
+        return [sr.name, progOf(c.prog).cycle, c.score ?? "—", "", compStatus(c), (c.findings || []).filter(NC_OPEN).length];
+      }),
+      extra: ["Exposure", orgExposure(org.id).slice(0, 8).map((e) => [e.t, e.lv, e.why] as [string, string, string])],
+      file: `${org.initials}-scorecard-${TODAY}.csv`,
+    };
+  }
+
+  return (
+    <>
+      <div className="card p0">
+        <div className="tbl-tools">
+          <div className="grow">
+            <div className="h4">Status by programme</div>
+            <div className="cap muted">
+              Overall: <CompChip status={orgOverall(org.id)} />
+            </div>
+          </div>
+          <Button variant="secondary" size="sm" icon="export" testId="org-export" onClick={() => setScorecardOpen(true)}>
+            Export scorecard
+          </Button>
+        </div>
+        <div className="tbl-wrap">
+          <table className="tbl">
+            <thead>
+              <tr>
+                <th>Programme</th>
+                <th>Latest cycle</th>
+                <th className="num">Score</th>
+                <th className="num">Change</th>
+                <th>Status</th>
+                <th>Firm</th>
+                <th className="num">Open findings</th>
+              </tr>
+            </thead>
+            <tbody>
+              {sers.map((sr) => {
+                const c = latestResult(org.id, sr.id);
+                const pv = prevResult(org.id, sr.id);
+                const live = cyc(sr.id).find((x) => x.stage !== "Published");
+                const firm = c ? FIRMS.find((f) => f.id === c.firm) : undefined;
+                return (
+                  <tr key={sr.id} className={c ? "click" : ""} onClick={c ? () => router.push(`/regulator/reviews/${c.id}`) : undefined} data-test={`oc-${sr.id}`}>
+                    <td className="small strong">
+                      {sr.name}
+                      {live ? (
+                        <div className="cap muted">
+                          {progOf(live.prog).cycle}: {live.stage}
+                        </div>
+                      ) : null}
+                    </td>
+                    <td className="small">{c ? progOf(c.prog).cycle : "—"}</td>
+                    <td className="num tnum strong">{c ? c.score : "—"}</td>
+                    <td className="num tnum">{c && pv ? `${c.score! - pv.score! > 0 ? "+" : ""}${c.score! - pv.score!}` : "—"}</td>
+                    <td>
+                      <CompChip status={compStatus(c)} />
+                    </td>
+                    <td className="small">{firm ? firm.name : "—"}</td>
+                    <td className="num tnum">{c ? (c.findings || []).filter(NC_OPEN).length || "—" : "—"}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div className="ch-grid2">
+        <ChartCard
+          title="Score history"
+          sub="Each programme, every published cycle"
+          chart={
+            years.length > 1 ? (
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: chLine({
+                    w: 560,
+                    h: 210,
+                    x: { min: years[0] - 0.2, max: years[years.length - 1] + 0.2, ticks: years.map((y) => [y, String(y)]) },
+                    y: { min: 0, max: 100, ticks: [0, 50, 100] },
+                    series: sers
+                      .map((sr, i) => ({
+                        name: sr.name,
+                        col: cols[i % cols.length],
+                        dots: true,
+                        pts: cyc(sr.id)
+                          .filter((c) => c.stage === "Published" && c.score != null)
+                          .map((c) => [+progOf(c.prog).cycle, c.score!] as [number, number]),
+                      }))
+                      .filter((s) => s.pts.length),
+                    refY: [{ v: 70, label: "Benchmark 70" }],
+                    label: "Score history",
+                  }),
+                }}
+              />
+            ) : (
+              <p className="small muted">History appears after a second cycle.</p>
+            )
+          }
+        />
+        <ChartCard
+          title={isr ? `Section scores in ${progOf(isr.prog).name}` : "Section scores"}
+          sub="Latest published result"
+          chart={
+            isr ? (
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: chBars(
+                    progOf(isr.prog)
+                      .qset.sections.filter((s) => s.on)
+                      .map((s) => {
+                        const v = caseScore(isr, s.id);
+                        return { l: s.name, v: v || 0, vl: v ?? "—", col: v != null && v < 70 ? CH.bad : CH.brand };
+                      }),
+                    { max: 100 }
+                  ),
+                }}
+              />
+            ) : (
+              <p className="small muted">Not assessed yet.</p>
+            )
+          }
+        />
+      </div>
+
+      <div className="ch-grid2">
+        <div className="card p0 col">
+          <div className="tbl-tools">
+            <div className="grow">
+              <div className="h4">Findings</div>
+              <div className="cap muted">
+                {openF.length} open · {openF.filter((x) => fdOverdue(x.f, TODAY)).length} overdue · {fs.length - openF.length} closed
+              </div>
+            </div>
+          </div>
+          <div className="list">
+            {openF.length ? (
+              openF.slice(0, 6).map((x) => (
+                <Link key={x.f.id} href={`/regulator/findings/${x.f.id}`} className="list-row">
+                  <span className={`chip ${fcOf(x.f.cls).tone}`} title={fcOf(x.f.cls).name}>
+                    {x.f.cls}
+                  </span>
+                  <span className="grow ell small">{x.f.title}</span>
+                  <Chip tone={FD_STATUS_CHIP[x.f.status ?? ""]?.tone ?? "neu"} icon={FD_STATUS_CHIP[x.f.status ?? ""]?.icon}>{FD_STATUS_CHIP[x.f.status ?? ""]?.label ?? x.f.status}</Chip>
+                  {fdOverdue(x.f, TODAY) ? <Chip tone="bad" icon="warning">Overdue</Chip> : null}
+                </Link>
+              ))
+            ) : (
+              <div style={{ padding: "12px 20px" }} className="small muted">
+                No open findings.
+              </div>
+            )}
+          </div>
+        </div>
+        <div className="card col gap12">
+          <div className="h4">Returns and enforcement</div>
+          <Kv
+            pairs={[
+              ["Returns filed on time", fl.length ? `${onT.length} of ${fl.length} (${pct(onT.length, fl.length)}%)` : "None due yet"],
+              ["Late or not filed", String(fl.filter((f) => retStatus(f) === "Late" || f.lateBy).length)],
+              [
+                "Enforcement cases",
+                enf.length ? (
+                  <div key="enf">
+                    {enf.map((c) => (
+                      <div key={c.id}>
+                        <Link href={`/regulator/enforcement/${c.id}`}>{c.ref}</Link> {atOf(c.type).name.toLowerCase()}, {c.status.toLowerCase()}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  "None"
+                ),
+              ],
+            ]}
+          />
+        </div>
+      </div>
+
+      <Scorecard open={scorecardOpen} onClose={() => setScorecardOpen(false)} data={scorecardOpen ? scorecardData() : null} />
+    </>
   );
 }
