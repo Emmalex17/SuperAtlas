@@ -151,7 +151,7 @@ export const CLASS_REQS: ClassificationRequest[] = [
 ];
 
 export type FirmPerson = { name: string; initials: string; role: "Lead auditor" | "Assessor"; title: string; cred: string; expires: string; status: string };
-export type FirmClient = { org: string; initials: string; color: string; service: string; since: string };
+export type FirmClient = { org: string; orgId?: string; initials: string; color: string; service: string; since: string };
 export type FirmAccreditation = { type: string; ref: string; from: string; to: string; status: string };
 export type AccApplication = {
   id: string;
@@ -174,7 +174,8 @@ export type Firm = {
   initials: string;
   color: string;
   types: string[];
-  status: "Accredited" | "Renewal due" | "In review" | "Suspended";
+  status: "Accredited" | "Renewal due" | "In review" | "Suspended" | "Approved for one programme";
+  oneOff?: boolean;
   assigned: number;
   renews: string;
   since: string;
@@ -211,7 +212,8 @@ export const FIRMS: Firm[] = [
       { name: "G. Uche", initials: "GU", role: "Assessor", title: "Manager", cred: "CISA", expires: "Aug 2027", status: "Active" },
     ], clients: [] },
   { id: "pwc", name: "PricewaterhouseCoopers Nigeria", initials: "PwC", color: "#D04A02", types: ["Audit & assurance", "Advisory & remediation"], status: "Accredited", assigned: 9, renews: "Feb 2027", since: "Feb 2025", city: "Lagos", web: "pwc.com/ng",
-    people: [{ name: "E. Ajayi", initials: "EA", role: "Lead auditor", title: "Partner", cred: "FCA", expires: "Feb 2028", status: "Active" }], clients: [] },
+    people: [{ name: "E. Ajayi", initials: "EA", role: "Lead auditor", title: "Partner", cred: "FCA", expires: "Feb 2028", status: "Active" }],
+    clients: [{ org: "Guaranty Trust Bank Ltd", orgId: "gtb", initials: "GT", color: "#E35205", service: "Core banking security advisory", since: "Mar 2026" }] },
   { id: "ey", name: "Ernst & Young Nigeria", initials: "EY", color: "#2E2E38", types: ["Audit & assurance", "Data protection (DPCO)"], status: "Renewal due", assigned: 7, renews: "Nov 2026", since: "Nov 2024", city: "Lagos", web: "ey.com/ng",
     people: [{ name: "S. Bello", initials: "SB", role: "Lead auditor", title: "Partner", cred: "FCA, CIPM", expires: "Jan 2027", status: "Active" }], clients: [] },
   { id: "halcyon", name: "Halcyon Assurance Ltd", initials: "HA", color: "#3B5BA5", types: ["Cybersecurity assessor"], status: "In review", assigned: 0, renews: "—", since: "—", city: "Lagos", email: "hello@halcyon.example",
