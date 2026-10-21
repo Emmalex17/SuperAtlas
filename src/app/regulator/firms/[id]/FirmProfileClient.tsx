@@ -2,15 +2,25 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { AppShell } from "@/components/AppShell";
 import { ProfileHeader } from "@/components/ProfileHeader";
-import { Button, Chip, Tile, Kv, Tabs, AlertBox, Tag } from "@/components/ui";
+import { Button, Chip, Tile, Kv, Tabs, AlertBox, Tag, ChartCard, KTile, MiniTable, Stars } from "@/components/ui";
 import { Icon } from "@/lib/icons";
 import { useToast } from "@/components/Toast";
-import { STATUS_TONE, FIRM_ACCREDITATIONS, ACC_APPS, AUDIT, FIRM_RULES, type Firm, type AccApplication } from "@/lib/mockData";
+import { STATUS_TONE, FIRM_ACCREDITATIONS, ACC_APPS, AUDIT, FIRM_RULES, FIRMS, ORGANISATIONS, TENANT, type Firm, type AccApplication } from "@/lib/mockData";
+import { CASES, RATINGS, progOf, caseOf, avg, avg1, pct, type Case } from "@/lib/cases";
+import { chLine, chBars, CH } from "@/lib/charts";
 
-type Tab = "overview" | "accreditations" | "people" | "assignments" | "activity";
+type Tab = "overview" | "accreditations" | "people" | "performance" | "assignments" | "activity";
+
+function reportDays(c: Case): number | null {
+  if (c.reportDays != null) return c.reportDays;
+  const a = c.submitted ? new Date(c.submitted.split(",")[0]) : null;
+  const b = c.reportAt ? new Date(c.reportAt) : null;
+  if (!a || !b || isNaN(a.getTime()) || isNaN(b.getTime())) return null;
+  return Math.max(0, Math.round((b.getTime() - a.getTime()) / 864e5));
+}
 
 function leadOf(f: Firm) {
   return f.people?.find((p) => p.role === "Lead auditor");
@@ -106,6 +116,7 @@ export function FirmProfileClient({ firm }: { firm: Firm }) {
 
   const tabItems: { id: Tab; label: string; count?: number }[] = [
     { id: "overview", label: "Overview" },
+    { id: "performance", label: "Performance" },
     { id: "accreditations", label: "Accreditations", count: openApps.length || undefined },
     { id: "people", label: "People", count: people.length },
     { id: "assignments", label: "Assignments" },
@@ -175,6 +186,8 @@ export function FirmProfileClient({ firm }: { firm: Firm }) {
           </div>
         </div>
       )}
+
+      {tab === "performance" && <FirmPerformanceTab firm={firm} />}
 
       {tab === "accreditations" && (
         <>
@@ -274,5 +287,113 @@ export function FirmProfileClient({ firm }: { firm: Firm }) {
         </div>
       )}
     </AppShell>
+  );
+}
+
+/** The regulator's view of a firm's track record — published reports, ratings from organisations,
+ * turnaround time, how often outcomes were overridden, and how it compares with peers. The
+ * prototype's firmPerf(f, 'reg') (c5.js). */
+function FirmPerformanceTab({ firm }: { firm: Firm }) {
+  const router = useRouter();
+  const pub = CASES.filter((c) => c.firm === firm.id && c.stage === "Published");
+  const rs = RATINGS.filter((r) => r.firm === firm.id);
+  const outs = pub.flatMap((c) => Object.values(c.outcomes || {}));
+  const ov = outs.filter((o) => o.override).length;
+  const days = pub.map(reportDays).filter((v): v is number => v != null);
+  const years = [...new Set(pub.map((c) => +progOf(c.prog).cycle))].sort((a, b) => a - b);
+  const byYear = years.map((y) => {
+    const cs = pub.filter((c) => +progOf(c.prog).cycle === y);
+    const r = rs.filter((x) => cs.some((c) => c.id === x.case));
+    const yOuts = cs.flatMap((c) => Object.values(c.outcomes || {}));
+    return { y, n: cs.length, r: avg1(r.map((x) => x.stars)), d: avg(cs.map(reportDays).filter((v): v is number => v != null)), ov: pct(yOuts.filter((o) => o.override).length, yOuts.length) };
+  });
+  const peers = FIRMS.filter((x) => RATINGS.some((r) => r.firm === x.id))
+    .map((x) => ({ l: x.name, v: avg1(RATINGS.filter((r) => r.firm === x.id).map((r) => r.stars)) ?? 0, col: x.id === firm.id ? CH.brand : CH.prev }))
+    .sort((a, b) => b.v - a.v);
+
+  return (
+    <>
+      <div className="ktiles">
+        <KTile label="Reports published" value={pub.length} sub={`${years.length} cycle${years.length === 1 ? "" : "s"}`} />
+        <KTile label="Average rating" value={rs.length ? <>{avg1(rs.map((r) => r.stars))}<small> / 5</small></> : "—"} sub={`${rs.length} rating${rs.length === 1 ? "" : "s"}`} testId="fp-rating" />
+        <KTile label="Days to report" value={avg(days) ?? "—"} sub="From submission to signed report, on average" />
+        <KTile label={`Outcomes changed by ${TENANT.short}`} value={`${pct(ov, outs.length)}%`} sub={`${ov} of ${outs.length} outcomes`} testId="fp-override" />
+      </div>
+
+      <div className="ch-grid2">
+        <ChartCard
+          title={byYear.length ? `Average rating ${byYear.filter((b) => b.r != null).map((b) => b.r).join(" → ")}` : "No ratings yet"}
+          sub="Average organisation rating per cycle"
+          chart={
+            years.length > 1 ? (
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: chLine({
+                    w: 560,
+                    h: 200,
+                    x: { min: years[0] - 0.2, max: years[years.length - 1] + 0.2, ticks: years.map((y) => [y, String(y)]) },
+                    y: { min: 1, max: 5, ticks: [1, 3, 5] },
+                    series: [{ name: "Average rating", col: CH.warn, dots: true, pts: byYear.filter((b) => b.r != null).map((b) => [b.y, b.r!] as [number, number]), end: String(byYear[byYear.length - 1]?.r ?? "") }],
+                    label: "Average rating by cycle",
+                  }),
+                }}
+              />
+            ) : (
+              <p className="small muted">Trends appear after a second cycle.</p>
+            )
+          }
+          table={<MiniTable head={["Cycle", "Reports", "Average rating", "Days to report", "Outcomes changed"]} rows={byYear.map((b) => [b.y, b.n, b.r ?? "—", b.d ?? "—", `${b.ov}%`])} />}
+        />
+        <ChartCard title="Compared with other firms" sub="Average rating from organisations · click to open" chart={<div dangerouslySetInnerHTML={{ __html: chBars(peers, { max: 5 }) }} />} />
+      </div>
+
+      <div className="card p0">
+        <div className="tbl-tools">
+          <div className="grow">
+            <div className="h4">Ratings</div>
+            <div className="cap muted">Newest first</div>
+          </div>
+        </div>
+        <div className="tbl-wrap">
+          <table className="tbl">
+            <thead><tr><th>Organisation</th><th>Report</th><th>Rating</th><th>Comment</th></tr></thead>
+            <tbody>
+              {rs.length ? (
+                [...rs].reverse().slice(0, 12).map((r) => {
+                  const org = ORGANISATIONS.find((o) => o.id === r.org);
+                  const c = caseOf(r.case);
+                  return (
+                    <tr key={r.id} className="click" onClick={() => router.push(`/regulator/organisations/${r.org}`)}>
+                      <td>
+                        {org ? (
+                          <div className="org">
+                            <span className="logo s32" style={{ background: org.color }}>{org.initials}</span>
+                            <div className="nm">{org.name}</div>
+                          </div>
+                        ) : (
+                          r.org
+                        )}
+                      </td>
+                      <td className="small">{progOf(c?.prog).name}</td>
+                      <td><Stars n={r.stars} /></td>
+                      <td className="wrap small" style={{ maxWidth: 360 }}>{r.comment}</td>
+                    </tr>
+                  );
+                })
+              ) : (
+                <tr>
+                  <td colSpan={4}>
+                    <div className="col" style={{ alignItems: "center", textAlign: "center", padding: "40px 16px", gap: 10 }}>
+                      <Tile icon="star" size="lg" />
+                      <div className="h4">No ratings yet</div>
+                    </div>
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </>
   );
 }

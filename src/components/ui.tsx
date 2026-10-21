@@ -290,6 +290,18 @@ export function CompChip({ status }: { status: string }) {
   );
 }
 
+/** A read-only 1-5 star rating display — the prototype's starsHtml(). */
+export function Stars({ n }: { n: number }) {
+  const rounded = Math.round(n);
+  return (
+    <span className="stars" aria-label={`${n} out of 5`}>
+      {[1, 2, 3, 4, 5].map((i) => (
+        <i key={i} className={i <= rounded ? "on" : ""}>★</i>
+      ))}
+    </span>
+  );
+}
+
 /** One filter-pill row with counts, used inside a table card — the prototype's fpills(). Tones "warn"/"bad"
  * colour a pill's count badge when it needs attention (e.g. "Overdue 6"); omit `tone` for a plain pill. */
 export function FilterPills<T extends string>({
