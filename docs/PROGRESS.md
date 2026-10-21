@@ -10,7 +10,9 @@ Read this first when resuming. Keep it updated after every screen or significant
 
 A follow-up docs-only commit (`ff38f67`, recording this fix) was then pushed to `staging`, confirmed `Ready` there, and promoted the same way via a second PR (#36, merge commit `abab4eb` on `main`). **Attempted a fast-forward merge of `origin/staging` into local `main` first** (to get literally-identical hashes) — it failed (`fatal: Not possible to fast-forward`), because PR #35's merge commit (`c0084da`) exists only on `main`'s line, not `staging`'s, so the two branches' commit graphs diverge even though content matches. No history was rewritten or force-pushed to recover from this; the merge was simply aborted (cleanly, nothing was in progress) and a normal merge-commit PR was used instead, same as #35.
 
-**Final confirmed state:** `origin/main` = `abab4eb`, `origin/staging` = `ff38f67` — different SHAs (expected, per the above), but `git diff origin/staging origin/main --stat` is empty: **zero content drift**. Production (`superatlas-green.vercel.app`) deployment for `abab4eb` reached `Ready` and was confirmed live (sign-in page loads, no `/register` link, demo-access popover present). Staging deployment for `ff38f67` also reached `Ready`.
+**Final confirmed state:** `origin/main` = `2b8050c`, `origin/staging` = `4990367` — different SHAs (expected, per the above), but `git diff origin/staging origin/main --stat` is empty: **zero content drift**. Production (`superatlas-green.vercel.app`) deployment for `2b8050c` reached `Ready` and was confirmed live (sign-in page loads, no `/register` link, demo-access popover present). Staging deployment for `4990367` also reached `Ready`.
+
+(Note: this exact edit, recording the `2b8050c`/`4990367` hashes, is itself not yet promoted past `staging` as its own PR — it's a one-line bookkeeping update, not a "screen, fix, or phase," so per the standing rule's spirit it travels with the next real commit instead of spawning a fourth PR purely to promote itself. Everything substantive above is already live on both `staging` and `main`.)
 
 **Note for future promotions:** since `main` now permanently carries merge commits that never land on `staging`, a true fast-forward will not be possible again without first rebasing one branch onto the other (a history-rewriting operation this project avoids per its git-safety rules). Going forward, use a merge-commit PR for every `staging` → `main` promotion (as both #35 and #36 did) and treat an **empty `git diff origin/staging origin/main`** as the correct verification of "in sync" — not identical hashes.
 
@@ -29,51 +31,28 @@ The earlier (now superseded) `ddf4619`/`2ec46d0` commits were never reverted or 
   4. Confirm `main` and `staging` are in sync — `git diff origin/staging origin/main --stat` is empty (zero content drift). The hashes themselves (`git rev-parse origin/main` / `origin/staging`) will usually differ once any promotion has used a merge commit, which is expected, not a problem — see "Deployment-identity fix" above for why. Record both hashes and confirm the diff is empty here.
 - **Never** commit directly to `main`, **never** force-push, **never** promote `staging` → `main` while a check is red.
 
-## Current state (2026-10-21, mid-session — paused for a deployment-identity fix)
+## Current state (2026-10-21, ~07:40)
 
-**Phase:** Step 2 (foundations) is nearly done; one more piece of real Step 3 (P1) work was in flight when this session was paused to fix a deployment-blocking issue (see "Paused for" below). Step 1 (audit) is done and committed (`76fca2e`, `00e9c99`).
+**Phase:** Step 1 (audit) done. Step 2 (foundations) substantially done. **P1 (Step 3) is now fully closed: 16/16 Matches.** About to start P2.
 
-**Pushed to `staging` already:**
-- `ddf4619` — app shell foundations: Ctrl/⌘K command palette (`src/lib/search.ts`), "waiting for you" tasks drawer with live per-workspace counts (`src/lib/tasks.ts`), bell/user-menu converted to real popovers, sectioned sidebar nav with live count badges, Help dialog, "Powered by SuperAtlas" footer, 15-minute idle-timeout warning. Fixed: Escape now closes Dialog/Drawer; a React Compiler immutability violation in nav/palette rendering. Carried over the signin demo-access popover, two previously-missing demo accounts (Moniepoint, OPay), any-password-works demo auth, reset/signed-out banners.
-- `2ec46d0` — added this `PROGRESS.md` hand-over file.
-- **These two commits are the ones Vercel is currently blocking** (see "Paused for" below) — they are authored as `emmanueladedeji-svg` with a co-author line, not as Emmalex17. They still need to be deployed/promoted once the identity fix lands (per the standing rule above, a redeploy commit or the next real commit will carry staging forward; these two are not being reverted or rewritten).
+**Pushed to `staging` and `main`, both deployed `Ready` and verified live:**
+- App shell foundations: Ctrl/⌘K command palette (`src/lib/search.ts`), "waiting for you" tasks drawer with live per-workspace counts (`src/lib/tasks.ts`), bell/user-menu converted to real popovers, sectioned sidebar nav with live count badges, Help dialog, "Powered by SuperAtlas" footer, 15-minute idle-timeout warning. Escape now closes Dialog/Drawer (it didn't before).
+- Shared `StatusChip`/`statusTone()` (45-word status→tone/icon map), `FilterPills`, `KTile`, `ChartCard`, `MiniTable` (`src/components/ui.tsx`); chart-kit string-builders `chColumns`, `chBars`, `chStack`, `chFunnel`, `chHeat`, `chDots` (`src/lib/charts.ts`); all matching CSS in `globals.css`. **Built but not yet exercised by a real screen** — unverified-in-context until the first dashboard/analytics screen that needs one (P5's Analytics tab, P8/P9's Insights tabs, P10's dashboards). Drill/click interactivity deliberately deferred to that point too.
+- **P1 fully closed, 16/16 Matches** (was 13/16, 3 Missing): built the three invitation screens (`src/lib/invites.ts`, `src/components/InviteFlow.tsx`, `src/app/invitation/page.tsx`, `src/app/invitation/[id]/page.tsx`), all three live-verified pixel-identical to their reference screenshots with the full accept → password → MFA → destination flow working (regulator → `/welcome`, Zenith → `/organisation`, Deloitte → `/firm` — the latter two land on the plain dashboard rather than `org/welcome`/`firm/welcome` since those don't exist yet; P3 should update `INVITES[...].next` once built). Removed `signin`'s leftover `/register` link. `DemoAccess` popover now closes on outside-click/Escape. `TENANT.col` (`#0B7A3E`) added to `mockData.ts` — fixes the invitation emails' NITDA logo colour.
+- `docs/prototype/PARITY_INVENTORY.md`'s full P1 section (13 checkboxes) ticked; `docs/PARITY_AUDIT.md` updated (P1 section, overview table, gaps #6 and #9 marked resolved/fixed).
+- Verified: `tsc --noEmit`, `eslint src`, `npm run build` all clean on the final commit.
 
-**Committed locally as WIP (not yet pushed), on `staging`, needs a proper non-WIP follow-up commit once verification resumes:**
-- Rest of Step 2 foundations, all verified against reference screenshots/live dev server before this WIP commit:
-  - `StatusChip`/`statusTone()` (the 45-word status→tone/icon map), `FilterPills`, `KTile`, `ChartCard`, `MiniTable` added to `src/components/ui.tsx` (file now needs `"use client"` — added).
-  - Chart-kit string-builders `chColumns`, `chBars`, `chStack`, `chFunnel`, `chHeat`, `chDots` added to `src/lib/charts.ts` (visual-only for now, no drill/click — see note below).
-  - All the matching CSS ported from `docs/prototype/source/styles.css` into `src/app/globals.css` (`.ktile`, `.kt-*`, `.chcard`, `.ch-*`, `.pill.tone-*`, `.tbl-sub`).
-  - These are **built but not yet exercised by a real screen** — no phase screen uses `KTile`/`ChartCard`/the new chart-kit functions yet. Treat them as unverified-in-context until the first dashboard/analytics screen that uses them (P5's Analytics tab, P8/P9's Insights tabs, or P10's dashboards) is built and visually checked against its reference screenshot.
-- Real P1 fixes (the two non-"agreed-difference" gaps `PARITY_AUDIT.md` flagged for `signin`), done and verified live:
-  - Removed the `/register` link from `src/app/signin/page.tsx` (agreed difference #1 — keep `/register` in code, but it must not be linked from anywhere; it still isn't linked from anywhere else, confirmed by repo-wide grep).
-  - `src/components/DemoAccess.tsx`'s popover now closes on outside-click and Escape (it only closed via the toggle/picking an account before).
-- The three missing P1 invitation screens — **built and live-verified against their reference screenshots, pixel-matching**:
-  - `src/lib/invites.ts` — the `INVITES` data (mirrors the prototype's `auth.js` `INVITES`).
-  - `src/components/InviteFlow.tsx` — the shared two-step flow (simulated inbox/email → create-password form) used by all three routes.
-  - `src/app/invitation/page.tsx` (NITDA/regulator invite) and `src/app/invitation/[id]/page.tsx` (`zenith`, `deloitte`).
-  - `auth.ts` gained `beginPendingSignIn()`; `verify/page.tsx`'s `finish()` now respects a one-shot `superatlas.inviteNext` sessionStorage flag so accepting an invite lands on the right destination (`/welcome` for the regulator invite — org/firm invites land on their plain dashboard since `org/welcome`/`firm/welcome` don't exist yet; P3 will need to update `INVITES[...].next` once those are built).
-  - `TENANT` in `src/lib/mockData.ts` gained a `col` field (`#0B7A3E`, NITDA's own brand colour, distinct from the Navy/Forest/Ocean theme swatches) — the prototype's `tenant.col`, which had no app equivalent before. Fixed two real bugs found via screenshot-diffing against the reference images: (1) the invitation email's "tenant" logo was rendering the app's own navy brand colour instead of NITDA's green; (2) the SuperAtlas-branded email's logo mark was rendering the full `Lockup` (icon+text) next to a separately-rendered "SuperAtlas" label, duplicating the wordmark — fixed to use the icon-only `LogoMark`.
-  - **Verified live, full flow, both the regulator invite and the Zenith org invite**: inbox screenshot pixel-matches `screens/invitation.jpg`/`screens/invitation_zenith.jpg`, accept-password form works (live password-rules meter correct), routes to `/verify`, MFA code accepted, lands on the correct destination (`/welcome` for NITDA; `/organisation` dashboard, signed in as A. Okonkwo, for Zenith).
-  - **Not yet verified**: the Deloitte (`invitation/deloitte`) variant specifically — same code path as Zenith's, same component, so very likely fine, but wasn't individually clicked through before the session was paused. Do this first when resuming.
-- None of this WIP has run a final `tsc`/`eslint`/`next build` pass since the very last edits (the `cardMark`/`emailMark` logo fix). It passed clean right before that fix; re-run all three before turning this into a real commit.
+No WIP outstanding. Working tree clean as of this point in the session.
 
-## Paused for: fixing Vercel deployment-blocked identity issue
+## Exact next step
 
-A git/Vercel identity problem was found: commits `ddf4619` and `2ec46d0` are authored as `emmanueladedeji-svg` (with a `Co-authored-by` line), but this repo and Vercel project belong to GitHub account `Emmalex17` — Vercel blocks deployments it can't match to the project owner. Work was paused here, mid-fix, to resolve that first (see the standing rule above). Once fixed and `staging`/`main` are confirmed on the same green commit, resume exactly where this section says to.
+Move to Step 3, P2 (`docs/PARITY_AUDIT.md`'s P2 section — 2 Matches/10 Different/12 Missing). The biggest item is the entire regulator Settings section (`settings/categories`, `settings/scoring`, `settings/firm-types`, `settings/deadlines`, `settings/findings`, `settings/compliance`, `settings/actions` — all Missing, though their typed JSON data already exists and is unused) plus the shared `settingsShell`/`SETTINGS_NAV` left-nav layout that `profile`, `profile/branding`, and `team` all need to be rebuilt under (currently ad-hoc top tabs with no left nav, wrong breadcrumb). Read the full P2 section in `docs/PARITY_AUDIT.md` (and its "Questions") before starting — there's an open question there about whether to build `settingsShell` as shared infrastructure first (affects 4+ already-built screens plus all 7 missing ones) before any individual Settings screen.
 
-## Exact next step on resume
-
-1. Finish verifying the WIP described above: click through `invitation/deloitte` specifically, then run `tsc --noEmit`, `eslint src`, and `npm run build` one more time.
-2. Tick `invitation`, `invitation/zenith`, `invitation/deloitte`, and the `signin` row's register-link fix in `docs/prototype/PARITY_INVENTORY.md` / note them "Matches" in `docs/PARITY_AUDIT.md`.
-3. Commit all of the WIP as a real commit (not "WIP:") — suggested message: `ui-parity: P1 invitation flow + close remaining P1/foundations gaps`. Follow the standing rule: author as Emmalex17, no co-author line, push to `staging`, confirm the Vercel staging deployment is green, then promote to `main` via PR and confirm production is green, then record the matching `main`/`staging` commit hash here.
-4. P1 is then fully closed except the two explicitly-out-of-scope SSO question and (per the audit) possibly MFA/SSO scope confirmation — both already logged as Questions in `PARITY_AUDIT.md`, not blocking.
-5. Move to Step 3, P2 (`docs/PARITY_AUDIT.md`'s P2 section — 2 Matches/10 Different/12 Missing, the whole Settings section and settingsShell are the big items there).
-
-## Audit summary (from `docs/PARITY_AUDIT.md`)
+## Audit summary (from `docs/PARITY_AUDIT.md`, P1 now updated)
 
 | Phase | Matches | Different | Missing |
 |---|---|---|---|
-| P1 Public site and sign-in | 13 | 0 | 3 |
+| P1 Public site and sign-in | **16** | **0** | **0** |
 | P2 Regulator setup, settings, account | 2 | 10 | 12 |
 | P3 Organisations and assurance firms | 9 | 5 | 18 |
 | P4 Requirements library | 1 | 4 | 3 |
@@ -83,11 +62,9 @@ A git/Vercel identity problem was found: commits `ddf4619` and `2ec46d0` are aut
 | P8 Data returns | 2 | 4 | 2 |
 | P9 Compliance and enforcement | 0 | 6 | 9 |
 | P10 Dashboards, search, cross-cutting | 1 | 5 | 1 |
-| **Total** | **39** | **50** | **61** |
+| **Total** | **42** | **50** | **58** |
 
-(P1's "3 Missing" above is now built as WIP, pending the commit described above — will become effectively 16/16 once that commit lands and the inventory is ticked.)
-
-The 10 biggest gaps are listed in `docs/PARITY_AUDIT.md` lines 25-40 — worth re-reading before picking a phase, since several gaps span phases (e.g. the whole Settings section is both a P2 item and a dependency for P9's `settings/compliance`/`settings/actions`).
+The 10 biggest gaps are listed in `docs/PARITY_AUDIT.md` — worth re-reading before picking a phase; #6 (app shell) and #9 (P1 invitations/signin) are now marked resolved there, so #4 (P2 Settings) is effectively the next biggest open item and lines up with where P2 picks up.
 
 ## Remaining Step 2 foundations (lower priority, not blocking Step 3)
 

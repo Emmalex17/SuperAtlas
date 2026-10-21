@@ -8,19 +8,19 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 
 ### `home`: Landing page
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Public · Layout: public · Breadcrumb: none
 - Reference: `screens/home.jpg`
 - Headings and section titles: “See every organisation you supervise, and the evidence behind it.” · “Regulation moves faster when everything connects.” · “Who is compliant?” · “Where are the gaps?” · “What proves it?” · “What happens next?” · “See the whole picture. Find the detail that matters.” · “Every compliance claim. Backed by evidence.” · “Don't just find the gaps. Close them.” · “From identified to resolved” · “All your supervisory work, working together.” · “Regulatory reporting” · “Compliance monitoring” · “Evidence management” · “Audits & assessments” · “Risk-based supervision” · “Findings & remediation” · “Regulatory history” · “Management intelligence” · “Your rules. Your workflows. Your SuperAtlas.” · “Configured for your authority” · “One shared view. A better way to work together.” · “Confidence in every decision.” · “Clarity in every obligation.” · “Evidence for every assessment.” · “From obligations to insight, in four clear steps.” · “Define” · “Collect” · “Assess” · “Act” · “Built for the responsibilities of supervision.” · “Role-based access” · “Audit-ready history” · “Data governance” · “Controlled workspaces” · “See what better supervision looks like on your own terms.” · “Configure your framework” · “Run a real use case” · “Evaluate the evidence” · “Good questions deserve clear answers.”
 - Tabs: “CBN” · “SEC” · “NITDA”
 - Buttons and links: “Sign in” · “Book a demo” · “Start a proof of value”
 - Tab states (each must match its screenshot):
-    - [ ] “SEC”: `screens/home__sec.jpg`
-    - [ ] “NITDA”: `screens/home__nitda.jpg`
+    - [x] “SEC”: `screens/home__sec.jpg`
+    - [x] “NITDA”: `screens/home__nitda.jpg`
 
 ### `demo`: Book a demo
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Public · Layout: public · Breadcrumb: none
 - Reference: `screens/demo.jpg`
 - Headings and section titles: “See SuperAtlas on your own supervision work” · “Book a demo”
@@ -29,7 +29,7 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 
 ### `pilot`: Proof of value
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Public · Layout: public · Breadcrumb: none
 - Reference: `screens/pilot.jpg`
 - Headings and section titles: “See it working on your own use case first” · “What is included” · “Request a proof of value”
@@ -38,7 +38,7 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 
 ### `signin`: Sign in
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Public · Layout: public · Breadcrumb: none
 - Reference: `screens/signin.jpg`
 - Headings and section titles: “Supervision that shows its working.” · “Sign in”
@@ -47,7 +47,7 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 
 ### `verify`: Enter MFA code
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Public · Layout: public · Breadcrumb: none
 - Reference: `screens/verify.jpg`
 - Headings and section titles: “Supervision that shows its working.” · “Enter your 6-digit code”
@@ -56,7 +56,7 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 
 ### `mfa-setup`: Set up MFA
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Public · Layout: public · Breadcrumb: none
 - Reference: `screens/mfa-setup.jpg`
 - **Pilot note:** Authenticator apps are later phase; keep the screen, do not link it from sign-in.
@@ -65,28 +65,28 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 
 ### `invitation`: Accept invitation
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Public · Layout: public · Breadcrumb: none
 - Reference: `screens/invitation.jpg`
 - Buttons and links: “Accept invitation”
 
 ### `invitation/zenith`: Accept invitation
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Public · Layout: public · Breadcrumb: none
 - Reference: `screens/invitation_zenith.jpg`
 - Buttons and links: “Accept invitation”
 
 ### `invitation/deloitte`: Accept invitation
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Public · Layout: public · Breadcrumb: none
 - Reference: `screens/invitation_deloitte.jpg`
 - Buttons and links: “Accept invitation”
 
 ### `reset`: Reset password
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Public · Layout: public · Breadcrumb: none
 - Reference: `screens/reset.jpg`
 - Headings and section titles: “Supervision that shows its working.” · “Reset your password”
@@ -95,7 +95,7 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 
 ### `register`: Register and choose category
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Public · Layout: public · Breadcrumb: none
 - Reference: `screens/register.jpg`
 - **Pilot note:** Keep the screen in code but remove every link to it (invitation only for the pilot).
