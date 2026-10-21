@@ -2,6 +2,18 @@
 
 Read this first when resuming. Keep it updated after every screen or significant step, per `docs/PARITY_PROMPT.md`.
 
+## Deployment-identity fix — resolved 2026-10-21 ~07:25
+
+**Cause (confirmed via `vercel inspect` on the blocked deployment):** commits `ddf4619`/`2ec46d0` (and, it turned out, `00e9c99`/`76fca2e` too) were authored with email `emmanuel.adedeji@opexconsult.co.uk`, which GitHub resolves to login `emmanueladedeji-svg` — not `Emmalex17`, the repo/Vercel project owner. Vercel's exact message: *"The deployment was blocked because the commit author doesn't have permission to create deployments for this project."*
+
+**Fix applied:** set this repo's local git identity (not global) to `user.name "Emmalex17"`, `user.email "90387855+Emmalex17@users.noreply.github.com"` (GitHub's own noreply address for that account, user id 90387855 — confirmed via `gh api user`; the user chose this over supplying a real email). Committed the standing-rule doc update (`87b4b29`) under that identity with no co-author line, pushed to `staging`, confirmed the Vercel preview deployment went to `Ready` (not Blocked), then merged PR #35 into `main` with a merge commit (`c0084da`) and confirmed the production deployment also went to `Ready`. Verified both staging (`superatlas-git-staging-emmanueladedeji67-3967.vercel.app`) and production (`superatlas-green.vercel.app`) load the sign-in page and that sign-in (NITDA demo account) reaches the MFA step correctly.
+
+**On "main and staging point at the same commit":** `origin/main` is `c0084da` and `origin/staging` is `87b4b29` — different SHAs, because step 5 explicitly allowed a merge commit (`gh pr merge --merge`), which by nature produces a new SHA on `main` rather than fast-forwarding to staging's tip. Confirmed **zero drift** instead: `git diff origin/staging origin/main` is empty — identical tree content. For future promotions, prefer a fast-forward merge of `origin/staging` into `main` (this repo's pre-existing convention, from before this parity project) where possible, so the hashes are literally identical, not just content-identical — simpler to verify at a glance.
+
+The earlier (now superseded) `ddf4619`/`2ec46d0` commits were never reverted or rewritten — they're still in history, just no longer the tip of anything that gets deployed standalone; their content shipped as part of this same promotion.
+
+---
+
 ## Standing rule (deployment identity and promotion) — follow every session, no exceptions
 
 - This repo and its Vercel project belong to GitHub account **Emmalex17**. Vercel blocks any deployment whose commit author it can't match to the project owner/team — so every commit must be authored as Emmalex17, with **no `Co-authored-by` lines**.
