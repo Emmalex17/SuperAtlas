@@ -8,7 +8,7 @@ import seriesData from "./data/series.json";
 import complianceData from "./data/compliance.json";
 import schemesData from "./data/schemes.json";
 import deadlinesData from "./data/deadlines.json";
-import { ORGANISATIONS } from "./mockData";
+import { ORGANISATIONS, allCategoryTypes, addAudit } from "./mockData";
 import type { IconName } from "./icons";
 
 /** A requirement's raw question, as the regulation text states it: the question itself, plus a hint describing the expected kind of answer (e.g. "Yes / No / Not applicable", "Date", "Short text"). */
@@ -21,7 +21,12 @@ export type RegRequirement = {
   guidance?: string;
   weight?: string;
   evidence?: string[];
-  questions: RawQuestion[];
+  /** Normalised in place, once, right after REGS loads (see normalizeRegsQuestions below) — so
+   * every consumer always sees the rich {q, choice, comment, evidence, interview} shape, exactly
+   * like the prototype's own S.regs after its one-time SEED.regs normalisation pass. On disk
+   * (regs.json) this field is still raw [text, hint] tuples; the cast is corrected at runtime
+   * before anything else reads REGS. */
+  questions: NormQuestion[];
 };
 
 export type RegSection = { id: string; name: string; reqs: RegRequirement[] };
@@ -39,6 +44,7 @@ export type Regulation = {
   applies: string[];
   desc: string;
   sections: RegSection[];
+  isNew?: boolean;
 };
 
 /** A question as it appears inside a programme's own (editable) copy of the regulation: the raw [question, hint] pair normalised into an addressable object, `id` being `${requirementRef}#${index}`. */
@@ -186,6 +192,7 @@ export type FindingClass = { code: string; name: string; d: string; days: number
 export type Rating = { id: string; firm: string; org: string; case: string; stars: number; comment: string; when: string };
 
 export const REGS = regsData as unknown as Regulation[];
+normalizeRegsQuestions(REGS);
 export const PROGRAMMES = programmesData as unknown as Programme[];
 export const CASES = casesData as unknown as Case[];
 export const EVIDENCE = evidenceData as unknown as Evidence[];
@@ -735,4 +742,300 @@ export function copyScheme(id: string): ScoringScheme {
 export function saveFindingClasses(next: FindingClass[]) {
   FINDING_CLASSES.length = 0;
   FINDING_CLASSES.push(...next);
+}
+
+/* ================= Requirements library (P4) =================
+ * `library`, `library/regulation`, `library/requirement`, `library/edit`, `library/ai` — the
+ * prototype's library.js and qmodel.js. On disk (regs.json), each requirement's `questions` is a
+ * RawQuestion ([text, hint]) tuple, matching the prototype's own seed data (data.js ~line 146).
+ * normalizeRegsQuestions() converts every one of them, once, into the rich {q, choice, comment,
+ * evidence, interview} shape in place — exactly mirroring the prototype's own one-time SEED.regs
+ * normalisation pass (data.js lines 234-240), including its two hand-set interview overrides.
+ * From then on REGS carries only the rich shape: new questions (added via a dialog, or through
+ * createRequirement/updateRequirement) are pushed as NormQuestion objects directly, never round-
+ * tripped back through a hint string — the same "normalise once, objects forever" model the
+ * prototype's S.regs uses after boot. */
+
+export type NormQuestion = { q: string; choice: "yn" | "text" | "number" | "date" | ""; comment: boolean; evidence: boolean; interview: boolean };
+
+/** Idempotent, like the prototype's own normQ (data.js): a Fast Refresh reload can re-run the
+ * module-level normalizeRegsQuestions() call below against data this same function already
+ * normalised on a previous pass, so anything that isn't a raw tuple is returned unchanged. */
+function normQ(raw: RawQuestion | NormQuestion, i: number, req: RegRequirement): NormQuestion {
+  if (!Array.isArray(raw)) return raw;
+  const [q, ty] = raw;
+  const yn = /Yes/.test(ty);
+  return {
+    q,
+    choice: yn ? "yn" : /text/i.test(ty) ? "text" : ty === "Number" ? "number" : ty === "Date" ? "date" : "",
+    comment: yn || /Long/.test(ty),
+    evidence: (i === 0 && (req.evidence?.length ?? 0) > 0) || ty === "File upload",
+    interview: false,
+  };
+}
+
+function normalizeRegsQuestions(regs: Regulation[]) {
+  regs.forEach((r) =>
+    r.sections.forEach((s) =>
+      s.reqs.forEach((req) => {
+        const raw = req.questions as unknown as (RawQuestion | NormQuestion)[];
+        req.questions = raw.map((x, i) => normQ(x, i, req));
+      })
+    )
+  );
+  const isr = regs.find((r) => r.id === "isr");
+  const find = (ref: string) => isr?.sections.flatMap((s) => s.reqs).find((q) => q.ref === ref);
+  const q12 = find("ISR-1.2");
+  if (q12?.questions[1]) q12.questions[1].interview = true;
+  const q71 = find("ISR-7.1");
+  if (q71?.questions[0]) q71.questions[0].interview = true;
+}
+
+/** A requirement's questions — already normalised at module load, see normalizeRegsQuestions()
+ * above. Kept as a named accessor so call sites read the same as the prototype's own usage. */
+export function normalizedQuestions(req: RegRequirement): NormQuestion[] {
+  return req.questions;
+}
+
+export const CHOICES: [string, string][] = [
+  ["yn", "Yes / No / Not applicable"],
+  ["text", "Text"],
+  ["number", "Number"],
+  ["date", "Date"],
+  ["", "No choice"],
+];
+
+export function choiceLabel(c: string): string {
+  return (CHOICES.find((x) => x[0] === c) ?? CHOICES[4])[1];
+}
+
+export const PARTS: [string, string, IconName][] = [
+  ["comment", "Comment", "chat-text"],
+  ["evidence", "Evidence", "paperclip"],
+  ["interview", "Interview", "video-camera"],
+];
+
+/** AI: draft questions for a requirement (never answers) — the prototype's suggestQs(). */
+export function suggestQs(req: { ref: string; t: string }): NormQuestion[] {
+  const t = req.t.charAt(0).toLowerCase() + req.t.slice(1);
+  return [
+    { q: `Is there ${/^(a|an|the)\b/i.test(t) ? "" : "a "}${t} in place today?`, choice: "yn", comment: true, evidence: true, interview: false },
+    { q: `Who is accountable for this, and how often is it reviewed?`, choice: "text", comment: false, evidence: false, interview: false },
+    { q: `When was it last reviewed, tested or approved?`, choice: "date", comment: false, evidence: true, interview: false },
+    { q: `Walk the assessor through how this works in practice.`, choice: "", comment: false, evidence: false, interview: true },
+  ];
+}
+
+export function regReqs(r: Regulation): RegRequirement[] {
+  return r.sections.flatMap((s) => s.reqs);
+}
+export function regQs(r: Regulation): number {
+  return regReqs(r).reduce((n, req) => n + req.questions.length, 0);
+}
+export function orgsCovered(r: { applies: string[] }): number {
+  const types = allCategoryTypes();
+  return r.applies.reduce((n, name) => n + (types.find((t) => t.name === name)?.count ?? 0), 0);
+}
+
+export function findReq(ref: string): { reg: Regulation; sec: RegSection; q: RegRequirement } | null {
+  for (const reg of REGS) {
+    for (const sec of reg.sections) {
+      const q = sec.reqs.find((x) => x.ref === ref);
+      if (q) return { reg, sec, q };
+    }
+  }
+  return null;
+}
+
+export function createRegulation(input: { name: string; ref: string; category: string; version: string; effective: string }): string {
+  const id = `r${REGS.length + 1}-${Date.now()}`;
+  REGS.push({
+    id,
+    ref: input.ref.toUpperCase(),
+    name: input.name,
+    category: input.category || "General",
+    version: input.version || "v1.0",
+    effective: fmtD(input.effective || "2027-01-01"),
+    updated: "Today",
+    status: "Draft",
+    file: "",
+    applies: [],
+    desc: "",
+    sections: [{ id: `s-${Date.now()}`, name: "1. General", reqs: [] }],
+  });
+  addAudit("Created regulation", input.name);
+  return id;
+}
+
+/** The demo "Import requirements from a spreadsheet" outcome — the prototype's ACT.reqImportGo,
+ * which always adds the same one row to Consumer Protection Rules if it isn't there yet. */
+export function importRequirementsDemo(): string {
+  const r = REGS.find((x) => x.id === "cpr");
+  const msg = "consumer-protection.xlsx: 12 rows read, 11 already in the library, 1 added to Consumer Protection Rules (CPR-4.1).";
+  if (r && !r.sections.some((s) => s.name.startsWith("4."))) {
+    r.sections.push({
+      id: "s4",
+      name: "4. Disclosure",
+      reqs: [
+        {
+          ref: "CPR-4.1",
+          t: "Publish fees and charges",
+          text: "Publish all fees and charges in plain language before a customer signs up.",
+          guidance: "",
+          weight: "Normal (2)",
+          evidence: ["Published tariff"],
+          questions: [{ q: "Are all fees published before sign-up?", choice: "yn", comment: true, evidence: true, interview: false }],
+        },
+      ],
+    });
+  }
+  addAudit("Imported requirements", "consumer-protection.xlsx");
+  return msg;
+}
+
+export function addRegulationSection(regId: string, name: string): string | null {
+  const r = REGS.find((x) => x.id === regId);
+  if (!r) return null;
+  if (name.replace(/^\d+\.\s*/, "").length < 2) return null;
+  const s: RegSection = { id: `s-${Date.now()}`, name, reqs: [] };
+  r.sections.push(s);
+  return s.id;
+}
+
+export function renameRegulationSection(regId: string, sectionId: string, name: string) {
+  const s = REGS.find((x) => x.id === regId)?.sections.find((x) => x.id === sectionId);
+  if (s && name) s.name = name;
+}
+
+export function editRegulationDetails(regId: string, patch: { name: string; category: string; version: string; desc: string; applies: string[] }) {
+  const r = REGS.find((x) => x.id === regId);
+  if (!r) return;
+  Object.assign(r, { name: patch.name || r.name, category: patch.category, version: patch.version, desc: patch.desc, applies: patch.applies, updated: "Today" });
+  addAudit("Edited regulation", r.name);
+}
+
+export function createRegulationVersion(regId: string) {
+  const r = REGS.find((x) => x.id === regId);
+  if (!r) return;
+  const m = r.version.match(/v(\d+)\.(\d+)/);
+  r.version = m ? `v${m[1]}.${+m[2] + 1}` : r.version + ".1";
+  r.status = "Draft";
+  r.updated = "Today";
+  addAudit("Created regulation version", `${r.name} ${r.version}`);
+}
+
+export function publishRegulation(regId: string): { ok: boolean; message?: string } {
+  const r = REGS.find((x) => x.id === regId);
+  if (!r) return { ok: false };
+  if (!regReqs(r).length || !r.applies.length) return { ok: false, message: "Add at least one requirement and choose who it applies to before publishing" };
+  r.status = "Published";
+  r.updated = "Today";
+  addAudit("Published regulation", r.name);
+  return { ok: true };
+}
+
+export function archiveRegulation(regId: string) {
+  const r = REGS.find((x) => x.id === regId);
+  if (!r) return;
+  r.status = "Archived";
+  addAudit("Archived regulation", r.name);
+}
+
+export function addQuestionToRequirement(ref: string, question: NormQuestion) {
+  const f = findReq(ref);
+  if (!f) return;
+  f.q.questions.push(question);
+}
+
+export function addSuggestedQuestions(ref: string, list: NormQuestion[]) {
+  const f = findReq(ref);
+  if (!f) return;
+  f.q.questions.push(...list);
+  f.reg.updated = "Today";
+  addAudit("AI questions added", f.q.ref, `${list.length} question(s) suggested by AI`);
+}
+
+export type RequirementFormData = {
+  ref: string;
+  t: string;
+  text: string;
+  guidance: string;
+  weight: string;
+  evidence: string[];
+  questions: NormQuestion[];
+  applies: string[];
+};
+
+/** Creates a new requirement in a regulation's section — the prototype's ACT.form_req (new case). */
+export function createRequirement(regId: string, sectionId: string, data: RequirementFormData): string {
+  const reg = REGS.find((x) => x.id === regId) ?? REGS[0];
+  const sec = reg.sections.find((s) => s.id === sectionId) ?? reg.sections[reg.sections.length - 1];
+  sec.reqs.push({ ref: data.ref, t: data.t, text: data.text, guidance: data.guidance, weight: data.weight, evidence: data.evidence.filter(Boolean), questions: data.questions.filter((x) => x.q) });
+  reg.updated = "Today";
+  addAudit("Added requirement", data.ref);
+  return data.ref;
+}
+
+/** Saves an existing requirement — the prototype's ACT.form_req (edit case). */
+export function updateRequirement(ref: string, data: RequirementFormData) {
+  const f = findReq(ref);
+  if (!f) return;
+  Object.assign(f.q, { ref: data.ref, t: data.t, text: data.text, guidance: data.guidance, weight: data.weight, evidence: data.evidence.filter(Boolean), questions: data.questions.filter((x) => x.q) });
+  f.reg.updated = "Today";
+  addAudit("Edited requirement", data.ref);
+}
+
+/** The next default ref for a new requirement in a section — the prototype's inline numbering in
+ * screen('library/edit'). */
+export function nextRequirementRef(reg: Regulation, sec: RegSection): string {
+  const n = regReqs(reg).filter((x) => x.ref.startsWith(`${reg.ref}-${parseInt(sec.name) || 1}.`)).length + 1;
+  return `${reg.ref}-${parseInt(sec.name) || 1}.${n}`;
+}
+
+export type AiExtractItem = { ref: string; t: string; page: number; conf: number; state: "" | "accepted" | "rejected"; warn?: string };
+
+export const AI_EXTRACT_SEED: AiExtractItem[] = [
+  { ref: "CRR-2.1", t: "Maintain a cyber resilience strategy approved by the board", page: 4, conf: 96, state: "" },
+  { ref: "CRR-2.2", t: "Test the business continuity plan at least once a year", page: 5, conf: 93, state: "" },
+  { ref: "CRR-3.1", t: "Keep an up-to-date inventory of critical information assets", page: 7, conf: 91, state: "" },
+  { ref: "CRR-3.4", t: "Encrypt customer data at rest and in transit", page: 9, conf: 88, state: "" },
+  { ref: "CRR-4.2", t: "Run vulnerability scans monthly and fix critical findings within 14 days", page: 12, conf: 84, state: "" },
+  { ref: "CRR-5.1", t: "Report cyber incidents that affect customers within 24 hours", page: 15, conf: 79, state: "" },
+  { ref: "CRR-6.3", t: "Third-party providers should be reviewed periodically", page: 18, conf: 62, state: "", warn: "Vague wording: \"periodically\" has no frequency. Consider setting one." },
+];
+
+/** Publishes the AI-drafted regulation from its accepted items — the prototype's ACT.aiPublish. */
+export function publishAiRegulation(name: string, accepted: AiExtractItem[]): string {
+  const id = "crr";
+  REGS.unshift({
+    id,
+    ref: "CRR",
+    name,
+    category: "Cyber resilience",
+    version: "v1.0",
+    effective: "1 Dec 2026",
+    updated: "Today",
+    status: "Draft",
+    isNew: true,
+    file: "cyber-resilience-regulation.pdf",
+    desc: "Drafted with AI from the uploaded PDF and reviewed by your team. Check questions and evidence, then publish.",
+    applies: ["Commercial bank", "Microfinance bank", "Payment solution service provider"],
+    sections: [
+      {
+        id: "ai1",
+        name: "1. Drafted requirements",
+        reqs: accepted.map((x) => ({
+          ref: x.ref,
+          t: x.t,
+          text: x.t + ".",
+          guidance: "",
+          weight: "Normal (2)",
+          evidence: ["Evidence to be confirmed"],
+          questions: [{ q: "Does the organisation meet this requirement?", choice: "yn", comment: true, evidence: true, interview: false }],
+        })),
+      },
+    ],
+  });
+  addAudit("Added regulation with AI", `${name} · ${accepted.length} requirements`);
+  return id;
 }

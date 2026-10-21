@@ -422,7 +422,7 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 
 ### `library`: Requirements library
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Regulator (M. Bello) · Layout: app · Breadcrumb: Requirements library
 - Reference: `screens/library.jpg`
 - Headings and section titles: “Requirements library”
@@ -432,7 +432,7 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 
 ### `library/regulation`: Regulation
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Regulator (M. Bello) · Layout: app · Breadcrumb: Requirements library > Information Security Regulation 2026
 - Reference: `screens/library_regulation.jpg`
 - Headings and section titles: “Details” · “Actions” · “Information Security Regulation 2026”
@@ -440,13 +440,13 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 - Buttons and links: “Edit details” · “Add requirement” · “Create new version” · “Archive regulation” · “Expand all” · “Add section”
 - Status chips seen: “Published”
 - Tab states (each must match its screenshot):
-    - [ ] “Questions 17”: `screens/library_regulation__questions-17.jpg`
-    - [ ] “Evidence 13”: `screens/library_regulation__evidence-13.jpg`
-    - [ ] “Versions”: `screens/library_regulation__versions.jpg`
+    - [x] “Questions 17”: `screens/library_regulation__questions-17.jpg`
+    - [x] “Evidence 13”: `screens/library_regulation__evidence-13.jpg`
+    - [x] “Versions”: `screens/library_regulation__versions.jpg`
 
 ### `library/requirement`: Requirement
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Regulator (M. Bello) · Layout: app · Breadcrumb: Requirements library > ISR > ISR-4.1
 - Reference: `screens/library_requirement.jpg`
 - Headings and section titles: “ISR-4.1 Multi-factor authentication for privileged access” · “Questions asked” · “Evidence required” · “Guidance for organisations” · “Details” · “Applies to”
@@ -455,7 +455,7 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 
 ### `library/edit`: Edit requirement
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Regulator (M. Bello) · Layout: app · Breadcrumb: Requirements library > ISR > New requirement
 - Reference: `screens/library_edit.jpg`
 - Headings and section titles: “New requirement” · “Questions asked” · “Evidence required” · “Applies to”
@@ -464,7 +464,7 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 
 ### `library/ai`: Add regulation with AI
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Regulator (M. Bello) · Layout: app · Breadcrumb: Requirements library > Add with AI
 - Reference: `screens/library_ai.jpg`
 - Headings and section titles: “Add a regulation with AI” · “How it works”
