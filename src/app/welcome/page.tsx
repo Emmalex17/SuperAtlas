@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Lockup, Button, Field, Chip } from "@/components/ui";
+import { BrandPreview } from "@/components/BrandPreview";
 import { useToast } from "@/components/Toast";
 import { Icon } from "@/lib/icons";
 import { isEmail } from "@/lib/authHelpers";
@@ -135,6 +136,9 @@ export default function WelcomePage() {
                     </span>
                   </button>
                 ))}
+              </div>
+              <div className="preview-box">
+                <BrandPreview view="app" themeKey={theme} />
               </div>
               <div className="row between">
                 <Button variant="outline" icon="arrow-left" onClick={() => setStep(0)}>Back</Button>

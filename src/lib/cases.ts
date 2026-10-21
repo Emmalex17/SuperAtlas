@@ -641,3 +641,34 @@ export function signOffAndSubmitReport(c: Case, today: string, byName: string) {
   c.stage = "Report submitted";
   c.reportAt = today;
 }
+
+export function saveDeadlines(patch: Partial<Deadlines>) {
+  Object.assign(DEADLINES, patch);
+}
+
+export function saveComplianceSettings(patch: Partial<ComplianceSettings>) {
+  Object.assign(COMPLIANCE_SETTINGS, patch);
+}
+
+export function setDefaultScheme(id: string) {
+  SCHEMES.forEach((s) => {
+    s.def = s.id === id;
+  });
+}
+
+export function saveSchemeBands(id: string, bands: [string, number][]) {
+  const s = SCHEMES.find((x) => x.id === id);
+  if (s) s.bands = bands;
+}
+
+export function copyScheme(id: string): ScoringScheme {
+  const src = SCHEMES.find((x) => x.id === id) ?? SCHEMES[0];
+  const copy: ScoringScheme = { ...src, id: `sc${SCHEMES.length + 1}`, name: `${src.name} (copy)`, def: false, used: 0, levels: [...src.levels], bands: [...src.bands] };
+  SCHEMES.push(copy);
+  return copy;
+}
+
+export function saveFindingClasses(next: FindingClass[]) {
+  FINDING_CLASSES.length = 0;
+  FINDING_CLASSES.push(...next);
+}

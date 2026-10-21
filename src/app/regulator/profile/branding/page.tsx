@@ -1,56 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import { AppShell } from "@/components/AppShell";
+import { SettingsShell } from "@/components/SettingsShell";
+import { BrandPreview } from "@/components/BrandPreview";
 import { PageHead, Button, Field } from "@/components/ui";
 import { useToast } from "@/components/Toast";
 import { Icon } from "@/lib/icons";
 import { TENANT, THEMES } from "@/lib/mockData";
-
-function BrandPreview({ view, themeKey }: { view: "app" | "email"; themeKey: (typeof THEMES)[number]["key"] }) {
-  const th = THEMES.find((t) => t.key === themeKey)!.swatches;
-  if (view === "app") {
-    return (
-      <div style={{ display: "grid", gridTemplateColumns: "120px 1fr", minHeight: 300 }}>
-        <div style={{ background: th[0], padding: "12px 8px", display: "flex", flexDirection: "column", gap: 6 }}>
-          {["Home", "Organisations", "Firms", "Library"].map((l, i) => (
-            <div key={l} style={{ padding: "6px 8px", borderRadius: 8, color: "#fff", fontSize: 11, background: i === 1 ? th[1] : undefined }}>{l}</div>
-          ))}
-        </div>
-        <div style={{ padding: 16, display: "flex", flexDirection: "column", gap: 10 }}>
-          <b className="serif" style={{ fontSize: 18 }}>Directory</b>
-          <div className="row gap8">
-            <span style={{ height: 28, padding: "0 12px", borderRadius: 99, background: th[1], color: "#fff", fontSize: 11, display: "inline-flex", alignItems: "center" }}>All</span>
-            <span className="tag">Banks</span>
-            <span className="tag">Payments</span>
-          </div>
-          {[1, 2, 3].map((i) => <div key={i} className="skel" style={{ height: 30, animation: "none" }} />)}
-        </div>
-      </div>
-    );
-  }
-  return (
-    <div style={{ padding: 20, background: "#f4f5fb" }}>
-      <div className="mail">
-        <div className="mh">
-          <b style={{ color: "var(--text)" }}>You are invited to {TENANT.name} on SuperAtlas</b>
-          <span>From: {TENANT.name} &lt;no-reply@{TENANT.domain}&gt;</span>
-        </div>
-        <div style={{ height: 6, background: th[1] }} />
-        <div className="mb col gap12">
-          <div className="row gap8">
-            <span className="logo s32" style={{ background: th[1] }}>{TENANT.initials}</span>
-            <b>{TENANT.name}</b>
-          </div>
-          <p>Hello, you have been invited to join {TENANT.name}&rsquo;s supervision portal.</p>
-          <span style={{ alignSelf: "flex-start", padding: "8px 14px", borderRadius: 10, background: th[1], color: "#fff", fontWeight: 600, fontSize: 13 }}>Accept invitation</span>
-          <p className="cap muted">Powered by SuperAtlas</p>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 export default function BrandingPage() {
   const toast = useToast();
@@ -68,12 +25,9 @@ export default function BrandingPage() {
   }, [theme]);
 
   return (
-    <AppShell workspace="regulator">
-      <PageHead title="Profile" sub="How NITDA appears to organisations and assurance firms, on screen and in emails." />
-      <div className="tabs" role="tablist">
-        <Link href="/regulator/profile" role="tab">Details</Link>
-        <button role="tab" className="on">Branding</button>
-      </div>
+    <AppShell workspace="regulator" crumbs={[{ label: "Profile", href: "/regulator/profile" }, { label: "Branding" }]}>
+      <SettingsShell active="profile/branding">
+      <PageHead title="Branding" sub="Your name, logo and colours inside the workspace and in every email." />
       <p className="muted small">Your name, logo and colours appear inside the workspace and on every email you send. Sign-in stays SuperAtlas-branded, so everyone has one place to sign in.</p>
 
       <div className="grid side">
@@ -130,6 +84,7 @@ export default function BrandingPage() {
           </div>
         </form>
       </div>
+      </SettingsShell>
     </AppShell>
   );
 }

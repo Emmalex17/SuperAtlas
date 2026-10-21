@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AnyWorkspaceShell } from "@/components/AnyWorkspaceShell";
 import { PageHead, Button, Field, Tile, Chip } from "@/components/ui";
@@ -32,6 +32,14 @@ export default function AccountPage() {
   const toast = useToast();
   const session = getSession();
   const [tab, setTab] = useState<Tab>("profile");
+
+  useEffect(() => {
+    const requested = new URLSearchParams(window.location.search).get("tab");
+    if (requested && TABS.some((t) => t.id === requested)) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time read of the browser-only URL query string, which cannot be observed during SSR.
+      setTab(requested as Tab);
+    }
+  }, []);
   const [sessions, setSessions] = useState<Session[]>(SESSIONS);
   const [changePwOpen, setChangePwOpen] = useState(false);
   const [newCodesOpen, setNewCodesOpen] = useState(false);

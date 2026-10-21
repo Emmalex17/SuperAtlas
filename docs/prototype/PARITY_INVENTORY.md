@@ -107,7 +107,7 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 
 ### `welcome`: Set up your workspace
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Regulator (M. Bello) · Layout: public · Breadcrumb: none
 - Reference: `screens/welcome.jpg`
 - Headings and section titles: “Confirm your profile”
@@ -116,7 +116,7 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 
 ### `profile`: Profile
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Regulator (M. Bello) · Layout: app · Breadcrumb: Profile > Details
 - Reference: `screens/profile.jpg`
 - Headings and section titles: “Profile” · “Details” · “Logo” · “Preview”
@@ -126,7 +126,7 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 
 ### `profile/branding`: Branding
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Regulator (M. Bello) · Layout: app · Breadcrumb: Profile > Branding
 - Reference: `screens/profile_branding.jpg`
 - Headings and section titles: “Branding” · “Preview” · “Theme” · “Name and web address”
@@ -135,11 +135,11 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 - Buttons and links: “SuperAtlas default Navy and indigo” · “Forest Deep green” · “Ocean Deep blue” · “Save branding”
 - Status chips seen: “DNS verified”
 - Tab states (each must match its screenshot):
-    - [ ] “Invitation email”: `screens/profile_branding__invitation-email.jpg`
+    - [x] “Invitation email”: `screens/profile_branding__invitation-email.jpg`
 
 ### `team`: Team
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Regulator (M. Bello) · Layout: app · Breadcrumb: Team
 - Reference: `screens/team.jpg`
 - Headings and section titles: “Team”
@@ -148,11 +148,11 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 - Buttons and links: “Invite staff”
 - Status chips seen: “Admin” · “Active” · “Supervisor” · “Reviewer” · “Viewer”
 - Tab states (each must match its screenshot):
-    - [ ] “Roles and permissions”: `screens/team__roles-and-permissions.jpg`
+    - [x] “Roles and permissions”: `screens/team__roles-and-permissions.jpg`
 
 ### `settings/categories`: Categories
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Regulator (M. Bello) · Layout: app · Breadcrumb: Settings > Categories
 - Reference: `screens/settings_categories.jpg`
 - Headings and section titles: “Categories” · “How categories are used”
@@ -160,13 +160,13 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 - Buttons and links: “Import spreadsheet” · “Add sector”
 - Status chips seen: “International” · “National” · “Regional” · “State” · “Unit” · “PSSP” · “PTSP” · “Super-agent” · “Ultra-high level” · “Extra-high level” · “Ordinary-high level”
 - Tab states (each must match its screenshot):
-    - [ ] “Tags 4”: `screens/settings_categories__tags-4.jpg`
-    - [ ] “Saved groups 2”: `screens/settings_categories__saved-groups-2.jpg`
-    - [ ] “History”: `screens/settings_categories__history.jpg`
+    - [x] “Tags 4”: `screens/settings_categories__tags-4.jpg`
+    - [x] “Saved groups 2”: `screens/settings_categories__saved-groups-2.jpg`
+    - [x] “History”: `screens/settings_categories__history.jpg`
 
 ### `settings/categories/import`: Import categories
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Regulator (M. Bello) · Layout: app · Breadcrumb: Settings > Categories > Import
 - Reference: `screens/settings_categories_import.jpg`
 - Headings and section titles: “Import categories from a spreadsheet”
@@ -175,7 +175,7 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 
 ### `settings/scoring`: Scoring schemes
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Regulator (M. Bello) · Layout: app · Breadcrumb: Settings > Scoring schemes
 - Reference: `screens/settings_scoring.jpg`
 - Headings and section titles: “Scoring schemes” · “Rating bands”
@@ -185,7 +185,7 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 
 ### `settings/firm-types`: Firm types
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Regulator (M. Bello) · Layout: app · Breadcrumb: Settings > Firm types
 - Reference: `screens/settings_firm-types.jpg`
 - Headings and section titles: “Firm types” · “Audit & assurance” · “Data protection (DPCO)” · “Cybersecurity assessor” · “Advisory & remediation” · “Rules for every type”
@@ -195,7 +195,7 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 
 ### `settings/deadlines`: Deadlines and reminders
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Regulator (M. Bello) · Layout: app · Breadcrumb: Settings > Deadlines & reminders
 - Reference: `screens/settings_deadlines.jpg`
 - Headings and section titles: “Deadlines & reminders” · “Responses and returns” · “Invitations and digests” · “Example”
@@ -204,7 +204,7 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 
 ### `settings/findings`: Finding classes
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Regulator (M. Bello) · Layout: app · Breadcrumb: Settings > Finding classes
 - Reference: `screens/settings_findings.jpg`
 - Headings and section titles: “Finding classes”
@@ -213,7 +213,7 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 
 ### `settings/compliance`: Compliance status
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Regulator (M. Bello) · Layout: app · Breadcrumb: Settings > Compliance status
 - Reference: `screens/settings_compliance.jpg`
 - Headings and section titles: “Compliance status” · “How status is worked out” · “Benchmarks” · “Enforcement watch”
@@ -224,7 +224,7 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 
 ### `settings/actions`: Action types
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Regulator (M. Bello) · Layout: app · Breadcrumb: Settings > Action types
 - Reference: `screens/settings_actions.jpg`
 - Headings and section titles: “Action types”
@@ -234,7 +234,7 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 
 ### `account`: My account
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Any (shown as regulator) · Layout: app · Breadcrumb: Account > My account
 - Reference: `screens/account.jpg`
 - Headings and section titles: “My account” · “M. Bello”
@@ -242,13 +242,13 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 - Form fields: “Full name” · “Job title” · “Email” · “Phone (optional)”
 - Buttons and links: “Change photo” · “Save changes”
 - Tab states (each must match its screenshot):
-    - [ ] “Security”: `screens/account__security.jpg` · shows: “Password” · “Multi-factor authentication”
-    - [ ] “Notifications”: `screens/account__notifications.jpg`
-    - [ ] “Sessions 3”: `screens/account__sessions-3.jpg`
+    - [x] “Security”: `screens/account__security.jpg` · shows: “Password” · “Multi-factor authentication”
+    - [x] “Notifications”: `screens/account__notifications.jpg`
+    - [x] “Sessions 3”: `screens/account__sessions-3.jpg`
 
 ### `notifications`: Notifications
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Any (shown as regulator) · Layout: app · Breadcrumb: Notifications
 - Reference: `screens/notifications.jpg`
 - Headings and section titles: “Notifications”
@@ -257,7 +257,7 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 
 ### `audit`: Audit trail
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Any (shown as regulator) · Layout: app · Breadcrumb: Audit trail
 - Reference: `screens/audit.jpg`
 - Headings and section titles: “Audit trail”
@@ -279,7 +279,7 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 
 ### `organisations/invite`: Invite organisations
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Regulator (M. Bello) · Layout: app · Breadcrumb: Organisations > Invite
 - Reference: `screens/organisations_invite.jpg`
 - Headings and section titles: “Invite organisations”

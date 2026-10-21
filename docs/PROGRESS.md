@@ -31,32 +31,41 @@ The earlier (now superseded) `ddf4619`/`2ec46d0` commits were never reverted or 
   4. Confirm `main` and `staging` are in sync — `git diff origin/staging origin/main --stat` is empty (zero content drift). The hashes themselves (`git rev-parse origin/main` / `origin/staging`) will usually differ once any promotion has used a merge commit, which is expected, not a problem — see "Deployment-identity fix" above for why. Record both hashes and confirm the diff is empty here.
 - **Never** commit directly to `main`, **never** force-push, **never** promote `staging` → `main` while a check is red.
 
-## Current state (2026-10-21, ~07:40)
+## Current state (2026-10-21, ~09:15)
 
-**Phase:** Step 1 (audit) done. Step 2 (foundations) substantially done. **P1 (Step 3) is now fully closed: 16/16 Matches.** About to start P2.
+**Phase:** Step 1 (audit) done. Step 2 (foundations) substantially done. **P1 and P2 (Step 3) are both now fully closed: 16/16 and 24/24 Matches.** About to start P3.
 
-**Pushed to `staging` and `main`, both deployed `Ready` and verified live:**
-- App shell foundations: Ctrl/⌘K command palette (`src/lib/search.ts`), "waiting for you" tasks drawer with live per-workspace counts (`src/lib/tasks.ts`), bell/user-menu converted to real popovers, sectioned sidebar nav with live count badges, Help dialog, "Powered by SuperAtlas" footer, 15-minute idle-timeout warning. Escape now closes Dialog/Drawer (it didn't before).
-- Shared `StatusChip`/`statusTone()` (45-word status→tone/icon map), `FilterPills`, `KTile`, `ChartCard`, `MiniTable` (`src/components/ui.tsx`); chart-kit string-builders `chColumns`, `chBars`, `chStack`, `chFunnel`, `chHeat`, `chDots` (`src/lib/charts.ts`); all matching CSS in `globals.css`. **Built but not yet exercised by a real screen** — unverified-in-context until the first dashboard/analytics screen that needs one (P5's Analytics tab, P8/P9's Insights tabs, P10's dashboards). Drill/click interactivity deliberately deferred to that point too.
-- **P1 fully closed, 16/16 Matches** (was 13/16, 3 Missing): built the three invitation screens (`src/lib/invites.ts`, `src/components/InviteFlow.tsx`, `src/app/invitation/page.tsx`, `src/app/invitation/[id]/page.tsx`), all three live-verified pixel-identical to their reference screenshots with the full accept → password → MFA → destination flow working (regulator → `/welcome`, Zenith → `/organisation`, Deloitte → `/firm` — the latter two land on the plain dashboard rather than `org/welcome`/`firm/welcome` since those don't exist yet; P3 should update `INVITES[...].next` once built). Removed `signin`'s leftover `/register` link. `DemoAccess` popover now closes on outside-click/Escape. `TENANT.col` (`#0B7A3E`) added to `mockData.ts` — fixes the invitation emails' NITDA logo colour.
-- `docs/prototype/PARITY_INVENTORY.md`'s full P1 section (13 checkboxes) ticked; `docs/PARITY_AUDIT.md` updated (P1 section, overview table, gaps #6 and #9 marked resolved/fixed).
-- Verified: `tsc --noEmit`, `eslint src`, `npm run build` all clean on the final commit.
+**Pushed to `staging` and `main` as of the last promotion (identity-fix commits through `ca1a1db`/`d018a29`), both deployed `Ready` and verified live.** The P2 work below is committed locally but **not yet pushed** — see "Exact next step" for the pending promotion.
 
-**Confirmed final deploy state:** `origin/main` = `ca1a1db`, `origin/staging` = `d018a29` — `git diff origin/staging origin/main --stat` empty (zero content drift). Production (`superatlas-green.vercel.app`) deployment for `ca1a1db` reached `Ready`; spot-checked `/invitation/zenith` live on production, renders correctly.
+- App shell foundations, chart-kit/shared components, and P1 (16/16 Matches) — see git history, all previously pushed and confirmed live.
+- **P2 fully closed, 24/24 Matches** (was 2/24, 10 Different, 12 Missing):
+  - Built `SettingsShell`/`SETTINGS_NAV` (`src/components/SettingsShell.tsx`) — the shared left-nav layout (Workspace: Profile/Branding/Team, Supervision: Categories/Firm types/Scoring schemes/Deadlines & reminders/Finding classes/Compliance status/Action types). Found and fixed a real bug while building it: wrapping each nav group in its own `<div>` broke the prototype's flat flex-column structure, causing multi-word labels ("Firm types") to word-wrap mid-phrase — fixed by using `Fragment` instead, keeping `.set-g`/`<a>` as direct children of `.set-nav` like the prototype's own flat HTML.
+  - Wired real per-page breadcrumbs through `AppShell`'s `crumbs` prop on every P2 screen (first phase to actually use it).
+  - Added the regulator sidebar's "Settings" gear-icon link between Help and the footer (`AppShell.tsx`), with `pathname`-based active-state matching across all settings routes plus `profile`/`profile/branding`/`team`. Removed "Team" and "Profile" as separate top-level sidebar items (they live under Settings in the prototype, not the main nav).
+  - Built all 7 missing `settings/*` screens (`src/app/regulator/settings/{categories,categories/import,scoring,firm-types,deadlines,findings,compliance,actions}/page.tsx`), wiring up the previously-orphaned `schemes.json`/`deadlines.json`/`findingClasses.json`/`compliance.json`/`actionTypes.json` data layer via new exports (`SCHEMES`/`DEADLINES`/`FINDING_CLASSES`/`COMPLIANCE_SETTINGS`/`ACTION_TYPES`) and new mutators in `src/lib/cases.ts`/`enforcement.ts`. Added `CATEGORIES` counts/`TAGS`/`GROUPS`/`CAT_HISTORY` plus a full set of mutators to `mockData.ts` for the categories tree editor (add/rename/delete/reorder at sector/type/tier level, tag add/remove, saved-group create) and the 3-step categories-import wizard (exact 18-row seed, duplicate/missing-sector fix flows) — live-verified end to end, including a real import that added 7 new categories correctly.
+  - Fixed `profile/branding`'s "Profile"-instead-of-"Branding" heading bug.
+  - Fixed `welcome`'s missing live branding preview-box by extracting the existing `profile/branding` preview into a shared `BrandPreview` component (`src/components/BrandPreview.tsx`), used by both screens now.
+  - Fixed `notifications`/`account`'s "Preferences" deep-link — `account/page.tsx` now reads a `?tab=` query param via `window.location.search` in a `useEffect` (avoiding `useSearchParams()`'s Suspense-boundary requirement, consistent with this codebase's established browser-only-read pattern), and `notifications`'s "Preferences" button pushes to `/account?tab=notif`.
+  - Fixed `audit`'s missing "Apply" button — filters are now staged in draft state and only applied on form submit, matching the prototype (was live-filtering on every keystroke before).
+  - Built `organisations/invite`'s full "Spreadsheet" bulk-invite mode (mode-switch segmented control defaulting to Spreadsheet, template download, upload, a processing step, review table with per-row tier-fix/category-conflict resolution, "Send N invitations") alongside the existing single-organisation form, sharing a new `InviteEmailPreview` component (`src/components/InviteEmailPreview.tsx`). Added `inviteOrganisation`/`resendOrInvite` mutators to `mockData.ts`. Live-verified end to end: fixed both error rows, sent 4 invitations, confirmed all 4 landed in the organisations directory with correct categories and "Invited" status.
+- `docs/prototype/PARITY_INVENTORY.md`'s full P2 section (23 checkboxes) ticked, plus `organisations/invite`'s checkbox (filed under P3 in that doc). `docs/PARITY_AUDIT.md` updated: P2 section rewritten, overview table, "10 biggest gaps" #4 marked resolved, P3's `organisations/invite` row (it was duplicated across both phase tables in the original audit) updated to Matches too.
+- Verified: `tsc --noEmit`, `eslint src`, `npm run build` all clean.
 
-No WIP outstanding. Working tree clean as of this point in the session.
+No WIP outstanding beyond the pending commit/push/promote described next. Working tree has the P2 changes staged for commit as of this point.
 
 ## Exact next step
 
-Move to Step 3, P2 (`docs/PARITY_AUDIT.md`'s P2 section — 2 Matches/10 Different/12 Missing). The biggest item is the entire regulator Settings section (`settings/categories`, `settings/scoring`, `settings/firm-types`, `settings/deadlines`, `settings/findings`, `settings/compliance`, `settings/actions` — all Missing, though their typed JSON data already exists and is unused) plus the shared `settingsShell`/`SETTINGS_NAV` left-nav layout that `profile`, `profile/branding`, and `team` all need to be rebuilt under (currently ad-hoc top tabs with no left nav, wrong breadcrumb). Read the full P2 section in `docs/PARITY_AUDIT.md` (and its "Questions") before starting — there's an open question there about whether to build `settingsShell` as shared infrastructure first (affects 4+ already-built screens plus all 7 missing ones) before any individual Settings screen.
+1. Commit the P2 work as Emmalex17 (check identity first) with message `ui-parity: P2 complete — 24/24 Matches`, push to `staging`, confirm the Vercel staging deployment is green, then promote to `main` via a merge-commit PR (per the standing rule), confirm production is green, and record the final `main`/`staging` hashes here (with a `git diff origin/staging origin/main --stat` empty-diff check, not literal hash equality — see the "Deployment-identity fix" section above for why).
+2. Move to Step 3, P3 (`docs/PARITY_AUDIT.md`'s P3 section — now 10/32 Matches, 4 Different, 18 Missing after today's `organisations/invite` fix). The biggest items: the entire org-side "Compliance" tabbed surface doesn't exist (tracked as gap #1, now the single biggest gap in the whole project); `org/welcome`, `org/team`, `org/profile` (5 tabs), `firm/welcome`, `firm/team`, `firm/profile` (5 tabs) are all missing — orgs/firms have no self-service workspace at all (gap #3); `organisations/category` (the category drill-down ranking screen) is missing; `organisations/profile`'s Compliance tab and `firms/profile`'s Performance tab are both missing. Read the full P3 section and its "Questions" before starting.
+3. Once P3's `org/welcome`/`firm/welcome` exist, update `src/lib/invites.ts`'s `INVITES.zenith.next`/`INVITES.deloitte.next` to point at them instead of the plain `/organisation`/`/firm` dashboards (noted as a follow-up when P1's invitation flow was built).
 
-## Audit summary (from `docs/PARITY_AUDIT.md`, P1 now updated)
+## Audit summary (from `docs/PARITY_AUDIT.md`, P1 and P2 now updated)
 
 | Phase | Matches | Different | Missing |
 |---|---|---|---|
 | P1 Public site and sign-in | **16** | **0** | **0** |
-| P2 Regulator setup, settings, account | 2 | 10 | 12 |
-| P3 Organisations and assurance firms | 9 | 5 | 18 |
+| P2 Regulator setup, settings, account | **24** | **0** | **0** |
+| P3 Organisations and assurance firms | 10 | 4 | 18 |
 | P4 Requirements library | 1 | 4 | 3 |
 | P5 Programmes and engagements | 3 | 6 | 2 |
 | P6 Answering and assessment | 0 | 5 | 6 |
@@ -64,18 +73,20 @@ Move to Step 3, P2 (`docs/PARITY_AUDIT.md`'s P2 section — 2 Matches/10 Differe
 | P8 Data returns | 2 | 4 | 2 |
 | P9 Compliance and enforcement | 0 | 6 | 9 |
 | P10 Dashboards, search, cross-cutting | 1 | 5 | 1 |
-| **Total** | **42** | **50** | **58** |
+| **Total** | **64** | **39** | **46** |
 
-The 10 biggest gaps are listed in `docs/PARITY_AUDIT.md` — worth re-reading before picking a phase; #6 (app shell) and #9 (P1 invitations/signin) are now marked resolved there, so #4 (P2 Settings) is effectively the next biggest open item and lines up with where P2 picks up.
+(Totals carry a ~1-row bookkeeping wrinkle from `organisations/invite` being listed in both P2's and P3's tables in the original Step-1 audit — not worth untangling further; both occurrences now correctly say Matches.)
+
+The 10 biggest gaps are listed in `docs/PARITY_AUDIT.md` — #4 (P2 Settings), #6 (app shell) and #9 (P1 invitations/signin) are now all marked resolved there, so #1 (P9's org-side Compliance surface) and #3 (P3's missing org/firm self-service workspaces) are the two biggest open items, and #3 lines up with where P3 picks up.
 
 ## Remaining Step 2 foundations (lower priority, not blocking Step 3)
 
-- Settings shell (`settingsShell`/`SETTINGS_NAV`) — build when P2's Settings screens are actually built.
 - Sidebar brand block: prototype shows tenant logo+name+"Supervision workspace"/"Supervised by NITDA" subtitle + a collapse/rail toggle (`[` key). App still shows the SuperAtlas logo instead. Cosmetic, not blocking page builds.
-- Per-page breadcrumbs: `AppShell`'s `crumbs` prop exists and works (tested), but no page passes it yet — each phase's screens need to pass their own `crumbs` as they're built.
+- Remaining phases still need to adopt the `crumbs` prop screen-by-screen as they're built (P2 is the first phase to actually pass it).
 - Toast: prototype auto-dismisses at 4200ms with an explicit × button; app dismisses at 3500ms with no × button.
 - Dialog: still missing auto-focus-of-first-field on open (prototype's `openDialog` does this).
 - Chart-kit drill/click interactivity (`data-act="drill"` → opens a drawer of organisations) was deliberately left out of the new `chBars`/`chColumns`/`chStack`/`chFunnel`/`chHeat`/`chDots` — build it when the first screen that needs it is reached, since the drawer content needed to design the drill API concretely only exists once there's a real caller.
+- `KTile`/`ChartCard`/the chart-kit functions are still unexercised by any real screen — first real use (and visual verification) will come whenever P5/P8/P9/P10's analytics/Insights/dashboard screens are built.
 
 ## How to resume cleanly
 

@@ -16,7 +16,11 @@ export default function AuditPage() {
   const session = getSession();
   const [who, setWho] = useState("Anyone");
   const [q, setQ] = useState("");
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- applied but intentionally not filtered on, matching the prototype's own auditFilter() (date range is captured but has no effect on the rows shown)
   const [range, setRange] = useState("Last 30 days");
+  const [whoDraft, setWhoDraft] = useState("Anyone");
+  const [qDraft, setQDraft] = useState("");
+  const [rangeDraft, setRangeDraft] = useState("Last 30 days");
   const [selected, setSelected] = useState<AuditEntry | null>(null);
 
   if (!session) return null;
@@ -24,6 +28,13 @@ export default function AuditPage() {
   const scope = session.workspace === "regulator" ? AUDIT : AUDIT.filter((a) => a.workspace === session.workspace);
   const people = ["Anyone", ...Array.from(new Set(scope.map((a) => a.who)))];
   const rows = scope.filter((a) => (who === "Anyone" || a.who === who) && (!q || (a.record + a.action).toLowerCase().includes(q.toLowerCase())));
+
+  function applyFilter(e: React.FormEvent) {
+    e.preventDefault();
+    setQ(qDraft);
+    setWho(whoDraft);
+    setRange(rangeDraft);
+  }
 
   return (
     <AnyWorkspaceShell>
@@ -33,25 +44,22 @@ export default function AuditPage() {
         sub={session.workspace === "regulator" ? "Every action across your workspace, organisations and firms. Entries cannot be edited or deleted." : "Every action in your workspace. Entries cannot be edited or deleted."}
         actions={<Button variant="outline" icon="export" onClick={() => toast("Export started. You will get an email when it is ready.")}>Export CSV</Button>}
       />
-      <form
-        className="card tight row wrap"
-        style={{ gap: 12 }}
-        onSubmit={(e) => e.preventDefault()}
-      >
+      <form className="card tight row wrap" style={{ gap: 12 }} onSubmit={applyFilter}>
         <div className="inp-wrap grow" style={{ minWidth: 220 }}>
           <Icon name="magnifying-glass" />
-          <input className="inp" placeholder="Search records and actions" value={q} onChange={(e) => setQ(e.target.value)} />
+          <input className="inp" placeholder="Search records and actions" value={qDraft} onChange={(e) => setQDraft(e.target.value)} />
         </div>
-        <select className="sel" style={{ width: 200 }} value={who} onChange={(e) => setWho(e.target.value)}>
+        <select className="sel" style={{ width: 200 }} value={whoDraft} onChange={(e) => setWhoDraft(e.target.value)}>
           {people.map((p) => (
             <option key={p}>{p}</option>
           ))}
         </select>
-        <select className="sel" style={{ width: 170 }} value={range} onChange={(e) => setRange(e.target.value)}>
+        <select className="sel" style={{ width: 170 }} value={rangeDraft} onChange={(e) => setRangeDraft(e.target.value)}>
           {["Today", "Last 7 days", "Last 30 days", "This year"].map((r) => (
             <option key={r}>{r}</option>
           ))}
         </select>
+        <Button type="submit" variant="secondary" icon="funnel">Apply</Button>
       </form>
       <div className="card p0">
         <div className="tbl-wrap">
