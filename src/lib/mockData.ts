@@ -11,6 +11,8 @@ export type OrgApplication = {
 export type OrgInvite = { email: string; sent?: string; expires?: string; by?: string; history: [string, string, string][] };
 export type OrgOfficer = { initials: string; name: string; role: string; email: string };
 export type OrgColleague = { email: string; name: string; role: string; status: string };
+export type OrgLink = { name: string; rel: string };
+export type OrgOnboard = { profile: boolean; logo: boolean; officers: boolean; people: boolean; group: boolean };
 
 export type Organisation = {
   id: string;
@@ -38,7 +40,17 @@ export type Organisation = {
   invite?: OrgInvite;
   officers?: OrgOfficer[];
   colleagues?: OrgColleague[];
+  links?: OrgLink[];
+  logoUp?: boolean;
+  onboard?: OrgOnboard;
 };
+
+/** Marks every self-service onboarding step done, the prototype's lazy `o.onboard = o.onboard || {...}`
+ * default — an organisation only shows an incomplete setup card once something explicitly clears a step. */
+export function ensureOrgOnboard(o: Organisation): OrgOnboard {
+  if (!o.onboard) o.onboard = { profile: true, logo: true, officers: true, people: true, group: true };
+  return o.onboard;
+}
 
 export const ORGANISATIONS: Organisation[] = [
   { id: "zenith", name: "Zenith Bank Plc", initials: "ZB", color: "#C8102E", sector: "Banking", type: "Commercial bank", tier: "National", status: "Verified", officer: "A. Okonkwo", joined: "Mar 2026", last: "Today", hq: "Lagos", tags: ["Listed", "D-SIB"], web: "zenithbank.com", rc: "RC 000000 (sample)", email: "compliance@zenith.example",
@@ -154,6 +166,8 @@ export type AccApplication = {
   infoMsg?: string;
 };
 
+export type FirmOnboard = { profile: boolean; logo: boolean; people: boolean; clients: boolean };
+
 export type Firm = {
   id: string;
   name: string;
@@ -170,7 +184,15 @@ export type Firm = {
   suspendReason?: string;
   people?: FirmPerson[];
   clients?: FirmClient[];
+  logoUp?: boolean;
+  onboard?: FirmOnboard;
 };
+
+/** Marks every self-service onboarding step done, mirroring ensureOrgOnboard() above for firms. */
+export function ensureFirmOnboard(f: Firm): FirmOnboard {
+  if (!f.onboard) f.onboard = { profile: true, logo: true, people: true, clients: true };
+  return f.onboard;
+}
 
 export const FIRMS: Firm[] = [
   { id: "deloitte", name: "Deloitte & Touche (Nigeria)", initials: "D", color: "#4E8A12", types: ["Audit & assurance", "Cybersecurity assessor"], status: "Accredited", assigned: 14, renews: "Jan 2027", since: "Feb 2024", city: "Lagos · Abuja", web: "deloitte.com/ng", email: "regulatory@deloitte.example",
@@ -641,4 +663,117 @@ export function resendOrInvite(r: { org: string; email: string; initials: string
     return existing.id;
   }
   return inviteOrganisation(r);
+}
+
+/* ================= Self-service onboarding (org/welcome, org/team, org/profile) =================
+ * Mutators behind the organisation's own setup wizard and team/profile screens — the prototype's
+ * ACT.form_obProfile/obLogo/form_obOfficer/obOffDel/form_obColleague/form_obLink (onboarding.js)
+ * and ACT.form_myOrg/myFirm (workspace.js). */
+
+export function saveOrgProfile(o: Organisation, patch: { rc?: string; web?: string; hq?: string; email?: string }) {
+  Object.assign(o, patch);
+}
+
+export function setOrgLogoUploaded(o: Organisation) {
+  o.logoUp = true;
+}
+
+export function addOrgOfficer(o: Organisation, officer: { name: string; role: string; email: string }) {
+  const initials = officer.name.split(/\s+/).map((w) => w[0]).join("").slice(0, 2).toUpperCase();
+  (o.officers ??= []).push({ initials, name: officer.name, role: officer.role, email: officer.email });
+}
+
+export function removeOrgOfficer(o: Organisation, index: number) {
+  o.officers?.splice(index, 1);
+}
+
+export function inviteColleague(o: Organisation, email: string, role: string) {
+  const name = email.split("@")[0].replace(/\./g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+  (o.colleagues ??= []).push({ email, name, role, status: "Invited" });
+}
+
+export function addOrgLink(o: Organisation, link: OrgLink) {
+  (o.links ??= []).push(link);
+  o.group = link.name;
+}
+
+export function completeOrgOnboardStep(o: Organisation, step: keyof OrgOnboard) {
+  ensureOrgOnboard(o)[step] = true;
+}
+
+/** An organisation's own "Request a classification change" submission — the prototype's ACT.form_cc. */
+export function requestClassificationChange(o: Organisation, to: { sector: string; type: string; tier: string }, reason: string, file: string) {
+  const ref = `CC-0${219 + CLASS_REQS.length}`;
+  CLASS_REQS.unshift({
+    id: `cc-${Date.now()}`,
+    ref,
+    org: o.id,
+    by: `${o.officer}, Chief compliance officer`,
+    date: "19 Oct 2026",
+    from: { sector: o.sector, type: o.type, tier: o.tier },
+    to,
+    reason,
+    file,
+    status: "Pending",
+    impact: `${o.name} moves to ${catLabel(to.type, to.tier)}. Requirements for that category apply from the next cycle. Open submissions keep their current requirements.`,
+  });
+  return ref;
+}
+
+export function withdrawClassificationRequest(id: string) {
+  const i = CLASS_REQS.findIndex((r) => r.id === id);
+  if (i >= 0) CLASS_REQS.splice(i, 1);
+}
+
+/* ---------- Self-service onboarding (firm/welcome, firm/team, firm/profile) ---------- */
+
+export function saveFirmProfile(f: Firm, patch: { web?: string; city?: string; email?: string }) {
+  Object.assign(f, patch);
+}
+
+export function setFirmLogoUploaded(f: Firm) {
+  f.logoUp = true;
+}
+
+export function addFirmPerson(f: Firm, person: { name: string; role: "Lead auditor" | "Assessor"; title?: string; cred?: string; expires?: string }) {
+  const initials = person.name.split(/\s+/).map((w) => w[0]).join("").slice(0, 2).toUpperCase();
+  (f.people ??= []).push({ name: person.name, initials, role: person.role, title: person.title ?? "", cred: person.cred || "—", expires: person.expires || "—", status: "Active" });
+}
+
+export function removeFirmPerson(f: Firm, index: number) {
+  f.people?.splice(index, 1);
+}
+
+export function declareFirmClient(f: Firm, client: { org: string; service?: string; since?: string }) {
+  const initials = client.org.split(/\s+/).map((w) => w[0]).join("").slice(0, 2).toUpperCase();
+  (f.clients ??= []).push({ org: client.org, initials, color: "#607D8B", service: client.service || "Advisory", since: client.since || "2026" });
+}
+
+export function removeFirmClient(f: Firm, index: number) {
+  f.clients?.splice(index, 1);
+}
+
+export function completeFirmOnboardStep(f: Firm, step: keyof FirmOnboard) {
+  ensureFirmOnboard(f)[step] = true;
+}
+
+/** A firm's own "Apply for accreditation" submission — the prototype's ACT.accNext (step 3 → 4). */
+export function submitAccreditationApplication(f: Firm, type: string, assessorNames: string[]): AccApplication {
+  const docsNeeded = ["DPCO licence from the data protection authority", "Professional indemnity insurance", "Methodology document", "Assessor CVs and certificates"];
+  const app: AccApplication = {
+    id: `acc-${Date.now()}`,
+    firm: f.id,
+    type,
+    submitted: "Today",
+    due: "16 Nov 2026",
+    status: "In review",
+    docs: docsNeeded.map((d) => [d, true] as [string, boolean]),
+    assessors: assessorNames.map((n) => {
+      const p = (f.people ?? []).find((x) => x.name === n);
+      return [n, p?.cred || "—", p?.status === "Active"] as [string, string, boolean];
+    }),
+    decl: `Independence declaration signed. Advisory clients declared: ${(f.clients ?? []).length}.`,
+  };
+  ACC_APPS.unshift(app);
+  return app;
 }

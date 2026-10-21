@@ -10,8 +10,7 @@ export type Invite = {
   role: string;
   by: string;
   /** Where /verify sends this account once MFA passes, instead of its workspace's plain dashboard —
-   * matches the prototype's INVITES[...].next. Zenith/Deloitte point at the plain dashboard for now
-   * since org/welcome and firm/welcome (P3) don't exist yet; update once those are built. */
+   * matches the prototype's INVITES[...].next. */
   next: string;
   body: string;
 };
@@ -40,7 +39,7 @@ export const INVITES: Record<InviteId, Invite> = {
     ent: "Zenith Bank Plc",
     role: "Organisation admin",
     by: "M. Bello, NITDA",
-    next: "/organisation",
+    next: "/organisation/welcome",
     body: "NITDA supervises Zenith Bank Plc as a Commercial bank · National. Accept this invitation to set up your organisation. You will answer requirements and file returns here.",
   },
   deloitte: {
@@ -52,7 +51,7 @@ export const INVITES: Record<InviteId, Invite> = {
     ent: "Deloitte & Touche (Nigeria)",
     role: "Firm admin",
     by: "M. Bello, NITDA",
-    next: "/firm",
+    next: "/firm/welcome",
     body: "Deloitte & Touche (Nigeria) is accredited by NITDA for Audit & assurance and Cybersecurity assessor work. Accept this invitation to set up your firm and add your assessors.",
   },
 };

@@ -85,6 +85,8 @@ function buildNav(account: Account): NavItem[] {
       { icon: "flag", label: "Findings", href: "/organisation/findings", count: findingsCount },
       { icon: "gavel", label: "Regulatory actions", href: "/organisation/actions", count: actionsCount },
       { icon: "files", label: "Evidence library", href: "/organisation/evidence" },
+      { icon: "users", label: "Team", href: "/organisation/team", section: "Organisation" },
+      { icon: "identification-card", label: "Profile", href: "/organisation/profile" },
     ];
   }
   // firm
@@ -94,6 +96,8 @@ function buildNav(account: Account): NavItem[] {
     { icon: "squares-four", label: "Dashboard", href: "/firm" },
     { icon: "handshake", label: "Engagements", href: "/firm/engagements", section: "Work", count: engagementsCount },
     { icon: "list-checks", label: "Assessments", href: "/firm/assessments" },
+    { icon: "users", label: "Team", href: "/firm/team", section: "Firm" },
+    { icon: "identification-card", label: "Profile", href: "/firm/profile" },
   ];
 }
 
