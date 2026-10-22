@@ -92,9 +92,11 @@ function buildNav(account: Account): NavItem[] {
   // firm
   const firmId = firmIdFor(account.entityName);
   const engagementsCount = firmId ? CASES.filter((c) => c.firm === firmId && (c.stage === "Firm to choose" || c.firmStatus === "Invited")).length : 0;
+  const firmFindingsCount = firmId ? allFindings().filter((x) => x.c.firm === firmId && x.f.status === "Fix submitted").length : 0;
   return [
     { icon: "squares-four", label: "Dashboard", href: "/firm" },
     { icon: "handshake", label: "Engagements", href: "/firm/engagements", section: "Work", count: engagementsCount },
+    { icon: "flag", label: "Findings", href: "/firm/findings", count: firmFindingsCount },
     { icon: "list-checks", label: "Assessments", href: "/firm/assessments" },
     { icon: "users", label: "Team", href: "/firm/team", section: "Firm" },
     { icon: "identification-card", label: "Profile", href: "/firm/profile" },

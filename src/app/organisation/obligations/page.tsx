@@ -3,7 +3,7 @@
 import { useReducer, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AppShell } from "@/components/AppShell";
-import { PageHead, Chip, Tile, Button, Field, AlertBox } from "@/components/ui";
+import { PageHead, Tile, Button, Field, AlertBox, StatusChip } from "@/components/ui";
 import { Dialog } from "@/components/Overlay";
 import { useToast } from "@/components/Toast";
 import { myCases, progOf, regOfProg, qsetQs, caseProgress, obligationAction, engageFirm, requestNonAccreditedFirm, accredited, conflictOf, TODAY } from "@/lib/cases";
@@ -122,7 +122,7 @@ export default function ObligationsPage() {
                           <span className="muted">NITDA assigns</span>
                         )}
                       </td>
-                      <td><Chip tone="neu">{c.stage}</Chip></td>
+                      <td><StatusChip status={c.stage} /></td>
                       <td>{c.stage === "Published" ? <><b className="serif">{c.score}</b> <span className="cap muted">score</span></> : <div className="pbar"><div className="bar"><i style={{ width: `${caseProgress(c)}%` }} /></div><span className="cap tnum">{caseProgress(c)}%</span></div>}</td>
                       <td className="small muted">{c.due}</td>
                       <td className="act-col">{actionFor(c)}</td>

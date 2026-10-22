@@ -3,7 +3,7 @@
 import { use, useEffect, useReducer, useState } from "react";
 import { useRouter, notFound } from "next/navigation";
 import { AppShell } from "@/components/AppShell";
-import { Chip, AlertBox, Field, Button, Tile, Kv } from "@/components/ui";
+import { Chip, AlertBox, Field, Button, Tile, Kv, StatusChip } from "@/components/ui";
 import { Dialog } from "@/components/Overlay";
 import { useToast } from "@/components/Toast";
 import { Icon } from "@/lib/icons";
@@ -165,7 +165,7 @@ export default function AnswerPage({ params }: { params: Promise<{ id: string }>
       <div className="rh">
         <div className="rh-main">
           <div className="overline">{o?.name}</div>
-          <div className="rh-title"><h1 className="h1">{p.name}</h1><Chip tone="neu">{c.stage}</Chip></div>
+          <div className="rh-title"><h1 className="h1">{p.name}</h1><StatusChip status={c.stage} /></div>
           <div className="rh-meta">Due {TODAY <= c.due ? c.due : c.due} · {fm ? `Assessed by ${fm.name}` : "Needs a firm"} · {p.preview ? "Outcome preview on" : "Results when published"}</div>
         </div>
         <div className="rh-act">

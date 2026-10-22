@@ -3,11 +3,11 @@
 import { use, useReducer, useState } from "react";
 import { notFound } from "next/navigation";
 import { AppShell } from "@/components/AppShell";
-import { Chip, Field, AlertBox, Kv, Button } from "@/components/ui";
+import { Chip, Field, AlertBox, Kv, Button, StatusChip } from "@/components/ui";
 import { Dialog } from "@/components/Overlay";
 import { useToast } from "@/components/Toast";
 import { Icon } from "@/lib/icons";
-import { CASES, progOf, caseScore, bandOf, outTone, schemeOf, qsetReqs, fcOf, fmtD, approveCase, returnCase, publishCase, cancelScheduleOn, overrideOutcome, type Case } from "@/lib/cases";
+import { CASES, progOf, caseScore, bandOf, outTone, schemeOf, qsetReqs, questionChoice, fcOf, fmtD, approveCase, returnCase, publishCase, cancelScheduleOn, overrideOutcome, type Case } from "@/lib/cases";
 import { ORGANISATIONS, FIRMS, TEAM } from "@/lib/mockData";
 
 const TODAY = "2026-10-19";
@@ -105,7 +105,7 @@ export default function ReviewReportPage({ params }: { params: Promise<{ id: str
         <span className="logo s48" style={{ background: o?.color }}>{o?.initials}</span>
         <div className="rh-main">
           <div className="overline">{p.name}{f ? ` · ${f.name}` : ""}</div>
-          <div className="rh-title"><h1 className="h1">{o?.name}</h1><Chip tone="neu">{c.stage}</Chip></div>
+          <div className="rh-title"><h1 className="h1">{o?.name}</h1><StatusChip status={c.stage} /></div>
           <div className="rh-meta">Signed off by {c.signed?.by || c.lead || "the firm"}{c.reportAt ? ` · submitted ${c.reportAt}` : ""}{c.reviewer ? ` · reviewer ${c.reviewer}` : ""}</div>
         </div>
       </div>
@@ -143,13 +143,20 @@ export default function ReviewReportPage({ params }: { params: Promise<{ id: str
                 <tbody>
                   {reqs.map((r) => {
                     const oc = c.outcomes[r.ref] ?? {};
+                    const yn = r.questions.filter((q) => questionChoice(q.hint) === "yn").map((q) => c.answers[q.id]?.v).filter((v): v is string => !!v);
                     return (
                       <tr key={r.ref}>
                         <td className="wrap"><span className="mono small" style={{ color: "var(--brand-600)" }}>{r.ref}</span> <span className="small">{r.t}</span></td>
-                        <td className="small">—</td>
+                        <td className="small">
+                          {yn.length ? (
+                            <div className="row wrap gap6">
+                              {yn.map((v, i) => <Chip key={i} tone={v === "Yes" ? "ok" : v === "No" ? "bad" : "neu"}>{v}</Chip>)}
+                            </div>
+                          ) : "—"}
+                        </td>
                         <td>
                           {oc.o ? <Chip tone={outTone(sch, oc.o)}>{oc.o}</Chip> : "—"}
-                          {oc.override ? <div className="cap" style={{ color: "var(--info-fg)", marginTop: 2 }}>Was {oc.override.by}</div> : null}
+                          {oc.override ? <div className="cap" style={{ color: "var(--info-fg)", marginTop: 2 }}>Was {oc.override.from} · {oc.override.by}</div> : null}
                         </td>
                         <td className="wrap small muted">{oc.override ? oc.override.reason : oc.note || ""}</td>
                         <td className="act-col">{canDecide ? <Button variant="tertiary" size="sm" onClick={() => openOverride(r.ref)} testId={`ov-${r.ref}`}>Change</Button> : null}</td>
@@ -160,6 +167,19 @@ export default function ReviewReportPage({ params }: { params: Promise<{ id: str
               </table>
             </div>
           </div>
+
+          {c.previewComments?.length ? (
+            <div className="card col gap8">
+              <div className="h4">Organisation&apos;s comments on the preview</div>
+              {c.previewComments.map((m, i) => (
+                <div className="oa" key={i}>
+                  <div className="cap mono muted">{m.ref}</div>
+                  <p className="small">&ldquo;{m.text}&rdquo;</p>
+                  <div className="cap muted">{m.by} · {m.when}</div>
+                </div>
+              ))}
+            </div>
+          ) : null}
 
           {c.findings.length ? (
             <div className="card col gap8">
@@ -213,7 +233,7 @@ export default function ReviewReportPage({ params }: { params: Promise<{ id: str
           </div>
           <div className="card col gap8">
             <div className="h4">Engagement</div>
-            <Kv pairs={[["Firm", f ? f.name : "—"], ["Lead auditor", c.lead || "—"], ["Organisation submitted", c.submitted || "—"]]} />
+            <Kv pairs={[["Firm", f ? f.name : "—"], ["Lead auditor", c.lead || "—"], ["Quality review", c.qr ? c.qr.by : "—"], ["Organisation submitted", c.submitted || "—"]]} />
           </div>
         </div>
       </div>

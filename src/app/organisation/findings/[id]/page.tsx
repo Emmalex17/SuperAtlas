@@ -17,11 +17,12 @@ import {
   askExtension,
   progOf,
   fcOf,
+  fmtD,
   FD_STATUS_CHIP,
   TODAY,
   type RemediationPlan,
 } from "@/lib/cases";
-import { FIRMS } from "@/lib/mockData";
+import { FIRMS, ORGANISATIONS } from "@/lib/mockData";
 
 const PEOPLE = ["A. Okonkwo", "C. Eze"];
 
@@ -36,6 +37,7 @@ export default function OrgFindingPage({ params }: { params: Promise<{ id: strin
 
   if (!allFindings().some((x) => x.f.id === id)) notFound();
   const { f, c } = fdFind(id);
+  const o = ORGANISATIONS.find((x) => x.id === c.org);
   const fm = FIRMS.find((x) => x.id === c.firm);
   const fc = fcOf(f.cls);
   const p = progOf(c.prog);
@@ -225,7 +227,7 @@ export default function OrgFindingPage({ params }: { params: Promise<{ id: strin
             {side}
             {canPlan && effDue(f) ? (
               f.ext?.status === "Requested" ? (
-                <AlertBox tone="warn" title="More time asked" body={`Until ${f.ext.date}. Waiting for NITDA.`} />
+                <AlertBox tone="warn" title="More time asked" body={`Until ${fmtD(f.ext.date)}. Waiting for NITDA.`} />
               ) : (
                 <Button variant="tertiary" block icon="clock-clockwise" onClick={() => setExtOpen((v) => !v)} testId="ext-ask">Ask for more time</Button>
               )
@@ -240,7 +242,16 @@ export default function OrgFindingPage({ params }: { params: Promise<{ id: strin
           </div>
           <div className="card col gap8">
             <div className="h4">Details</div>
-            <Kv pairs={[["Class", <span key="c"><span className={`chip ${fc.tone}`}>{f.cls}</span> <span className="small">{fc.name}</span></span>], ["Fix by", effDue(f) || "No deadline"], ["Assessed by", fm?.name ?? "—"], ["Owner", f.plan?.owner || "—"]]} />
+            <Kv
+              pairs={[
+                ["Class", <span key="c"><span className={`chip ${fc.tone}`}>{f.cls}</span> <span className="small">{fc.name}</span></span>],
+                ["Fix by", effDue(f) ? fmtD(effDue(f)) : "No deadline"],
+                ...(f.ext?.status === "Approved" ? ([["Original deadline", fmtD(f.due)]] as [string, string][]) : []),
+                ["Organisation", o?.name ?? ""],
+                ["Assessed by", fm?.name ?? "—"],
+                ["Owner", f.plan?.owner || "—"],
+              ]}
+            />
           </div>
         </div>
       </div>
