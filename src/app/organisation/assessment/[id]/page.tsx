@@ -3,7 +3,7 @@
 import { use, useReducer, useState } from "react";
 import { notFound, useRouter } from "next/navigation";
 import { AppShell } from "@/components/AppShell";
-import { Chip, Tabs, Button, Tile, AlertBox, Kv } from "@/components/ui";
+import { Chip, Tabs, Button, Tile, AlertBox, Kv, StatusChip } from "@/components/ui";
 import { Dialog } from "@/components/Overlay";
 import { ThreadsPanel } from "@/components/Threads";
 import { useToast } from "@/components/Toast";
@@ -68,7 +68,7 @@ export default function OrgAssessmentPage({ params }: { params: Promise<{ id: st
       <div className="rh">
         <div className="rh-main">
           <div className="overline">{f ? `Assessment by ${f.name}` : "Assessment"}</div>
-          <div className="rh-title"><h1 className="h1">{p.name}</h1><Chip tone="neu">{c.stage}</Chip></div>
+          <div className="rh-title"><h1 className="h1">{p.name}</h1><StatusChip status={c.stage} /></div>
           <div className="rh-meta">{c.submitted ? <>Submitted {c.submitted}{c.receipt ? <> · receipt <span className="mono">{c.receipt}</span></> : null}</> : "Not submitted yet"}</div>
         </div>
       </div>

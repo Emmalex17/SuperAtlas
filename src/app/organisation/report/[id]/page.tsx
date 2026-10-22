@@ -1,16 +1,77 @@
 "use client";
 
-import { use, useEffect } from "react";
+import { use, useEffect, useReducer, useState } from "react";
+import { useRouter } from "next/navigation";
 import { AppShell } from "@/components/AppShell";
-import { PageHead, Chip, Button } from "@/components/ui";
+import { PageHead, Chip, Button, Stars, Field } from "@/components/ui";
 import { Icon } from "@/lib/icons";
-import { CASES, progOf, caseScore, bandOf, outTone, schemeOf, qsetReqs, fcOf, fmtD, markOpened } from "@/lib/cases";
+import { useToast } from "@/components/Toast";
+import { CASES, progOf, caseScore, bandOf, outTone, schemeOf, qsetReqs, fcOf, fmtD, markOpened, ratingFor, addRating, type Case } from "@/lib/cases";
 import { FIRMS, ORGANISATIONS } from "@/lib/mockData";
 
 const TODAY = "2026-10-19";
+const ORG_ID = "zenith";
+const STAR_LABELS = ["", "Poor", "Below expectations", "Fine", "Good", "Excellent"];
+
+function RateCard({ c }: { c: Case | undefined }) {
+  const toast = useToast();
+  const [, bump] = useReducer((x: number) => x + 1, 0);
+  const [stars, setStars] = useState(0);
+  const [comment, setComment] = useState("");
+
+  if (!c || !c.firm) return null;
+  const f = FIRMS.find((x) => x.id === c.firm);
+  if (!f) return null;
+  const existing = ratingFor(c.id, ORG_ID);
+
+  if (existing) {
+    return (
+      <div className="card col gap8" data-test="rated">
+        <div className="h4">Your rating of {f.name}</div>
+        <Stars n={existing.stars} />
+        {existing.comment ? <p className="small muted">&ldquo;{existing.comment}&rdquo;</p> : null}
+        <p className="cap muted">Seen by NITDA. The firm sees ratings without your name.</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="card col gap12" data-test="rate-card">
+      <div>
+        <div className="h4">How did {f.name} do?</div>
+        <p className="cap muted" style={{ marginTop: 2 }}>Your rating helps NITDA oversee assurance firms. The firm sees it without your name.</p>
+      </div>
+      <div className="star-pick" role="radiogroup" aria-label="Rating">
+        {[1, 2, 3, 4, 5].map((i) => (
+          <button key={i} type="button" className={i <= stars ? "on" : ""} aria-label={`${i} star${i > 1 ? "s" : ""}`} data-test={`rate-star-${i}`} onClick={() => setStars(i)}>★</button>
+        ))}
+        <span className="cap muted">{STAR_LABELS[stars]}</span>
+      </div>
+      <Field label="Comment" htmlFor="rate-c" optional>
+        <textarea className="ta" id="rate-c" rows={3} placeholder="What went well, what could be better" value={comment} onChange={(e) => setComment(e.target.value)} />
+      </Field>
+      <div>
+        <Button
+          size="sm"
+          disabled={!stars}
+          testId="rate-go"
+          onClick={() => {
+            addRating(c, ORG_ID, stars, comment, TODAY);
+            bump();
+            toast("Thank you. Your rating has been sent.", "ok", "star");
+          }}
+        >
+          Send rating
+        </Button>
+      </div>
+    </div>
+  );
+}
 
 export default function OrgReportPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
+  const router = useRouter();
+  const toast = useToast();
   const c = CASES.find((x) => x.id === id);
   const published = c && c.stage === "Published" ? c : undefined;
 
@@ -109,9 +170,11 @@ export default function OrgReportPage({ params }: { params: Promise<{ id: string
             ) : (
               <p className="small muted">No findings.</p>
             )}
+            {published.findings.length ? <Button variant="secondary" size="sm" testId="to-findings" onClick={() => router.push("/organisation/findings")}>Plan your fixes</Button> : null}
           </div>
+          <RateCard c={published} />
           <div className="card col gap8">
-            <Button variant="outline" block icon="download-simple">Download report (PDF)</Button>
+            <Button variant="outline" block icon="download-simple" onClick={() => toast("Report downloaded")}>Download report (PDF)</Button>
             <p className="cap muted">The report and your answers are kept for 7 years.</p>
           </div>
         </div>

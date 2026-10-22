@@ -3,10 +3,12 @@
 import { useReducer, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AppShell } from "@/components/AppShell";
-import { PageHead, Chip, Button, Tile } from "@/components/ui";
+import { PageHead, Chip, Tabs, Button, Tile } from "@/components/ui";
 import { Icon } from "@/lib/icons";
+import { useToast } from "@/components/Toast";
 import { allFindings, fdCardsWithOverdue, fdOverdue, effDue, progOf, fcOf, fdLog, FD_STATUS_CHIP, FINDING_CLASSES, TODAY, type FindingWithCase } from "@/lib/cases";
 import { ORGANISATIONS, FIRMS, catLabel } from "@/lib/mockData";
+import FindingsInsights from "./Insights";
 
 function fdDue(x: FindingWithCase): React.ReactNode {
   const due = effDue(x.f);
@@ -34,7 +36,9 @@ function FdChips({ x }: { x: FindingWithCase }) {
 
 export default function FindingsPage() {
   const router = useRouter();
+  const toast = useToast();
   const [, bump] = useReducer((x: number) => x + 1, 0);
+  const [view, setView] = useState<"register" | "insights">("register");
   const [fk, setFk] = useState("");
   const [cls, setCls] = useState("all");
   const [q, setQ] = useState("");
@@ -53,8 +57,25 @@ export default function FindingsPage() {
 
   return (
     <AppShell workspace="regulator">
-      <PageHead over="NITDA" title="Findings" sub="Every finding from published reports, and how each fix is going. Firms verify fixes; you close them." actions={<Button variant="secondary" icon="export">Export</Button>} />
-      <div className="card p0">
+      <PageHead
+        title="Findings"
+        sub="Every finding from published reports, and how each fix is going. Firms verify fixes; you close them."
+        actions={
+          view === "register" ? (
+            <>
+              <button className="icon-btn bordered" title="Finding classes" aria-label="Finding classes" onClick={() => router.push("/regulator/settings/findings")}><Icon name="gear-six" /></button>
+              <Button variant="secondary" icon="export" onClick={() => toast("Export started. You will get an email with the CSV file.")}>Export</Button>
+            </>
+          ) : undefined
+        }
+      />
+      <Tabs items={[{ id: "register", label: "Register" }, { id: "insights", label: "Insights" }]} active={view} onChange={setView} />
+      {view === "insights" ? (
+        <div style={{ marginTop: 16 }}>
+          <FindingsInsights />
+        </div>
+      ) : (
+      <div className="card p0" style={{ marginTop: 16 }}>
         <div className="tbl-tools wrap">
           <div className="inp-wrap" style={{ width: 260 }}>
             <Icon name="magnifying-glass" />
@@ -118,6 +139,7 @@ export default function FindingsPage() {
         </div>
         <div className="tbl-foot">{rows.length} finding{rows.length === 1 ? "" : "s"}</div>
       </div>
+      )}
     </AppShell>
   );
 }

@@ -3,7 +3,7 @@
 import { use, useEffect, useReducer, useState } from "react";
 import { notFound } from "next/navigation";
 import { AppShell } from "@/components/AppShell";
-import { Chip, Tabs, Field, Button, AlertBox, Tile } from "@/components/ui";
+import { Chip, Tabs, Field, Button, AlertBox, Tile, StatusChip } from "@/components/ui";
 import { Dialog } from "@/components/Overlay";
 import { ThreadsPanel } from "@/components/Threads";
 import { useToast } from "@/components/Toast";
@@ -130,7 +130,7 @@ export default function AssessPage({ params }: { params: Promise<{ id: string }>
       <div className="rh">
         <div className="rh-main">
           <div className="overline">{p.name}</div>
-          <div className="rh-title"><h1 className="h1">{o?.name}</h1><Chip tone="neu">{c.stage}</Chip></div>
+          <div className="rh-title"><h1 className="h1">{o?.name}</h1><StatusChip status={c.stage} /></div>
           <div className="rh-meta">{c.lead ? `Lead ${c.lead} · ` : ""}{c.team.length ? `team ${c.team.join(", ")} · ` : ""}{c.submitted ? `submitted ${c.submitted} · ` : "not submitted yet · "}due {c.due}</div>
         </div>
       </div>

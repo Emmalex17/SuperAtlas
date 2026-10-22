@@ -596,7 +596,7 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 
 ### `reviews`: Reviews & publishing
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Regulator (M. Bello) · Layout: app · Breadcrumb: Reviews & publishing
 - Reference: `screens/reviews.jpg`
 - Headings and section titles: “Reviews & publishing”
@@ -604,15 +604,15 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 - Table columns: “ORGANISATION” · “PROGRAMME” · “FIRM” · “SCORE” · “REVIEWER” · “SUBMITTED”
 - Buttons and links: “Assign reviewer”
 - Tab states (each must match its screenshot):
-    - [ ] “Approved 1”: `screens/reviews__approved-1.jpg`
-    - [ ] “Scheduled 0”: `screens/reviews__scheduled-0.jpg` · shows: “Nothing here”
-    - [ ] “Held back 0”: `screens/reviews__held-back-0.jpg` · shows: “Nothing here”
-    - [ ] “Published 56”: `screens/reviews__published-56.jpg`
-    - [ ] “Tracker”: `screens/reviews__tracker.jpg`
+    - [x] “Approved 1”: `screens/reviews__approved-1.jpg`
+    - [x] “Scheduled 0”: `screens/reviews__scheduled-0.jpg` · shows: “Nothing here”
+    - [x] “Held back 0”: `screens/reviews__held-back-0.jpg` · shows: “Nothing here”
+    - [x] “Published 56”: `screens/reviews__published-56.jpg`
+    - [x] “Tracker”: `screens/reviews__tracker.jpg`
 
 ### `reviews/report`: Review report
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Regulator (M. Bello) · Layout: app · Breadcrumb: Reviews & publishing > Wema Bank Plc
 - Reference: `screens/reviews_report.jpg`
 - Headings and section titles: “Wema Bank Plc” · “Outcomes” · “Findings” · “Decision” · “Engagement”
@@ -623,7 +623,7 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 
 ### `org/report`: Report
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Organisation (Zenith) · Layout: app · Breadcrumb: Obligations > Consumer protection review 2025
 - Reference: `screens/org_report.jpg`
 - Headings and section titles: “Zenith Bank Plc” · “By section” · “Outcomes” · “Findings” · “How did Deloitte & Touche (Nigeria) do?”
@@ -634,7 +634,7 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 
 ### `findings`: Findings
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Regulator (M. Bello) · Layout: app · Breadcrumb: Findings
 - Reference: `screens/findings.jpg`
 - Headings and section titles: “Findings”
@@ -645,11 +645,11 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 - Buttons and links: “Export” · “All open 30” · “Plan needed 13” · “In progress 15” · “With firm to verify 1” · “Ready to close 1” · “Overdue 26” · “More time asked 1” · “Remind” · “Decide” · “Close”
 - Status chips seen: “MaNC” · “In progress” · “Overdue” · “Plan needed” · “MiNC” · “More time asked” · “OBS” · “Verified fixed” · “Fix submitted”
 - Tab states (each must match its screenshot):
-    - [ ] “Insights”: `screens/findings__insights.jpg` · shows: “Open findings by category and class” · “26 fixes overdue today”
+    - [x] “Insights”: `screens/findings__insights.jpg` · shows: “Open findings by category and class” · “26 fixes overdue today”
 
 ### `findings/view`: Finding
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Regulator (M. Bello) · Layout: app · Breadcrumb: Findings > Complaint acknowledgement slipped past 48 hours in December
 - Reference: `screens/findings_view.jpg`
 - Headings and section titles: “Complaint acknowledgement slipped past 48 hours in December” · “The finding” · “Action plan” · “Proof of the fix” · “Verification” · “Activity” · “Decision” · “Details”
@@ -657,7 +657,7 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 
 ### `org/findings`: Findings
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Organisation (Zenith) · Layout: app · Breadcrumb: Findings
 - Reference: `screens/org_findings.jpg`
 - Headings and section titles: “Findings”
@@ -668,7 +668,7 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 
 ### `org/finding`: Finding
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Organisation (Zenith) · Layout: app · Breadcrumb: Findings > Complaint acknowledgement slipped past 48 hours in December
 - Reference: `screens/org_finding.jpg`
 - Headings and section titles: “Complaint acknowledgement slipped past 48 hours in December” · “The finding” · “Action plan” · “Proof of the fix” · “Verification” · “Activity” · “Next step” · “Details”
@@ -676,7 +676,7 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 
 ### `firm/findings`: Findings
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Assurance firm (Deloitte) · Layout: app · Breadcrumb: Findings
 - Reference: `screens/firm_findings.jpg`
 - Headings and section titles: “Findings”
@@ -685,12 +685,12 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 - Buttons and links: “Verify”
 - Status chips seen: “OBS” · “Fix submitted”
 - Tab states (each must match its screenshot):
-    - [ ] “Being fixed 8”: `screens/firm_findings__being-fixed-8.jpg`
-    - [ ] “Verified and closed 31”: `screens/firm_findings__verified-and-closed-31.jpg`
+    - [x] “Being fixed 8”: `screens/firm_findings__being-fixed-8.jpg`
+    - [x] “Verified and closed 31”: `screens/firm_findings__verified-and-closed-31.jpg`
 
 ### `firm/finding`: Finding
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Assurance firm (Deloitte) · Layout: app · Breadcrumb: Findings > Complaint acknowledgement slipped past 48 hours in December
 - Reference: `screens/firm_finding.jpg`
 - Headings and section titles: “Complaint acknowledgement slipped past 48 hours in December” · “The finding” · “Action plan” · “Proof of the fix” · “Verification” · “Activity” · “Details”

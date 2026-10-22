@@ -3,7 +3,7 @@
 import { useReducer, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AppShell } from "@/components/AppShell";
-import { PageHead, Chip, Tabs, Field, AlertBox, Tile, Button } from "@/components/ui";
+import { PageHead, Chip, Tabs, Field, AlertBox, Tile, Button, StatusChip } from "@/components/ui";
 import { Dialog } from "@/components/Overlay";
 import { useToast } from "@/components/Toast";
 import { Icon } from "@/lib/icons";
@@ -172,7 +172,7 @@ export default function ReviewsPage() {
                       ) : null}
                       {tab === "tracker" ? (
                         <>
-                          <td><Chip tone="neu">{c.stage}</Chip>{c.pubAt && c.stage === "Scheduled" ? <div className="cap muted">{fmtD(c.pubAt)}</div> : null}</td>
+                          <td><StatusChip status={c.stage} />{c.pubAt && c.stage === "Scheduled" ? <div className="cap muted">{fmtD(c.pubAt)}</div> : null}</td>
                           <td className="small">{c.stage === "Published" ? (c.opened ? <Chip tone="ok" icon="eye">Opened {c.openedAt || ""}</Chip> : <Chip tone="neu">Not opened yet</Chip>) : "—"}</td>
                         </>
                       ) : null}

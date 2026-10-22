@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Button, Chip, CompChip, KTile, ChartCard, MiniTable, Tile } from "@/components/ui";
+import { Button, CompChip, KTile, ChartCard, MiniTable, Tile, StatusChip } from "@/components/ui";
 import { chLine, chColumns, chBars, chStack, chFunnel, chHeat, chDots, CH } from "@/lib/charts";
 import {
   casesOf,
@@ -219,7 +219,7 @@ function ProgressPanel({ p, cs, cc, cmp, toast }: { p: Programme; cs: Case[]; cc
                   [...notSub].sort((a, b) => caseProgress(b) - caseProgress(a)).map((c) => (
                     <tr key={c.id}>
                       <td><div className="org"><span className="logo s32" style={{ background: orgOf(c.org)?.color }}>{orgOf(c.org)?.initials}</span><div><div className="nm">{orgName(c.org)}</div><div className="sub">{FIRMS.find((f) => f.id === c.firm)?.name ?? "Needs a firm"}</div></div></div></td>
-                      <td><Chip tone="neu">{c.stage}</Chip></td>
+                      <td><StatusChip status={c.stage} /></td>
                       <td style={{ width: 120, paddingRight: 20 }}><div className="pbar"><div className="bar"><i style={{ width: `${caseProgress(c)}%` }} /></div></div></td>
                     </tr>
                   ))

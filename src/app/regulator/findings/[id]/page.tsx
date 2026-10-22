@@ -17,6 +17,7 @@ import {
   decideExtension,
   progOf,
   fcOf,
+  fmtD,
   FD_STATUS_CHIP,
   TODAY,
 } from "@/lib/cases";
@@ -84,7 +85,7 @@ export default function RegulatorFindingPage({ params }: { params: Promise<{ id:
           <AlertBox
             tone={fdOverdue(f, TODAY) ? "bad" : "info"}
             title={fdOverdue(f, TODAY) ? "Overdue" : f.status === "Open" ? "Waiting for a plan" : "Fix in progress"}
-            body={fdOverdue(f, TODAY) ? `Past the deadline of ${effDue(f)}.` : `${o?.name} has until ${effDue(f)}.`}
+            body={fdOverdue(f, TODAY) ? `Past the deadline of ${fmtD(effDue(f))}.` : `${o?.name} has until ${fmtD(effDue(f))}.`}
           />
         )}
         <Button variant="secondary" block icon="bell-ringing" onClick={remind} testId="fd-remind">Send a reminder</Button>
@@ -160,7 +161,7 @@ export default function RegulatorFindingPage({ params }: { params: Promise<{ id:
               <div className="ext-box col gap8">
                 <div className="row gap8">
                   <Tile icon="clock-clockwise" tone="warn" size="sm" />
-                  <div className="grow"><div className="small strong">More time asked: until {f.ext.date}</div><div className="cap muted">{f.ext.by} · {f.ext.when} · now due {f.due}</div></div>
+                  <div className="grow"><div className="small strong">More time asked: until {fmtD(f.ext.date)}</div><div className="cap muted">{f.ext.by} · {f.ext.when} · now due {fmtD(f.due)}</div></div>
                 </div>
                 <p className="small">&quot;{f.ext.reason}&quot;</p>
                 <div className="row">
@@ -172,7 +173,16 @@ export default function RegulatorFindingPage({ params }: { params: Promise<{ id:
           </div>
           <div className="card col gap8">
             <div className="h4">Details</div>
-            <Kv pairs={[["Class", <span key="c"><span className={`chip ${fc.tone}`}>{f.cls}</span> <span className="small">{fc.name}</span></span>], ["Fix by", effDue(f) || "No deadline"], ["Organisation", o?.name ?? ""], ["Assessed by", fm?.name ?? "—"], ["Owner", f.plan?.owner || "—"]]} />
+            <Kv
+              pairs={[
+                ["Class", <span key="c"><span className={`chip ${fc.tone}`}>{f.cls}</span> <span className="small">{fc.name}</span></span>],
+                ["Fix by", effDue(f) ? fmtD(effDue(f)) : "No deadline"],
+                ...(f.ext?.status === "Approved" ? ([["Original deadline", fmtD(f.due)]] as [string, string][]) : []),
+                ["Organisation", o?.name ?? ""],
+                ["Assessed by", fm?.name ?? "—"],
+                ["Owner", f.plan?.owner || "—"],
+              ]}
+            />
           </div>
         </div>
       </div>

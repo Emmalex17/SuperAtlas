@@ -124,7 +124,7 @@ export type CaseAnswer = {
   assignee?: string;
 };
 
-export type CaseOutcome = { o: string; note: string; override?: { by: string; reason: string } };
+export type CaseOutcome = { o: string; note: string; override?: { by: string; reason: string; from: string } };
 
 export type ThreadMessage = { side: "firm" | "org"; by: string; when: string; text: string; file?: string };
 export type Thread = { qid: string; status: "Open" | "Answered"; msgs: ThreadMessage[] };
@@ -479,7 +479,7 @@ export function cancelScheduleOn(c: Case) {
 
 export function overrideOutcome(c: Case, ref: string, value: string, reason: string, byName: string) {
   const oc = c.outcomes[ref];
-  c.outcomes[ref] = { ...oc, o: value, override: { by: byName, reason } };
+  c.outcomes[ref] = { ...oc, o: value, override: { by: byName, reason, from: oc?.o ?? "" } };
   if (c.stage === "Report submitted") {
     c.stage = "In review";
     c.reviewer = c.reviewer || byName;
@@ -1428,4 +1428,17 @@ export function recordQualityReview(c: Case, reviewerName: string, today: string
 
 export function addPreviewComment(c: Case, ref: string, text: string, byName: string, today: string) {
   c.previewComments = (c.previewComments ?? []).filter((m) => m.ref !== ref).concat({ ref, text, by: byName, when: today });
+}
+
+/* ================= P7: Review, publishing and findings ================= */
+
+/** The organisation's rating of the firm that assessed a published case — the prototype's
+ * ACT.rateSend(). One rating per case per organisation; the firm sees it without the author's name. */
+export function ratingFor(caseId: string, orgId: string): Rating | undefined {
+  return RATINGS.find((r) => r.case === caseId && r.org === orgId);
+}
+
+export function addRating(c: Case, orgId: string, stars: number, comment: string, today: string) {
+  RATINGS.push({ id: `rt-${Date.now()}`, firm: c.firm, org: orgId, case: c.id, stars, comment, when: today });
+  addAudit("Rated assurance firm", FIRMS.find((f) => f.id === c.firm)?.name ?? "");
 }
