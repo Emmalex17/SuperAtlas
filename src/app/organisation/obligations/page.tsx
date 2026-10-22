@@ -3,11 +3,12 @@
 import { useReducer, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AppShell } from "@/components/AppShell";
-import { PageHead, Chip, Tile, Button } from "@/components/ui";
+import { PageHead, Chip, Tile, Button, Field, AlertBox } from "@/components/ui";
 import { Dialog } from "@/components/Overlay";
 import { useToast } from "@/components/Toast";
-import { myCases, progOf, regOfProg, qsetQs, caseProgress, obligationAction, engageFirm, TODAY } from "@/lib/cases";
+import { myCases, progOf, regOfProg, qsetQs, caseProgress, obligationAction, engageFirm, requestNonAccreditedFirm, accredited, conflictOf, TODAY } from "@/lib/cases";
 import { FIRMS } from "@/lib/mockData";
+import { isEmail } from "@/lib/authHelpers";
 
 const ORG_ID = "zenith";
 
@@ -18,11 +19,29 @@ export default function ObligationsPage() {
   const [filter, setFilter] = useState<"Active" | "Completed" | "All">("Active");
   const [chooseFor, setChooseFor] = useState<string | null>(null);
   const [pickFirm, setPickFirm] = useState("");
+  const [engMode, setEngMode] = useState<"list" | "other">("list");
+  const [otherName, setOtherName] = useState("");
+  const [otherEmail, setOtherEmail] = useState("");
+  const [otherCreds, setOtherCreds] = useState("");
+  const [otherWhy, setOtherWhy] = useState("");
+  const [otherFile, setOtherFile] = useState(false);
 
   const cs = myCases(ORG_ID);
   const isActive = (c: (typeof cs)[number]) => c.stage !== "Published" && progOf(c.prog).status !== "Closed";
   const rows = cs.filter((c) => (filter === "All" ? true : filter === "Active" ? isActive(c) : !isActive(c)));
-  const accreditedFirms = FIRMS.filter((f) => f.status === "Accredited");
+  const accreditedFirms = accredited();
+  const chooseCase = cs.find((x) => x.id === chooseFor);
+
+  function closeChoose() {
+    setChooseFor(null);
+    setPickFirm("");
+    setEngMode("list");
+    setOtherName("");
+    setOtherEmail("");
+    setOtherCreds("");
+    setOtherWhy("");
+    setOtherFile(false);
+  }
 
   function doEngage() {
     if (!chooseFor || !pickFirm) {
@@ -31,10 +50,30 @@ export default function ObligationsPage() {
     }
     const c = cs.find((x) => x.id === chooseFor)!;
     engageFirm(c, pickFirm, TODAY, "A. Okonkwo");
-    setChooseFor(null);
-    setPickFirm("");
+    const firmName = FIRMS.find((f) => f.id === pickFirm)?.name;
+    closeChoose();
     bump();
-    toast(`Request sent to ${FIRMS.find((f) => f.id === pickFirm)?.name}`, "ok", "handshake");
+    toast(`Request sent to ${firmName}`, "ok", "handshake");
+  }
+
+  function doEngageOther() {
+    if (!otherName || !isEmail(otherEmail) || !otherWhy) {
+      toast("Add the firm name, a valid email and your reason", "bad");
+      return;
+    }
+    const c = cs.find((x) => x.id === chooseFor)!;
+    requestNonAccreditedFirm(c, {
+      name: otherName,
+      contact: otherEmail,
+      reason: otherWhy,
+      creds: otherCreds || "—",
+      file: `${otherName} profile.pdf`,
+      when: "Today",
+      by: "A. Okonkwo",
+    });
+    closeChoose();
+    bump();
+    toast("Sent to NITDA for approval", "ok", "paper-plane-tilt");
   }
 
   function actionFor(c: (typeof cs)[number]) {
@@ -95,23 +134,56 @@ export default function ObligationsPage() {
         </div>
       </div>
 
-      <Dialog open={chooseFor !== null} onClose={() => setChooseFor(null)}>
+      <Dialog open={chooseFor !== null} onClose={closeChoose} wide>
         <div className="row"><h2 className="h3">Choose an assurance firm</h2></div>
-        <p className="muted small">The firm is asked to accept.</p>
-        <div className="col gap8">
-          {accreditedFirms.map((f) => (
-            <label key={f.id} className={`choice ${pickFirm === f.id ? "on" : ""}`}>
-              <input type="radio" name="eng-f" className="sr" checked={pickFirm === f.id} onChange={() => setPickFirm(f.id)} />
-              <span className="radio" />
-              <span className="av" style={{ background: f.color }}>{f.initials}</span>
-              <span className="grow"><b>{f.name}</b><br /><span className="cap muted">{f.types.join(" · ")}</span></span>
-            </label>
-          ))}
+        <p className="muted small">{chooseCase ? progOf(chooseCase.prog).name : ""}. The firm is asked to accept.</p>
+
+        {chooseCase?.declineNote ? <AlertBox tone="bad" title="NITDA declined your last request" body={chooseCase.declineNote} /> : null}
+
+        <div className="seg" style={{ alignSelf: "flex-start" }}>
+          <button className={engMode === "list" ? "on" : ""} onClick={() => setEngMode("list")}>Accredited firms</button>
+          <button className={engMode === "other" ? "on" : ""} data-test="eng-other" onClick={() => setEngMode("other")}>Another firm</button>
         </div>
-        <div className="row end">
-          <Button variant="outline" onClick={() => setChooseFor(null)}>Cancel</Button>
-          <Button onClick={doEngage} testId="eng-go">Engage firm</Button>
-        </div>
+
+        {engMode === "list" ? (
+          <>
+            <div className="col gap8">
+              {accreditedFirms.map((f) => {
+                const conflict = chooseCase ? conflictOf(f, chooseCase.org) : undefined;
+                return (
+                  <label key={f.id} className="choice" style={conflict ? { opacity: 0.55 } : undefined}>
+                    <input type="radio" name="eng-f" className="sr" checked={pickFirm === f.id} disabled={!!conflict} onChange={() => setPickFirm(f.id)} />
+                    <span className="radio" />
+                    <span className="av" style={{ background: f.color }}>{f.initials}</span>
+                    <span className="grow"><b>{f.name}</b><br /><span className="cap muted">{conflict ? `Not available: advised you since ${conflict.since}` : f.types.join(" · ")}</span></span>
+                  </label>
+                );
+              })}
+            </div>
+            <div className="row end">
+              <Button variant="outline" onClick={closeChoose}>Cancel</Button>
+              <Button onClick={doEngage} testId="eng-go">Engage firm</Button>
+            </div>
+          </>
+        ) : (
+          <div className="col gap12">
+            <AlertBox tone="info" title="NITDA's approval is needed" body="A firm that is not accredited needs NITDA's approval before it can start." />
+            <div className="grid g2" style={{ gap: 12 }}>
+              <Field label="Firm name" htmlFor="eo-name"><input className="inp" id="eo-name" value={otherName} onChange={(e) => setOtherName(e.target.value)} /></Field>
+              <Field label="Contact email" htmlFor="eo-email"><input className="inp" id="eo-email" type="email" value={otherEmail} onChange={(e) => setOtherEmail(e.target.value)} /></Field>
+            </div>
+            <Field label="Assessor credentials" htmlFor="eo-cred"><input className="inp" id="eo-cred" placeholder="e.g. CIPP/E (2)" value={otherCreds} onChange={(e) => setOtherCreds(e.target.value)} /></Field>
+            <Field label="Why this firm?" htmlFor="eo-why"><textarea className="ta" id="eo-why" rows={2} value={otherWhy} onChange={(e) => setOtherWhy(e.target.value)} /></Field>
+            <button type="button" className="drop" onClick={() => { setOtherFile(true); toast("Firm profile attached"); }}>
+              <Tile icon="upload-simple" size="sm" />
+              <b className="small">{otherFile ? "Firm profile attached" : "Attach the firm's profile"}</b>
+            </button>
+            <div className="row end">
+              <Button variant="outline" onClick={closeChoose}>Cancel</Button>
+              <Button onClick={doEngageOther} testId="eo-go">Send for approval</Button>
+            </div>
+          </div>
+        )}
       </Dialog>
     </AppShell>
   );

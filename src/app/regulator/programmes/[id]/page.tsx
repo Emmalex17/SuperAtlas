@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useReducer, useRef, useState } from "react";
+import { use, useEffect, useReducer, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { notFound } from "next/navigation";
 import { AppShell } from "@/components/AppShell";
@@ -9,6 +9,7 @@ import { Dialog, Drawer } from "@/components/Overlay";
 import { Popover, MenuItem } from "@/components/Popover";
 import { useToast } from "@/components/Toast";
 import { Icon } from "@/lib/icons";
+import AnalyticsTab from "./Analytics";
 import {
   PROGRAMMES,
   progOf,
@@ -52,7 +53,7 @@ function firmOf(id: string) {
   return FIRMS.find((f) => f.id === id);
 }
 
-type Tab = "overview" | "organisations" | "firms" | "questions" | "cycles" | "settings";
+type Tab = "overview" | "analytics" | "organisations" | "firms" | "questions" | "cycles" | "settings";
 
 function OverviewTab({ p, cs }: { p: Programme; cs: Case[] }) {
   const router = useRouter();
@@ -469,6 +470,14 @@ export default function ProgrammePage({ params }: { params: Promise<{ id: string
   const router = useRouter();
   const toast = useToast();
 
+  useEffect(() => {
+    const t = new URLSearchParams(window.location.search).get("tab");
+    if (t === "analytics") {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time read of the browser-only URL query string, used only to land on the Analytics tab when the cycle picker there navigates here.
+      setTab("analytics");
+    }
+  }, []);
+
   if (!found) notFound();
 
   const p = progOf(id);
@@ -527,6 +536,7 @@ export default function ProgrammePage({ params }: { params: Promise<{ id: string
         <Tabs
           items={[
             { id: "overview", label: "Overview" },
+            { id: "analytics", label: "Analytics" },
             { id: "organisations", label: "Organisations", count: reqN || undefined },
             { id: "firms", label: "Firms" },
             { id: "questions", label: "Questions", count: qsetQs(p.qset).length },
@@ -538,6 +548,7 @@ export default function ProgrammePage({ params }: { params: Promise<{ id: string
         />
       </div>
       {tab === "overview" ? <OverviewTab p={p} cs={cs} /> : null}
+      {tab === "analytics" ? <AnalyticsTab p={p} /> : null}
       {tab === "organisations" ? (
         <OrganisationsTab
           p={p}
