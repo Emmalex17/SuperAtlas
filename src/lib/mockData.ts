@@ -52,6 +52,12 @@ export function ensureOrgOnboard(o: Organisation): OrgOnboard {
   return o.onboard;
 }
 
+/** Everyone at an organisation who can be assigned a question or a section to answer — the
+ * prototype's orgPeople(). */
+export function orgPeople(o: Organisation): string[] {
+  return [...(o.officers ?? []).map((p) => p.name), ...(o.colleagues ?? []).filter((c) => (c.status || "Active") === "Active").map((c) => c.name || c.email)];
+}
+
 export const ORGANISATIONS: Organisation[] = [
   { id: "zenith", name: "Zenith Bank Plc", initials: "ZB", color: "#C8102E", sector: "Banking", type: "Commercial bank", tier: "National", status: "Verified", officer: "A. Okonkwo", joined: "Mar 2026", last: "Today", hq: "Lagos", tags: ["Listed", "D-SIB"], web: "zenithbank.com", rc: "RC 000000 (sample)", email: "compliance@zenith.example",
     officers: [{ initials: "AO", name: "A. Okonkwo", role: "Chief compliance officer", email: "a.okonkwo@zenith.example" }],
