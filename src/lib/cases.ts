@@ -48,7 +48,7 @@ export type Regulation = {
 };
 
 /** A question as it appears inside a programme's own (editable) copy of the regulation: the raw [question, hint] pair normalised into an addressable object, `id` being `${requirementRef}#${index}`. */
-export type Question = { id: string; text: string; hint: string };
+export type Question = { id: string; text: string; hint: string; comment?: boolean; evidence?: boolean; interview?: boolean };
 
 export type Requirement = {
   ref: string;
@@ -126,6 +126,12 @@ export type CaseAnswer = {
 
 export type CaseOutcome = { o: string; note: string; override?: { by: string; reason: string } };
 
+export type ThreadMessage = { side: "firm" | "org"; by: string; when: string; text: string; file?: string };
+export type Thread = { qid: string; status: "Open" | "Answered"; msgs: ThreadMessage[] };
+export type Interview = { qid: string; status: "Times proposed" | "Confirmed" | "Held"; slots: string[]; link: string; who: string; at: string };
+export type PreviewComment = { ref: string; text: string; by: string; when: string };
+export type QualityReview = { by: string; when: string };
+
 export type RemediationPlan = { action: string; owner: string; target: string; steps: [string, boolean][] };
 export type RemediationVerify = { by: string; when: string; ok: boolean; note: string };
 export type RemediationClosed = { by: string; when: string };
@@ -161,8 +167,8 @@ export type Case = {
   assign: Record<string, string>;
   outcomes: Record<string, CaseOutcome>;
   findings: CaseFinding[];
-  threads: unknown[];
-  interviews: { at?: string }[];
+  threads: Thread[];
+  interviews: Interview[];
   stage: string;
   due: string;
   reqFirm?: ReqFirmRequest;
@@ -183,6 +189,9 @@ export type Case = {
   reviewer?: string;
   approved?: { by: string; when: string };
   signed?: { by: string; when: string };
+  previewAt?: string;
+  previewComments?: PreviewComment[];
+  qr?: QualityReview;
 };
 
 export type Evidence = { id: string; org: string; name: string; size: string; kind: string; by: string; when: string; expires: string; links: string[] };
@@ -311,6 +320,12 @@ export const PROG_STATUSES = ["Draft", "Scheduled", "Open", "In review", "Closed
 export function fmtD(d: string | undefined): string {
   if (!d) return "—";
   return new Date(d + "T12:00:00").toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+}
+
+/** Formats an interview slot's ISO datetime-local value for display — the prototype's fmtDT(). */
+export function fmtDT(s: string): string {
+  const d = new Date(s);
+  return `${d.toLocaleDateString("en-GB", { day: "numeric", month: "short" })}, ${d.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" })} WAT`;
 }
 
 export function regOf(id: string): Regulation {
@@ -632,6 +647,8 @@ export function answerComplete(q: Question, a: CaseAnswer | undefined): boolean 
   if (!a.v) return false;
   const neg = choice === "yn" && (a.v === "No" || a.v === "Not applicable");
   if (neg && !(a.comment || "").trim()) return false;
+  if (q.comment && choice !== "yn" && !(a.comment || "").trim()) return false;
+  if (q.evidence && !neg && !((a.files || []).length || a.link)) return false;
   return true;
 }
 
@@ -711,6 +728,7 @@ export function signOffAndSubmitReport(c: Case, today: string, byName: string) {
   c.signed = { by: byName, when: today };
   c.stage = "Report submitted";
   c.reportAt = today;
+  c.score = caseScore(c) ?? undefined;
 }
 
 export function saveDeadlines(patch: Partial<Deadlines>) {
@@ -1086,7 +1104,7 @@ export function makeQSet(reg: Regulation): QSet {
         guidance: r.guidance,
         weight: r.weight,
         evidence: r.evidence ? [...r.evidence] : [],
-        questions: r.questions.map((q, i) => ({ id: `${r.ref}#${i}`, text: q.q, hint: hintForChoice(q) })),
+        questions: r.questions.map((q, i) => ({ id: `${r.ref}#${i}`, text: q.q, hint: hintForChoice(q), comment: q.comment, evidence: q.evidence, interview: q.interview })),
       })),
     })),
   };
@@ -1283,4 +1301,131 @@ export function nextCycle(programmeId: string, byName: string): { id: string; re
   PROGRAMMES.push(n);
   addAudit("Drafted next programme cycle", n.name);
   return { id: n.id, reused: false };
+}
+
+/* ================= P6: Answering and assessment ================= */
+
+export function toggleFlag(c: Case, qid: string, byName: string, today: string) {
+  const a = (c.answers[qid] ??= { status: "draft", by: byName, when: today });
+  a.flag = !a.flag;
+}
+
+export function assignQuestion(c: Case, qid: string, name: string, byName: string, today: string) {
+  const a = (c.answers[qid] ??= { status: "draft", by: byName, when: today });
+  a.assignee = name || undefined;
+}
+
+export function saveSectionAssignments(c: Case, patch: Record<string, string>) {
+  Object.entries(patch).forEach(([sec, name]) => {
+    if (name) c.assign[sec] = name;
+    else delete c.assign[sec];
+  });
+}
+
+export function addEvidenceFile(c: Case, qid: string, name: string, size: string, byName: string, today: string, orgId: string) {
+  const a = (c.answers[qid] ??= { status: "draft", by: byName, when: today });
+  a.files = [...(a.files ?? []), [name, size]];
+  a.by = a.by || byName;
+  a.when = today;
+  EVIDENCE.unshift({ id: `e-${Date.now()}`, org: orgId, name, size, kind: "Upload", by: byName, when: today, expires: "", links: [qid] });
+}
+
+export function addEvidenceLink(c: Case, qid: string, url: string, byName: string, today: string) {
+  const a = (c.answers[qid] ??= { status: "draft", by: byName, when: today });
+  a.link = url;
+  a.by = a.by || byName;
+  a.when = today;
+}
+
+export function removeEvidenceFile(c: Case, qid: string, index: number) {
+  const a = c.answers[qid];
+  if (!a?.files) return;
+  a.files = a.files.filter((_, i) => i !== index);
+}
+
+export function removeEvidenceLink(c: Case, qid: string) {
+  const a = c.answers[qid];
+  if (a) a.link = undefined;
+}
+
+export function attachFromLibrary(c: Case, qid: string, evidenceIds: string[], byName: string, today: string) {
+  const a = (c.answers[qid] ??= { status: "draft", by: byName, when: today });
+  evidenceIds.forEach((id) => {
+    const e = EVIDENCE.find((x) => x.id === id);
+    if (!e) return;
+    a.files = [...(a.files ?? []), [e.name, `${e.size} · from library`]];
+    if (!e.links.includes(qid)) e.links.push(qid);
+  });
+}
+
+export function askInformation(c: Case, qid: string, text: string, byName: string, today: string) {
+  c.threads.push({ qid, status: "Open", msgs: [{ side: "firm", by: byName, when: today, text }] });
+  addAudit("Requested information", c.org);
+}
+
+export function replyToThread(c: Case, threadIndex: number, text: string, byName: string, today: string, file?: string) {
+  const t = c.threads[threadIndex];
+  if (!t) return;
+  t.msgs.push({ side: "org", by: byName, when: today, text, file });
+  t.status = "Answered";
+}
+
+export function proposeInterview(c: Case, qid: string, slots: string[], link: string, who: string) {
+  c.interviews.push({ qid, status: "Times proposed", slots: slots.filter(Boolean), link, who, at: "" });
+}
+
+export function confirmInterviewSlot(c: Case, index: number, slotIndex: number) {
+  const iv = c.interviews[index];
+  if (!iv) return;
+  iv.at = iv.slots[slotIndex];
+  iv.status = "Confirmed";
+}
+
+export function markInterviewHeld(c: Case, qid: string) {
+  const iv = c.interviews.find((i) => i.qid === qid);
+  if (iv) iv.status = "Held";
+}
+
+export function raiseFinding(c: Case, ref: string, cls: string, title: string, detail: string, today: string): string {
+  const fc = fcOf(cls);
+  const id = `f-${Date.now()}`;
+  c.findings.push({ id, ref, cls, title, detail, due: fc.days ? addDaysISO(today, fc.days) : "" });
+  return id;
+}
+
+function addDaysISO(today: string, n: number): string {
+  const d = new Date(`${today}T12:00:00`);
+  d.setDate(d.getDate() + n);
+  return d.toISOString().slice(0, 10);
+}
+
+export function deleteFinding(c: Case, index: number) {
+  c.findings.splice(index, 1);
+}
+
+/** The organisation's own answer says one thing, the assessor's outcome another — flagged so the
+ * assessor explains the gap. The prototype's divergence(). */
+export function divergence(c: Case, r: { questions: Question[] }, outcome: string | undefined): string {
+  const yn = r.questions.filter((q) => questionChoice(q.hint) === "yn").map((q) => c.answers[q.id]?.v).filter((v): v is string => !!v);
+  if (!yn.length || !outcome) return "";
+  if (yn.every((v) => v === "Yes") && outcome !== "Compliant" && !/Not applicable|Pass|Satisfactory|Optimised|Managed/.test(outcome)) {
+    return "The organisation answered Yes to every question here. Explain why the outcome differs; the organisation sees this in the preview.";
+  }
+  if (yn.some((v) => v === "No") && outcome === "Compliant") {
+    return "The organisation answered No to at least one question but the outcome is Compliant. Record what you saw that closes the gap.";
+  }
+  return "";
+}
+
+export function shareOutcomePreview(c: Case, today: string) {
+  c.previewAt = today;
+  if (c.stage === "Assessing") c.stage = "In preview";
+}
+
+export function recordQualityReview(c: Case, reviewerName: string, today: string) {
+  c.qr = { by: reviewerName, when: today };
+}
+
+export function addPreviewComment(c: Case, ref: string, text: string, byName: string, today: string) {
+  c.previewComments = (c.previewComments ?? []).filter((m) => m.ref !== ref).concat({ ref, text, by: byName, when: today });
 }

@@ -82,7 +82,10 @@ export default function ObligationsPage() {
     if (action === "answer") return <Button variant={Object.keys(c.answers).length ? "secondary" : "primary"} size="sm" onClick={() => router.push(`/organisation/answer/${c.id}`)} testId={`answer-${c.prog}`}>{Object.keys(c.answers).length ? "Continue" : "Start answering"}</Button>;
     if (action === "view-report") return <Button variant="tertiary" size="sm" onClick={() => router.push(`/organisation/report/${c.id}`)}>View report</Button>;
     if (action === "view") return <Button variant="tertiary" size="sm" onClick={() => router.push(`/organisation/answer/${c.id}`)}>View</Button>;
-    if (action === "assess-respond") return <Button variant="tertiary" size="sm" onClick={() => router.push(`/organisation/answer/${c.id}`)}>Open</Button>;
+    if (action === "assess-respond") {
+      const need = c.threads.filter((t) => t.status === "Open").length + c.interviews.filter((i) => i.status === "Times proposed").length;
+      return <Button variant={need ? "primary" : "tertiary"} size="sm" onClick={() => router.push(`/organisation/assessment/${c.id}`)} testId={`oa-${c.prog}`}>{need ? `Respond (${need})` : "Open"}</Button>;
+    }
     return null;
   }
 
