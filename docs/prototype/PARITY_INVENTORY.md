@@ -760,7 +760,7 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 
 ### `enforcement`: Enforcement
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Regulator (M. Bello) · Layout: app · Breadcrumb: Enforcement
 - Reference: `screens/enforcement.jpg`
 - Headings and section titles: “Enforcement” · “Watchlist”
@@ -769,12 +769,12 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 - Buttons and links: “Open a case” · “Set it in Settings” · “Add an organisation” · “Dismiss”
 - Status chips seen: “Awaiting payment”
 - Tab states (each must match its screenshot):
-    - [ ] “Cases 2”: `screens/enforcement__cases-2.jpg`
-    - [ ] “Insights”: `screens/enforcement__insights.jpg` · shows: “1 case waiting for a decision” · “Penalties: ₦0 paid, ₦5,000,000 outstanding”
+    - [x] “Cases 2”: `screens/enforcement__cases-2.jpg`
+    - [x] “Insights”: `screens/enforcement__insights.jpg` · shows: “1 case waiting for a decision” · “Penalties: ₦0 paid, ₦5,000,000 outstanding”
 
 ### `enforcement/new`: Open a case
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Regulator (M. Bello) · Layout: app · Breadcrumb: Enforcement > Open a case
 - Reference: `screens/enforcement_new.jpg`
 - Headings and section titles: “Open a case” · “1. Organisation” · “2. Action” · “3. Evidence” · “4. Notice” · “Sign-off”
@@ -783,7 +783,7 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 
 ### `enforcement/case`: Enforcement case
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Regulator (M. Bello) · Layout: app · Breadcrumb: Enforcement > EC-2025-011
 - Reference: `screens/enforcement_case.jpg`
 - Headings and section titles: “Ironwood Bank Ltd” · “Notice” · “Evidence” · “Response from Ironwood Bank Ltd” · “Decision” · “Timeline” · “Next step” · “Case”
@@ -792,7 +792,7 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 
 ### `org/compliance`: Compliance
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Organisation (Zenith) · Layout: app · Breadcrumb: Compliance
 - Reference: `screens/org_compliance.jpg`
 - Headings and section titles: “Compliance” · “In progress”
@@ -801,12 +801,12 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 - Buttons and links: “Export scorecard”
 - Status chips seen: “Compliant” · “Firm to choose”
 - Tab states (each must match its screenshot):
-    - [ ] “Exposure”: `screens/org_compliance__exposure.jpg`
-    - [ ] “Regulatory actions”: `screens/org_compliance__regulatory-actions.jpg` · shows: “No regulatory actions”
+    - [x] “Exposure”: `screens/org_compliance__exposure.jpg`
+    - [x] “Regulatory actions”: `screens/org_compliance__regulatory-actions.jpg` · shows: “No regulatory actions”
 
 ### `org/compliance/programme`: Programme compliance
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Organisation (Zenith) · Layout: app · Breadcrumb: Compliance > Programme
 - Reference: `screens/org_compliance_programme.jpg`
 - Headings and section titles: “ISR annual assessment” · “87 in 2025, down from 95” · “Sections against your category” · “Trace a gap to its fix”
@@ -815,7 +815,7 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 
 ### `org/exposure`: Exposure
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Organisation (Zenith) · Layout: app · Breadcrumb: Compliance > Exposure
 - Reference: `screens/org_exposure.jpg`
 - Headings and section titles: “Compliance”
@@ -824,12 +824,12 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 - Buttons and links: “Export scorecard” · “All 3” · “High 0” · “Medium 2” · “Low 1”
 - Status chips seen: “Medium” · “Low”
 - Tab states (each must match its screenshot):
-    - [ ] “Exposure”: `screens/org_exposure__exposure.jpg`
-    - [ ] “Regulatory actions”: `screens/org_exposure__regulatory-actions.jpg` · shows: “No regulatory actions”
+    - [x] “Exposure”: `screens/org_exposure__exposure.jpg`
+    - [x] “Regulatory actions”: `screens/org_exposure__regulatory-actions.jpg` · shows: “No regulatory actions”
 
 ### `org/actions`: Regulatory actions
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Organisation (Zenith) · Layout: app · Breadcrumb: Compliance > Regulatory actions
 - Reference: `screens/org_actions.jpg`
 - Headings and section titles: “Compliance” · “No regulatory actions”
@@ -837,12 +837,12 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 - Table columns: “NOTICE” · “ISSUED” · “RESPOND BY” · “STATUS”
 - Buttons and links: “Export scorecard”
 - Tab states (each must match its screenshot):
-    - [ ] “Exposure”: `screens/org_actions__exposure.jpg`
-    - [ ] “Regulatory actions”: `screens/org_actions__regulatory-actions.jpg`
+    - [x] “Exposure”: `screens/org_actions__exposure.jpg`
+    - [x] “Regulatory actions”: `screens/org_actions__regulatory-actions.jpg`
 
 ### `org/action`: Regulatory action
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Organisation (Zenith) · Layout: app · Breadcrumb: Compliance > Regulatory actions > EC-2025-011
 - Reference: `screens/org_action.jpg`
 - Headings and section titles: “Warning letter” · “Notice” · “Evidence” · “Your response” · “Decision” · “Timeline” · “Status”
