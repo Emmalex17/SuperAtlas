@@ -47,7 +47,7 @@ The earlier (now superseded) `ddf4619`/`2ec46d0` commits were never reverted or 
 
 **Real, previously-undiscovered data-quality bug found and fixed:** all 1,029 seed answers across every case had `status: "answered"` stored but no actual `v` value — meaning `answerComplete()` (used by this phase's new completeness checks) always disagreed with `caseProgress()`'s `status`-based check used elsewhere (e.g. the Obligations table's "41%"). Backfilled plausible values per question type via a one-time script; confirmed org/answer's own progress bar now agrees with the Obligations table everywhere.
 
-Verified: `tsc --noEmit`, `eslint src`, `npm run build` all clean. Committed as `3865f60` + `4424ebe` (Emmalex17, no co-author lines), pushed to staging.
+Verified: `tsc --noEmit`, `eslint src`, `npm run build` all clean. Committed as `3865f60` + `4424ebe` + `8b2ad1d` (Emmalex17, no co-author lines), pushed to staging, confirmed Ready, promoted via PR #46 (merge commit `87843d4`), confirmed production Ready (all new routes 200). `origin/main` = `87843d4ce6cc7f78aaa77b2e0c761f00bd7985e6`, `origin/staging` = `8b2ad1dc36b3a53e455ebfd41cfec7b445acf63b`, `git diff origin/staging origin/main --stat` empty (zero content drift).
 
 **P5 is complete — 11/11 Matches (up from 3/11 at session start).** Built:
 1. `programmes` list: List/Calendar view toggle + full Calendar (month grid of Opens/Due events), wired "New programme"/"Continue setup"/scoring-settings buttons.
