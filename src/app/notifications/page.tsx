@@ -26,7 +26,7 @@ export default function NotificationsPage() {
   }
 
   return (
-    <AnyWorkspaceShell>
+    <AnyWorkspaceShell crumbs={[{ label: "Notifications" }]}>
       <PageHead
         over="Inbox"
         title="Notifications"

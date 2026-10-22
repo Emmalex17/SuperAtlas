@@ -1,5 +1,5 @@
 import type { Account, Workspace } from "./auth";
-import { orgIdFor, firmIdFor } from "./mockData";
+import { orgIdFor, firmIdFor, ORGANISATIONS, CLASS_REQS, ACC_APPS, FIRMS, catLabel } from "./mockData";
 import { CASES, allFindings, caseProgress, progOf, TODAY as CASE_TODAY, effDue, fmtD } from "./cases";
 import { FILINGS, tplOf, isFiled } from "./returns";
 import { ENF_CASES } from "./enforcement";
@@ -49,13 +49,12 @@ export function orgTodo(orgId: string): (TaskItem & { icon: string; group: "act"
 
 const plural = (n: number, one: string, many?: string) => (n === 1 ? one : many || `${one}s`);
 
-/** Grouped "waiting for you" lists, per workspace. Mirrors the prototype's myTasks() in d1.js. Item targets
- * that don't yet exist in the app (e.g. firm-side finding verification, not built until a later phase) are
- * left out rather than linked to a page that doesn't exist. */
+/** Grouped "waiting for you" lists, per workspace. Mirrors the prototype's myTasks() in d1.js. */
 export function myTasks(account: Account): (TaskGroup & { say: (n: number) => string })[] {
   const ws: Workspace = account.workspace;
   if (ws === "regulator") {
-    const orgN = (id: string) => id;
+    const orgN = (id: string) => ORGANISATIONS.find((o) => o.id === id)?.name ?? id;
+    const firmN = (id: string) => FIRMS.find((f) => f.id === id)?.name ?? id;
     const groups: (TaskGroup & { say: (n: number) => string })[] = [
       {
         id: "enf",
@@ -91,6 +90,30 @@ export function myTasks(account: Account): (TaskGroup & { say: (n: number) => st
           .filter((x) => x.f.status === "Verified fixed")
           .map((x) => ({ title: x.f.title, sub: orgN(x.c.org), href: `/regulator/findings/${x.f.id}` })),
       },
+      {
+        id: "ver",
+        icon: "seal-check",
+        label: "Organisations to verify",
+        href: "/regulator/organisations",
+        say: (n) => `${n} ${plural(n, "organisation")} to verify`,
+        items: ORGANISATIONS.filter((o) => o.status === "Pending verification").map((o) => ({ title: o.name, sub: catLabel(o.type, o.tier), href: `/regulator/organisations/${o.id}` })),
+      },
+      {
+        id: "cls",
+        icon: "git-diff",
+        label: "Classification changes",
+        href: "/regulator/organisations",
+        say: (n) => `${n} classification ${plural(n, "change")} to decide`,
+        items: CLASS_REQS.filter((r) => r.status === "Pending").map((r) => ({ title: orgN(r.org), sub: "Asked for a different category", href: `/regulator/organisations/${r.org}` })),
+      },
+      {
+        id: "acc",
+        icon: "certificate",
+        label: "Accreditation applications",
+        href: "/regulator/firms",
+        say: (n) => `${n} accreditation ${plural(n, "application")} to review`,
+        items: ACC_APPS.filter((a) => a.status === "In review").map((a) => ({ title: firmN(a.firm), sub: a.type, href: `/regulator/firms/${a.firm}` })),
+      },
     ];
     return groups;
   }
@@ -108,6 +131,7 @@ export function myTasks(account: Account): (TaskGroup & { say: (n: number) => st
   // firm
   const firmId = firmIdFor(account.entityName);
   const cs = firmId ? CASES.filter((c) => c.firm === firmId) : [];
+  const orgNf = (id: string) => ORGANISATIONS.find((o) => o.id === id)?.name ?? id;
   return [
     {
       id: "req",
@@ -115,7 +139,7 @@ export function myTasks(account: Account): (TaskGroup & { say: (n: number) => st
       label: "Engagement requests",
       href: "/firm/engagements",
       say: (n) => `${n} engagement ${plural(n, "request")} to accept or decline`,
-      items: cs.filter((c) => c.stage === "Firm to choose" || c.firmStatus === "Invited").map((c) => ({ title: c.org, sub: progOf(c.prog).name, href: "/firm/engagements" })),
+      items: cs.filter((c) => c.stage === "Firm to choose" || c.firmStatus === "Invited").map((c) => ({ title: orgNf(c.org), sub: progOf(c.prog).name, href: "/firm/engagements" })),
     },
     {
       id: "asm",
@@ -126,7 +150,17 @@ export function myTasks(account: Account): (TaskGroup & { say: (n: number) => st
       items: cs
         .filter((c) => ["Submitted", "Assessing", "In preview", "Returned"].includes(c.stage))
         .sort((a, b) => (a.due || "").localeCompare(b.due || ""))
-        .map((c) => ({ title: c.org, sub: `${progOf(c.prog).name} · ${c.stage}`, due: c.due, href: `/firm/assess/${c.id}` })),
+        .map((c) => ({ title: orgNf(c.org), sub: `${progOf(c.prog).name} · ${c.stage}`, due: c.due, href: `/firm/assess/${c.id}` })),
+    },
+    {
+      id: "fix",
+      icon: "flag",
+      label: "Fixes to verify",
+      href: "/firm/findings",
+      say: (n) => `${n} ${plural(n, "fix", "fixes")} sent with proof, waiting for you to verify`,
+      items: allFindings()
+        .filter((x) => x.c.firm === firmId && x.f.status === "Fix submitted")
+        .map((x) => ({ title: x.f.title, sub: orgNf(x.c.org), href: `/firm/findings/${x.f.id}` })),
     },
   ];
 }

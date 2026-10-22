@@ -37,7 +37,7 @@ export default function AuditPage() {
   }
 
   return (
-    <AnyWorkspaceShell>
+    <AnyWorkspaceShell crumbs={[{ label: "Audit trail" }]}>
       <PageHead
         over="Records"
         title="Audit trail"
