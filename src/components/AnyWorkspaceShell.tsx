@@ -2,11 +2,11 @@
 
 import { useEffect, useState, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
-import { AppShell } from "@/components/AppShell";
+import { AppShell, type Crumb } from "@/components/AppShell";
 import { getSession, type Account } from "@/lib/auth";
 
 /** For the ws:"any" screens (notifications, account, audit, search) — renders inside whichever workspace the signed-in account belongs to. */
-export function AnyWorkspaceShell({ children }: { children: ReactNode }) {
+export function AnyWorkspaceShell({ children, crumbs }: { children: ReactNode; crumbs?: Crumb[] }) {
   const router = useRouter();
   const [state, setState] = useState<{ checked: boolean; account: Account | null }>({ checked: false, account: null });
 
@@ -23,5 +23,9 @@ export function AnyWorkspaceShell({ children }: { children: ReactNode }) {
 
   if (!state.checked || !state.account) return null;
 
-  return <AppShell workspace={state.account.workspace}>{children}</AppShell>;
+  return (
+    <AppShell workspace={state.account.workspace} crumbs={crumbs}>
+      {children}
+    </AppShell>
+  );
 }

@@ -853,7 +853,7 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 
 ### `dashboard`: My dashboard
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Regulator (M. Bello) · Layout: app · Breadcrumb: My dashboard
 - Reference: `screens/dashboard.jpg`
 - Headings and section titles: “Good evening, Musa” · “9 organisations non-compliant in at least one programme” · “Average score by category” · “Watchlist” · “5 biggest drops since the previous cycle”
@@ -863,7 +863,7 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 
 ### `org/dashboard`: My dashboard
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Organisation (Zenith) · Layout: app · Breadcrumb: My dashboard
 - Reference: `screens/org_dashboard.jpg`
 - Headings and section titles: “Good evening, Adaeze” · “Finish setting up” · “Compliance” · “Regulatory exposure” · “Your obligations”
@@ -872,7 +872,7 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 
 ### `firm/dashboard`: My dashboard
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Assurance firm (Deloitte) · Layout: app · Breadcrumb: My dashboard
 - Reference: `screens/firm_dashboard.jpg`
 - Headings and section titles: “Good evening, Tunde” · “Finish setting up” · “Due soon” · “Team workload is even” · “3 active, 14 completed”
@@ -881,7 +881,7 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 
 ### `search`: Search results
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Any (shown as regulator) · Layout: app · Breadcrumb: Search
 - Reference: `screens/search.jpg`
 - Headings and section titles: “Search”

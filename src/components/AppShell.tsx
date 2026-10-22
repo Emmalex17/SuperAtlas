@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useReducer, useRef, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useReducer, useRef, useState, type ReactNode } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import { Lockup, LogoMark, Button, Tile } from "@/components/ui";
@@ -18,7 +18,7 @@ import { ENF_CASES } from "@/lib/enforcement";
 import { FILINGS } from "@/lib/returns";
 import { CLASS_REQS, ACC_APPS } from "@/lib/mockData";
 
-type NavItem = { icon: IconName; label: string; href: string; section?: string; count?: number };
+export type NavItem = { icon: IconName; label: string; href: string; section?: string; count?: number };
 
 /** Flags the first item of each section run, so the sidebar can render a divider before it. */
 function withSectionBreaks(nav: NavItem[]): { item: NavItem; showSection: boolean }[] {
@@ -57,11 +57,11 @@ function regulatorCount(key: "organisations" | "firms" | "enforcement" | "review
   }
 }
 
-function buildNav(account: Account): NavItem[] {
+export function buildNav(account: Account): NavItem[] {
   const ws = account.workspace;
   if (ws === "regulator") {
     return [
-      { icon: "squares-four", label: "Dashboard", href: "/regulator" },
+      { icon: "squares-four", label: "My dashboard", href: "/regulator" },
       { icon: "buildings", label: "Organisations", href: "/regulator/organisations", section: "Supervise", count: regulatorCount("organisations") },
       { icon: "briefcase", label: "Assurance firms", href: "/regulator/firms", count: regulatorCount("firms") },
       { icon: "gavel", label: "Enforcement", href: "/regulator/enforcement", count: regulatorCount("enforcement") },
@@ -79,7 +79,7 @@ function buildNav(account: Account): NavItem[] {
     const findingsCount = orgId ? allFindings().filter((x) => x.c.org === orgId && x.f.status === "Open").length : 0;
     const complianceCount = orgId ? ENF_CASES.filter((c) => c.org === orgId && c.status === "Notice issued").length : 0;
     return [
-      { icon: "squares-four", label: "Dashboard", href: "/organisation" },
+      { icon: "squares-four", label: "My dashboard", href: "/organisation" },
       { icon: "shield-check", label: "Compliance", href: "/organisation/compliance", count: complianceCount },
       { icon: "list-checks", label: "Obligations", href: "/organisation/obligations", section: "Work", count: obligationsCount },
       { icon: "table", label: "Data returns", href: "/organisation/returns", count: returnsCount },
@@ -94,10 +94,9 @@ function buildNav(account: Account): NavItem[] {
   const engagementsCount = firmId ? CASES.filter((c) => c.firm === firmId && (c.stage === "Firm to choose" || c.firmStatus === "Invited")).length : 0;
   const firmFindingsCount = firmId ? allFindings().filter((x) => x.c.firm === firmId && x.f.status === "Fix submitted").length : 0;
   return [
-    { icon: "squares-four", label: "Dashboard", href: "/firm" },
+    { icon: "squares-four", label: "My dashboard", href: "/firm" },
     { icon: "handshake", label: "Engagements", href: "/firm/engagements", section: "Work", count: engagementsCount },
     { icon: "flag", label: "Findings", href: "/firm/findings", count: firmFindingsCount },
-    { icon: "list-checks", label: "Assessments", href: "/firm/assessments" },
     { icon: "users", label: "Team", href: "/firm/team", section: "Firm" },
     { icon: "identification-card", label: "Profile", href: "/firm/profile" },
   ];
@@ -119,6 +118,13 @@ function useSessionOnMount() {
 const IDLE_MS = 15 * 60 * 1000;
 
 export type Crumb = { label: string; href?: string };
+
+/** Lets a dashboard's hero "See all N tasks" button open the same Tasks drawer as the topbar
+ * button, without threading drawer state through every page. */
+const OpenTasksContext = createContext<() => void>(() => {});
+export function useOpenTasks() {
+  return useContext(OpenTasksContext);
+}
 
 export function AppShell({ workspace, crumbs, children }: { workspace: Workspace; crumbs?: Crumb[]; children: ReactNode }) {
   const router = useRouter();
@@ -434,7 +440,9 @@ export function AppShell({ workspace, crumbs, children }: { workspace: Workspace
             </Popover>
           </div>
         </div>
-        <div className="content">{children}</div>
+        <div className="content">
+          <OpenTasksContext.Provider value={() => setTasksOpen(true)}>{children}</OpenTasksContext.Provider>
+        </div>
       </div>
 
       {/* Command palette — Ctrl/⌘K or "/" */}

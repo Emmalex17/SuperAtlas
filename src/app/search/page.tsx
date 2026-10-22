@@ -3,9 +3,11 @@
 import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { AnyWorkspaceShell } from "@/components/AnyWorkspaceShell";
-import { PageHead, Tile, Chip } from "@/components/ui";
+import { buildNav } from "@/components/AppShell";
+import { PageHead, Tile } from "@/components/ui";
+import { Icon } from "@/lib/icons";
 import { getSession } from "@/lib/auth";
-import { ORGANISATIONS, FIRMS, TEAM, STATUS_TONE } from "@/lib/mockData";
+import { searchIndex, searchRun, SEARCH_GROUPS, type SearchHit } from "@/lib/search";
 
 function highlight(text: string, q: string) {
   if (!q) return text;
@@ -32,99 +34,80 @@ function SearchContent() {
   const router = useRouter();
   const session = getSession();
   const params = useSearchParams();
-  const q = (params.get("q") || "").toLowerCase();
+  const q = params.get("q") || "";
   const [filter, setFilter] = useState("All");
+  const [query, setQuery] = useState(q);
 
   if (!session) return null;
-  const isRegulator = session.workspace === "regulator";
 
-  const orgs = isRegulator ? ORGANISATIONS.filter((o) => (o.name + o.type).toLowerCase().includes(q)) : [];
-  const firms = isRegulator ? FIRMS.filter((f) => (f.name + f.types.join(" ")).toLowerCase().includes(q)) : [];
-  const people = isRegulator ? TEAM.filter((p) => (p.name + p.role + p.email).toLowerCase().includes(q)) : [];
-  const groups: [string, number][] = [
-    ["Organisations", orgs.length],
-    ["Assurance firms", firms.length],
-    ["People", people.length],
-  ];
-  const show = (k: string) => filter === "All" || filter === k;
-  const total = orgs.length + firms.length + people.length;
+  const nav = buildNav(session);
+  const index = searchIndex(session, nav);
+  const all = searchRun(index, q);
+  const groups = SEARCH_GROUPS.map((g): [string, SearchHit[]] => [g, all.filter((x) => x.group === g)]).filter(([, l]) => l.length);
+  const shown = filter === "All" ? groups : groups.filter(([g]) => g === filter);
+
+  function submit(e: React.FormEvent) {
+    e.preventDefault();
+    router.push(`/search?q=${encodeURIComponent(query)}`);
+  }
 
   return (
-    <AnyWorkspaceShell>
-      <PageHead over="Search" title={`Results for "${params.get("q") || ""}"`} sub={`${total} results`} />
-      <div className="pills">
-        <button className={`pill ${filter === "All" ? "on" : ""}`} onClick={() => setFilter("All")}>
-          All<span className="count">{total}</span>
-        </button>
-        {groups.map(([g, c]) => (
-          <button key={g} className={`pill ${filter === g ? "on" : ""}`} onClick={() => setFilter(g)}>
-            {g}<span className="count">{c}</span>
+    <AnyWorkspaceShell crumbs={[{ label: "Search" }]}>
+      <PageHead
+        over="Search"
+        title={q ? `Results for "${q}"` : "Search"}
+        sub={q ? `${all.length} result${all.length === 1 ? "" : "s"}` : "Search programmes, findings, returns, reports and more"}
+      />
+      <form className="inp-wrap" style={{ maxWidth: 520 }} onSubmit={submit}>
+        <Icon name="magnifying-glass" />
+        <input className="inp" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search" aria-label="Search" data-test="search-q" />
+      </form>
+
+      {groups.length ? (
+        <div className="pills">
+          <button className={`pill ${filter === "All" ? "on" : ""}`} onClick={() => setFilter("All")}>
+            All<span className="count">{all.length}</span>
           </button>
-        ))}
-      </div>
-
-      {show("Organisations") && orgs.length ? (
-        <div className="card p0">
-          <div style={{ padding: "16px 24px" }} className="h4">Organisations</div>
-          {orgs.map((o) => (
-            <button
-              key={o.id}
-              className="row"
-              style={{ width: "100%", border: 0, background: "none", padding: "12px 24px", borderTop: "1px solid var(--border)", cursor: "pointer", textAlign: "left" }}
-              onClick={() => router.push(`/regulator/organisations/${o.id}`)}
-            >
-              <span className="logo s32" style={{ background: o.color }}>{o.initials}</span>
-              <div className="grow">
-                <div className="strong">{highlight(o.name, q)}</div>
-                <div className="cap muted">{o.type}{o.tier ? " · " + o.tier : ""}</div>
-              </div>
-              <Chip tone={STATUS_TONE[o.status]}>{o.status}</Chip>
+          {groups.map(([g, l]) => (
+            <button key={g} className={`pill ${filter === g ? "on" : ""}`} onClick={() => setFilter(g)} data-test={`sg-${g}`}>
+              {g}<span className="count">{l.length}</span>
             </button>
           ))}
         </div>
       ) : null}
 
-      {show("Assurance firms") && firms.length ? (
-        <div className="card p0">
-          <div style={{ padding: "16px 24px" }} className="h4">Assurance firms</div>
-          {firms.map((f) => (
-            <button
-              key={f.id}
-              className="row"
-              style={{ width: "100%", border: 0, background: "none", padding: "12px 24px", borderTop: "1px solid var(--border)", cursor: "pointer", textAlign: "left" }}
-              onClick={() => router.push(`/regulator/firms/${f.id}`)}
-            >
-              <span className="logo s32" style={{ background: f.color }}>{f.initials}</span>
-              <div className="grow">
-                <div className="strong">{highlight(f.name, q)}</div>
-                <div className="cap muted">{f.types.join(" · ")}</div>
-              </div>
-              <Chip tone={STATUS_TONE[f.status]}>{f.status}</Chip>
-            </button>
-          ))}
-        </div>
-      ) : null}
-
-      {show("People") && people.length ? (
-        <div className="card p0">
-          <div style={{ padding: "16px 24px" }} className="h4">People</div>
-          {people.map((p) => (
-            <div key={p.email} className="row" style={{ padding: "12px 24px", borderTop: "1px solid var(--border)" }}>
-              <span className="av">{p.initials}</span>
-              <div className="grow">
-                <div className="strong">{highlight(p.name, q)}</div>
-                <div className="cap muted">{p.role} · {p.email}</div>
-              </div>
+      {shown.map(([g, l]) => {
+        const cap = filter === "All" ? 6 : 200;
+        const rows = l.slice(0, cap);
+        return (
+          <div className="card p0" key={g} data-test={`sres-${g}`}>
+            <div className="tbl-tools"><span className="h4 grow">{g}</span><span className="cap muted">{l.length}</span></div>
+            <div className="list">
+              {rows.map((x, i) => (
+                <button key={i} className="list-row" onClick={() => router.push(x.href)}>
+                  <Tile icon={x.icon} size="sm" />
+                  <span className="grow" style={{ minWidth: 0 }}>
+                    <span className="strong small" style={{ display: "block" }}>{highlight(x.title, q.toLowerCase())}</span>
+                    <span className="cap muted">{x.sub}</span>
+                  </span>
+                  <Icon name="caret-right" />
+                </button>
+              ))}
+              {filter === "All" && l.length > 6 ? (
+                <button className="list-row small strong" style={{ color: "var(--link)" }} onClick={() => setFilter(g)}>
+                  Show all {l.length} {g.toLowerCase()}
+                </button>
+              ) : null}
             </div>
-          ))}
-        </div>
-      ) : null}
+          </div>
+        );
+      })}
 
-      {!total ? (
+      {q && !all.length ? (
         <div className="card col" style={{ alignItems: "center", textAlign: "center", padding: "40px 16px", gap: 10 }}>
           <Tile icon="magnifying-glass" size="lg" />
           <div className="h4">No results</div>
-          <p className="muted small">Try a shorter word, or search by reference such as ISR-4.1.</p>
+          <p className="muted small">Try a shorter word, or a reference such as ISR-4.1.</p>
         </div>
       ) : null}
     </AnyWorkspaceShell>
