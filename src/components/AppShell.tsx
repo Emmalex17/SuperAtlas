@@ -77,13 +77,13 @@ function buildNav(account: Account): NavItem[] {
     const obligationsCount = orgId ? CASES.filter((c) => c.org === orgId && ["Firm to choose", "In preview"].includes(c.stage)).length : 0;
     const returnsCount = orgId ? FILINGS.filter((f) => f.org === orgId && f.status === "Queried").length : 0;
     const findingsCount = orgId ? allFindings().filter((x) => x.c.org === orgId && x.f.status === "Open").length : 0;
-    const actionsCount = orgId ? ENF_CASES.filter((c) => c.org === orgId && c.status === "Notice issued").length : 0;
+    const complianceCount = orgId ? ENF_CASES.filter((c) => c.org === orgId && c.status === "Notice issued").length : 0;
     return [
       { icon: "squares-four", label: "Dashboard", href: "/organisation" },
+      { icon: "shield-check", label: "Compliance", href: "/organisation/compliance", count: complianceCount },
       { icon: "list-checks", label: "Obligations", href: "/organisation/obligations", section: "Work", count: obligationsCount },
       { icon: "table", label: "Data returns", href: "/organisation/returns", count: returnsCount },
       { icon: "flag", label: "Findings", href: "/organisation/findings", count: findingsCount },
-      { icon: "gavel", label: "Regulatory actions", href: "/organisation/actions", count: actionsCount },
       { icon: "files", label: "Evidence library", href: "/organisation/evidence" },
       { icon: "users", label: "Team", href: "/organisation/team", section: "Organisation" },
       { icon: "identification-card", label: "Profile", href: "/organisation/profile" },
@@ -284,7 +284,12 @@ export function AppShell({ workspace, crumbs, children }: { workspace: Workspace
           </div>
         </div>
         {withSectionBreaks(nav).map(({ item, showSection }) => {
-          const active = item.href === `/${workspace}` ? pathname === item.href : pathname.startsWith(item.href);
+          const active =
+            item.href === `/${workspace}`
+              ? pathname === item.href
+              : item.href === "/organisation/compliance"
+                ? ["/organisation/compliance", "/organisation/exposure", "/organisation/actions"].some((p) => pathname.startsWith(p))
+                : pathname.startsWith(item.href);
           return (
             <div key={item.href}>
               {showSection ? <div className="sb-sec">{item.section}</div> : null}

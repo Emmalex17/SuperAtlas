@@ -2,7 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import { AppShell } from "@/components/AppShell";
-import { PageHead, Chip, Button, Tile } from "@/components/ui";
+import { Chip, Button, Tile } from "@/components/ui";
+import { ComplianceHead } from "@/components/ComplianceHead";
 import { myEnfCases, atOf, ENF_TONE } from "@/lib/enforcement";
 
 export default function OrgActionsPage() {
@@ -11,7 +12,8 @@ export default function OrgActionsPage() {
 
   return (
     <AppShell workspace="organisation">
-      <PageHead over="Zenith Bank Plc" title="Regulatory actions" sub="Notices from NITDA and what they need from you. Respond by the deadline: accept with a fix plan, or contest with documents." />
+      <ComplianceHead active="/organisation/actions" />
+      <p className="small muted">Notices from NITDA and what they need from you. Respond by the deadline: accept with a fix plan, or contest with documents.</p>
       <div className="card p0">
         <div className="tbl-wrap">
           <table className="tbl">

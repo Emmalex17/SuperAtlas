@@ -8,10 +8,11 @@ import { Dialog } from "@/components/Overlay";
 import { useToast } from "@/components/Toast";
 import { Icon } from "@/lib/icons";
 import { TODAY } from "@/lib/cases";
-import { watchlist, enfOpenFor, ENF_CASES, OPEN_ENF, ENF_TONE, atOf, naira, dismissFromWatchlist, addToWatchlist, openEnfCase, COMPLIANCE_WATCH_OFF } from "@/lib/enforcement";
+import { watchlist, enfOpenFor, ENF_CASES, OPEN_ENF, ENF_TONE, atOf, naira, dismissFromWatchlist, addToWatchlist, COMPLIANCE_WATCH_OFF } from "@/lib/enforcement";
 import { ORGANISATIONS, catLabel } from "@/lib/mockData";
+import EnforcementInsights from "./Insights";
 
-type Tab = "watch" | "cases";
+type Tab = "watch" | "cases" | "insights";
 
 const RULE_ICON: Record<string, string> = { overdue: "warning", cycles: "chart-line-down", returns: "table", manual: "user" };
 
@@ -55,18 +56,12 @@ export default function EnforcementPage() {
     toast(`${ORGANISATIONS.find((o) => o.id === addOrg)?.name} added to the watchlist`);
   }
 
-  function openCaseFromWatch(org: string) {
-    const c = openEnfCase(org, "advisory", "", "", "M. Bello", [], TODAY, "M. Bello");
-    bump();
-    router.push(`/regulator/enforcement/${c.id}`);
-  }
-
   const verifiedOrgs = ORGANISATIONS.filter((o) => o.status === "Verified").sort((a, b) => a.name.localeCompare(b.name));
 
   return (
     <AppShell workspace="regulator">
-      <PageHead over="NITDA" title="Enforcement" sub="Organisations flagged by your rules, and the action you take: notices, responses, decisions and penalties." actions={<Button icon="plus" onClick={() => setAddOpen(true)} testId="enf-new">Open a case</Button>} />
-      <Tabs items={[{ id: "watch", label: "Watchlist", count: wl.length }, { id: "cases", label: "Cases", count: openN }]} active={tab} onChange={setTab} />
+      <PageHead over="NITDA" title="Enforcement" sub="Organisations flagged by your rules, and the action you take: notices, responses, decisions and penalties." actions={<Button icon="plus" onClick={() => router.push("/regulator/enforcement/new")} testId="enf-new">Open a case</Button>} />
+      <Tabs items={[{ id: "watch", label: "Watchlist", count: wl.length }, { id: "cases", label: "Cases", count: openN }, { id: "insights", label: "Insights" }]} active={tab} onChange={setTab} />
 
       {tab === "watch" ? (
         <>
@@ -113,7 +108,7 @@ export default function EnforcementPage() {
                           </td>
                           <td className="act-col">
                             <div className="row end gap4">
-                              {!oc ? <Button size="sm" onClick={() => openCaseFromWatch(w.org)} testId={`enf-new-${w.org}`}>Open a case</Button> : null}
+                              {!oc ? <Button size="sm" onClick={() => router.push(`/regulator/enforcement/new?org=${w.org}`)} testId={`enf-new-${w.org}`}>Open a case</Button> : null}
                               <Button variant="tertiary" size="sm" onClick={() => setDismissOrg(w.org)} testId={`dismiss-${w.org}`}>Dismiss</Button>
                             </div>
                           </td>
@@ -129,7 +124,7 @@ export default function EnforcementPage() {
             <div className="tbl-foot">{wl.length} organisation{wl.length === 1 ? "" : "s"} flagged</div>
           </div>
         </>
-      ) : (
+      ) : tab === "cases" ? (
         <div className="card p0">
           <div className="tbl-sub">
             <div className="pills">
@@ -160,6 +155,8 @@ export default function EnforcementPage() {
             </table>
           </div>
         </div>
+      ) : (
+        <EnforcementInsights />
       )}
 
       <Dialog open={dismissOrg !== null} onClose={() => setDismissOrg(null)}>

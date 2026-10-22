@@ -1,6 +1,7 @@
 "use client";
 
 import { Fragment, useState, type ReactNode } from "react";
+import Link from "next/link";
 import { Icon, type IconName } from "@/lib/icons";
 
 export type ChipTone = "ok" | "warn" | "bad" | "info" | "neu" | "ai" | "brand";
@@ -174,6 +175,22 @@ export function Tabs<T extends string>({ items, active, onChange }: { items: { i
           {t.label}
           {t.count !== undefined ? <span className="count">{t.count}</span> : null}
         </button>
+      ))}
+    </div>
+  );
+}
+
+/** A tab bar whose "tabs" are really separate routes sharing one header — the prototype's
+ * routeTabs(), used by screens like org/compliance that split one logical page across several
+ * URLs (org/compliance, org/exposure, org/actions) instead of client-side tab state. */
+export function RouteTabs({ items, active }: { items: { label: string; href: string; count?: number }[]; active: string }) {
+  return (
+    <div className="tabs" role="tablist">
+      {items.map((t) => (
+        <Link key={t.href} role="tab" className={t.href === active ? "on" : ""} href={t.href}>
+          {t.label}
+          {t.count !== undefined ? <span className="count">{t.count}</span> : null}
+        </Link>
       ))}
     </div>
   );
