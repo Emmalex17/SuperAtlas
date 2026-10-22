@@ -7,7 +7,7 @@ import { Chip, AlertBox, Kv, Field, Button, Tile } from "@/components/ui";
 import { Dialog } from "@/components/Overlay";
 import { useToast } from "@/components/Toast";
 import { Icon } from "@/lib/icons";
-import { TODAY } from "@/lib/cases";
+import { TODAY, fmtD } from "@/lib/cases";
 import { dPlus } from "@/lib/returns";
 import {
   ENF_CASES,
@@ -23,8 +23,17 @@ import {
   escalateCase,
   nextActionTypes,
   type EnforcementCase,
+  type EnfEvidence,
 } from "@/lib/enforcement";
 import { ORGANISATIONS } from "@/lib/mockData";
+
+function evLink(e: EnfEvidence): string {
+  if (!e.id) return "";
+  if (e.kind === "finding") return `/regulator/findings/${e.id}`;
+  if (e.kind === "result") return `/regulator/reviews/${e.id}`;
+  if (e.kind === "return") return `/regulator/returns/${e.id}`;
+  return "";
+}
 
 export default function EnforcementCasePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -151,42 +160,68 @@ export default function EnforcementCasePage({ params }: { params: Promise<{ id: 
       </>
     );
   } else {
-    side = <AlertBox tone="ok" title={c.status} body={c.decision ? `${c.decision.outcome} · ${c.decision.when}` : ""} />;
+    side = <AlertBox tone="ok" title={c.status} body={c.decision ? `${c.decision.outcome} · ${fmtD(c.decision.when)}` : ""} />;
   }
 
   return (
-    <AppShell workspace="regulator">
+    <AppShell workspace="regulator" crumbs={[{ label: "Enforcement", href: "/regulator/enforcement" }, { label: c.ref }]}>
       <div className="rh">
         <span className="logo s48" style={{ background: o?.color }}>{o?.initials}</span>
         <div className="rh-main">
           <div className="overline">{c.ref} · {t.name}</div>
           <div className="rh-title"><h1 className="h1">{o?.name}</h1><Chip tone={ENF_TONE[c.status] ?? "neu"}>{c.status}</Chip></div>
-          <div className="rh-meta">Opened {c.opened} by {c.by}{c.respondBy ? ` · respond by ${c.respondBy}` : ""}{c.penalty ? ` · penalty ${naira(c.penalty.amount)}` : ""}</div>
+          <div className="rh-meta">Opened {fmtD(c.opened)} by {c.by}{c.respondBy ? ` · respond by ${fmtD(c.respondBy)}` : ""}{c.penalty ? ` · penalty ${naira(c.penalty.amount)}` : ""}</div>
         </div>
         <div className="rh-act"><Button variant="secondary" size="sm" onClick={() => router.push(`/regulator/organisations/${c.org}`)}>Open organisation</Button></div>
       </div>
       <div className="grid side">
         <div className="col gap16">
-          <div className="card col gap8"><div className="h4">Why this case was opened</div><p className="small">{c.reason}</p></div>
-          {c.evidence.length ? (
+          {c.notice || c.reason ? (
             <div className="card col gap8">
-              <div className="h4">Evidence</div>
-              {c.evidence.map((e, i) => <div className="row small" key={i}><Icon name="dot" /><span>{e.label}</span></div>)}
+              <div className="row"><span className="h4 grow">Notice</span>{c.issued ? <span className="cap muted">Issued {fmtD(c.issued)}</span> : <Chip tone="warn">Not issued yet</Chip>}</div>
+              {c.notice ? (
+                <>
+                  <div className="strong small">{c.notice.subject}</div>
+                  <div className="letter">{c.notice.body}</div>
+                </>
+              ) : (
+                <p className="small">{c.reason}</p>
+              )}
+              <Button variant="tertiary" size="sm" icon="download-simple" onClick={() => toast("Notice downloaded")}>Download notice (PDF)</Button>
             </div>
           ) : null}
+          <div className="card col gap8">
+            <div className="h4">Evidence</div>
+            {c.evidence.length ? (
+              c.evidence.map((e, i) => (
+                evLink(e) ? (
+                  <a key={i} className="small" href={evLink(e)} onClick={(ev) => { ev.preventDefault(); router.push(evLink(e)); }}>{e.label}</a>
+                ) : (
+                  <span key={i} className="small">{e.label}</span>
+                )
+              ))
+            ) : (
+              <p className="small muted">None linked.</p>
+            )}
+          </div>
           {c.response ? (
             <div className="card col gap8">
-              <div className="h4">Response</div>
-              <Chip tone={c.response.kind === "accept" ? "ok" : "warn"}>{c.response.kind === "accept" ? "Accepted" : "Contested"}</Chip>
+              <div className="row"><span className="h4 grow">Response from {o?.name}</span><Chip tone={c.response.kind === "accept" ? "ok" : "warn"}>{c.response.kind === "accept" ? "Accepted" : "Contested"}</Chip></div>
               <p className="small">{c.response.text}</p>
-              <div className="cap muted">{c.response.by} · {c.response.when}</div>
+              <div className="cap muted">{c.response.by} · {fmtD(c.response.when)}</div>
+            </div>
+          ) : null}
+          {c.decision ? (
+            <div className="card col gap8">
+              <div className="h4">Decision</div>
+              <Kv pairs={[["Outcome", c.decision.outcome], ["By", c.decision.by], ["When", fmtD(c.decision.when)], ...(c.decision.note ? ([["Note", c.decision.note]] as [string, string][]) : [])]} />
             </div>
           ) : null}
           <div className="card col gap12">
             <div className="h4">Timeline</div>
             <div className="timeline">
               {[...c.timeline].reverse().map(([w, who, a], i) => (
-                <div className="tl" key={i}><Tile icon="gavel" size="sm" /><div><div className="small strong">{a}</div><div className="cap muted">{who} · {w}</div></div></div>
+                <div className="tl" key={i}><Tile icon="gavel" size="sm" /><div><div className="small strong">{a}</div><div className="cap muted">{who} · {fmtD(w)}</div></div></div>
               ))}
             </div>
           </div>

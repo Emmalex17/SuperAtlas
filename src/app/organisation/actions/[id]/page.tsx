@@ -1,15 +1,24 @@
 "use client";
 
 import { use, useReducer, useState } from "react";
-import { notFound } from "next/navigation";
+import { useRouter, notFound } from "next/navigation";
 import { AppShell } from "@/components/AppShell";
 import { Chip, AlertBox, Kv, Field, Button, Tile } from "@/components/ui";
 import { useToast } from "@/components/Toast";
-import { TODAY } from "@/lib/cases";
-import { ENF_CASES, atOf, naira, ENF_TONE, respondToCase, uploadPaymentProof, type EnforcementCase } from "@/lib/enforcement";
+import { TODAY, fmtD } from "@/lib/cases";
+import { ENF_CASES, atOf, naira, ENF_TONE, respondToCase, uploadPaymentProof, type EnforcementCase, type EnfEvidence } from "@/lib/enforcement";
+
+function evLink(e: EnfEvidence): string {
+  if (!e.id) return "";
+  if (e.kind === "finding") return `/organisation/findings/${e.id}`;
+  if (e.kind === "result") return `/organisation/report/${e.id}`;
+  if (e.kind === "return") return `/organisation/returns/${e.id}`;
+  return "";
+}
 
 export default function OrgActionPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
+  const router = useRouter();
   const toast = useToast();
   const [, bump] = useReducer((x: number) => x + 1, 0);
   const [kind, setKind] = useState<"accept" | "contest">("accept");
@@ -62,7 +71,7 @@ export default function OrgActionPage({ params }: { params: Promise<{ id: string
   } else if (c.status === "Awaiting payment") {
     side = (
       <>
-        <AlertBox tone="warn" title={`Pay ${naira(c.penalty?.amount)}`} body={`By ${c.respondBy || "the deadline"}. Upload proof once paid.`} />
+        <AlertBox tone="warn" title={`Pay ${naira(c.penalty?.amount)}`} body={`By ${c.respondBy ? fmtD(c.respondBy) : "the deadline"}. Upload proof once paid.`} />
         {c.penalty?.proof ? (
           <div className="file"><div className="grow"><div className="strong small">{c.penalty.proof[0]}</div><div className="cap muted">{c.penalty.proof[1]}</div></div></div>
         ) : (
@@ -77,28 +86,53 @@ export default function OrgActionPage({ params }: { params: Promise<{ id: string
   }
 
   return (
-    <AppShell workspace="organisation">
+    <AppShell workspace="organisation" crumbs={[{ label: "Compliance", href: "/organisation/compliance" }, { label: "Regulatory actions", href: "/organisation/actions" }, { label: c.ref }]}>
       <div className="rh">
         <div className="rh-main">
           <div className="overline">{c.ref} · from NITDA</div>
           <div className="rh-title"><h1 className="h1">{t.name}</h1><Chip tone={ENF_TONE[c.status] ?? "neu"}>{c.status}</Chip></div>
-          <div className="rh-meta">Issued {c.issued}{c.respondBy ? ` · respond by ${c.respondBy}` : ""}{c.penalty ? ` · penalty ${naira(c.penalty.amount)}` : ""}</div>
+          <div className="rh-meta">Issued {c.issued ? fmtD(c.issued) : ""}{c.respondBy ? ` · respond by ${fmtD(c.respondBy)}` : ""}{c.penalty ? ` · penalty ${naira(c.penalty.amount)}` : ""}</div>
         </div>
       </div>
       <div className="grid side">
         <div className="col gap16">
-          <div className="card col gap8"><div className="h4">Reason</div><p className="small">{c.reason}</p></div>
+          {c.notice || c.reason ? (
+            <div className="card col gap8">
+              <div className="row"><span className="h4 grow">Notice</span>{c.issued ? <span className="cap muted">Issued {fmtD(c.issued)}</span> : <Chip tone="warn">Not issued yet</Chip>}</div>
+              {c.notice ? (
+                <>
+                  <div className="strong small">{c.notice.subject}</div>
+                  <div className="letter">{c.notice.body}</div>
+                </>
+              ) : (
+                <p className="small">{c.reason}</p>
+              )}
+              <Button variant="tertiary" size="sm" icon="download-simple" onClick={() => toast("Notice downloaded")}>Download notice (PDF)</Button>
+            </div>
+          ) : null}
           {c.evidence.length ? (
             <div className="card col gap8">
               <div className="h4">Evidence</div>
-              {c.evidence.map((e, i) => <div className="row small" key={i}><span>{e.label}</span></div>)}
+              {c.evidence.map((e, i) => (
+                evLink(e) ? (
+                  <a key={i} className="small" href={evLink(e)} onClick={(ev) => { ev.preventDefault(); router.push(evLink(e)); }}>{e.label}</a>
+                ) : (
+                  <span key={i} className="small">{e.label}</span>
+                )
+              ))}
+            </div>
+          ) : null}
+          {c.decision ? (
+            <div className="card col gap8">
+              <div className="h4">Decision</div>
+              <Kv pairs={[["Outcome", c.decision.outcome], ["By", c.decision.by], ["When", fmtD(c.decision.when)], ...(c.decision.note ? ([["Note", c.decision.note]] as [string, string][]) : [])]} />
             </div>
           ) : null}
           <div className="card col gap12">
             <div className="h4">Timeline</div>
             <div className="timeline">
               {[...c.timeline].reverse().map(([w, who, a], i) => (
-                <div className="tl" key={i}><div><div className="small strong">{a}</div><div className="cap muted">{who} · {w}</div></div></div>
+                <div className="tl" key={i}><div><div className="small strong">{a}</div><div className="cap muted">{who} · {fmtD(w)}</div></div></div>
               ))}
             </div>
           </div>
@@ -107,10 +141,6 @@ export default function OrgActionPage({ params }: { params: Promise<{ id: string
           <div className="card col gap12">
             <div className="h4">{c.status === "Notice issued" ? "Your response" : "Status"}</div>
             {side}
-          </div>
-          <div className="card col gap8">
-            <div className="h4">Details</div>
-            <Kv pairs={[["Action", t.name], ["Days to respond", t.days ? `${t.days} days` : "—"]]} />
           </div>
         </div>
       </div>
