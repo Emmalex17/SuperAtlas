@@ -700,7 +700,7 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 
 ### `returns`: Data returns
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Regulator (M. Bello) · Layout: app · Breadcrumb: Data returns
 - Reference: `screens/returns.jpg`
 - Headings and section titles: “Data returns”
@@ -710,13 +710,13 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 - Buttons and links: “New template” · “Show late filings” · “Export” · “All 30” · “Due 11” · “To review 4” · “Queried 1” · “Late 2” · “Accepted 12” · “Review” · “Remind”
 - Status chips seen: “Submitted” · “Late” · “Queried” · “Not started” · “Draft” · “Accepted”
 - Tab states (each must match its screenshot):
-    - [ ] “Insights”: `screens/returns__insights.jpg` · shows: “Filing on time by return and period” · “4 organisations late at least once”
-    - [ ] “Templates 4”: `screens/returns__templates-4.jpg` · shows: “Return templates”
-    - [ ] “Schedule”: `screens/returns__schedule.jpg` · shows: “Schedule and reminders”
+    - [x] “Insights”: `screens/returns__insights.jpg` · shows: “Filing on time by return and period” · “4 organisations late at least once”
+    - [x] “Templates 4”: `screens/returns__templates-4.jpg` · shows: “Return templates”
+    - [x] “Schedule”: `screens/returns__schedule.jpg` · shows: “Schedule and reminders”
 
 ### `returns/template`: Return template
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Regulator (M. Bello) · Layout: app · Breadcrumb: Data returns > New template
 - Reference: `screens/returns_template.jpg`
 - Headings and section titles: “New return template” · “Basics” · “Fields”
@@ -727,7 +727,7 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 
 ### `returns/filing`: Filing
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Regulator (M. Bello) · Layout: app · Breadcrumb: Data returns > Moniepoint Microfinance Bank · MQR Q3 2026
 - Reference: `screens/returns_filing.jpg`
 - Headings and section titles: “Lagoon Microfinance Bank Ltd” · “Figures” · “History” · “Decision” · “Filing” · “Other periods”
@@ -737,7 +737,7 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 
 ### `org/returns`: Data returns
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Organisation (Zenith) · Layout: app · Breadcrumb: Data returns
 - Reference: `screens/org_returns.jpg`
 - Headings and section titles: “Data returns” · “To do” · “Filed”
@@ -748,7 +748,7 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 
 ### `org/return`: Return
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Organisation (Zenith) · Layout: app · Breadcrumb: Data returns > Monthly cyber incident return · Sep 2026
 - Reference: `screens/org_return.jpg`
 - Headings and section titles: “Monthly cyber incident return · Sep 2026” · “What you filed” · “Receipt” · “History”
