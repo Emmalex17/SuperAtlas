@@ -31,9 +31,21 @@ The earlier (now superseded) `ddf4619`/`2ec46d0` commits were never reverted or 
   4. Confirm `main` and `staging` are in sync — `git diff origin/staging origin/main --stat` is empty (zero content drift). The hashes themselves (`git rev-parse origin/main` / `origin/staging`) will usually differ once any promotion has used a merge commit, which is expected, not a problem — see "Deployment-identity fix" above for why. Record both hashes and confirm the diff is empty here.
 - **Never** commit directly to `main`, **never** force-push, **never** promote `staging` → `main` while a check is red.
 
-## Current state (2026-10-22, ~08:00)
+## Current state (2026-10-22, ~09:15)
 
-**Phase:** Step 1 (audit) done. Step 2 (foundations) substantially done. **P1-P6 (Step 3) are all fully closed: 16/16, 24/24, 32/32, 8/8, 11/11, and 11/11 Matches.** Next: P7 (Review, publishing and findings).
+**Phase:** Step 1 (audit) done. Step 2 (foundations) substantially done. **P1-P7 (Step 3) are all fully closed: 16/16, 24/24, 32/32, 8/8, 11/11, 11/11, and 18/18 Matches.** Next: P8 (Data returns).
+
+**P7 is complete — 18/18 Matches (up from 8/18 at session start).** Built:
+1. `firm/findings` (Fixes to verify / Being fixed / Verified and closed tabs) and `firm/finding` (the firm's verify/not-fixed decision panel) — the whole firm-side finding workflow was missing entirely. Added a "Findings" item to the firm sidebar nav (was absent) with a live Fix-submitted count.
+2. `findings` Register tab: Insights tab (new `Insights.tsx`, built on the existing chart kit — KTiles, open-findings-by-category stack, 8-month overdue trend line), gear-icon link to Finding classes, working Export toast.
+3. `reviews/report`: a real "Organisation said" column (derived from the org's own Yes/No answers, was hardcoded `—`), the "Organisation's comments on the preview" card, and the Quality review row. Widened `CaseOutcome.override` with a `from` field so "Was X · changed by Y" shows correctly.
+4. `org/report`: "Plan your fixes" button, the full star-rating card (new `addRating`/`ratingFor` in cases.ts — rate the firm once per case, read-only after), and wired the dead "Download report" button.
+5. "Original deadline" and "Organisation" Kv rows added to `findings/view` and `org/finding`.
+6. **Bonus fix**: swapped flat `tone="neu"` status chips for the existing `StatusChip` component (full colour/icon vocabulary) in `reviews` (tracker + report), and — caught while doing that — in several pages *this same session* had already written with the identical oversight: `programmes/[id]/Analytics.tsx`, `firm/assess`, `org/assessment`, `org/answer`, `org/obligations`.
+
+**Correction to the standing audit, not a new fix:** `settings/findings` (the finding-classes editor) was flagged "Missing" in the P7 audit, but it was actually already fully built and wired in an earlier P2 commit (`3ddf379`) — the P2 inventory already had it checked off. The P7 audit's claim was stale. Lightly re-authored it to the same behaviour while fixing the (genuinely missing) gear-icon link to it from `findings`.
+
+Verified: `tsc --noEmit`, `eslint src`, `npm run build` all clean. Live-verified end to end: a full star rating submitted on `org/report`, a submitted fix verified on `firm/finding` (status → "Verified fixed", nav badge updated). Committed as `64b2bd5` + `3027b6b` (Emmalex17, no co-author lines), pushed to staging.
 
 **P6 is complete — 11/11 Matches (up from 0/11 at session start, the worst-scoring phase of the whole audit).** Built:
 1. `org/answer` rebuilt from a single scrolling page into the prototype's one-question-at-a-time wizard: sidebar section/question nav with progress, All/Unanswered/Mine/Flagged filters, per-question flagging and assignment, the "Assign questions" dialog, "Explain this question" AI box, "Rephrase with AI", real Upload/Add-a-link/From-evidence-library evidence actions, and a "Previous answer" reference dialog.
