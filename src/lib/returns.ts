@@ -1,7 +1,7 @@
 import returnTemplatesData from "./data/returnTemplates.json";
 import filingsData from "./data/filings.json";
-import { ORGANISATIONS } from "./mockData";
-import { DEADLINES } from "./cases";
+import { ORGANISATIONS, type Organisation } from "./mockData";
+import { DEADLINES, fmtD } from "./cases";
 
 export type ReturnFieldType = "number" | "text" | "date" | "yn";
 
@@ -161,6 +161,15 @@ export function retOrgs(t: ReturnTemplate): number {
   return ORGANISATIONS.filter((o) => t.types.includes(o.type)).length;
 }
 
+export function retOrgsForTemplate(t: ReturnTemplate): Organisation[] {
+  return ORGANISATIONS.filter((o) => t.types.includes(o.type));
+}
+
+export function nextVer(v: string): string {
+  const m = /v(\d+)\.(\d+)/.exec(v || "v1.0");
+  return m ? `v${m[1]}.${+m[2] + 1}` : "v1.1";
+}
+
 export function dueRule(t: ReturnTemplate): string {
   return t.freq === "Yearly" ? `${t.dueDays} days after year end` : t.freq === "Monthly" ? `Day ${t.dueDays} of the next month` : `${t.dueDays} days after quarter end`;
 }
@@ -232,15 +241,115 @@ export function saveDraft(f: Filing, values: Record<string, string | number>) {
   if (f.status === "Not started") f.status = "Draft";
 }
 
-export function submitFiling(f: Filing, values: Record<string, string | number>, byName: string, today: string, receiptPrefix: string) {
+export function submitFiling(f: Filing, values: Record<string, string | number>, preparedBy: string, approvedBy: string, today: string, receiptPrefix: string, source: "Online" | "Upload" = "Online") {
   const wasQueried = f.status === "Queried";
   f.values = { ...f.values, ...values };
   f.status = wasQueried ? "Resubmitted" : "Submitted";
   f.filedAt = `${today}, 09:00`;
-  f.filedBy = byName;
-  f.approvedBy = byName;
+  f.filedBy = preparedBy;
+  f.approvedBy = approvedBy;
+  f.source = source;
   f.ver = (f.ver || 1) + (wasQueried ? 1 : 0);
   if (!f.receipt) f.receipt = `${receiptPrefix}-${f.id.toUpperCase()}`;
-  f.history.push([today, wasQueried ? "Resubmitted" : "Submitted", byName]);
+  f.history.push([today, wasQueried ? "Resubmitted" : "Submitted", preparedBy]);
   if (wasQueried) f.queries.forEach((q) => { if (q.status === "Open") q.status = "Answered"; });
+}
+
+export function periodCode(f: Filing): string {
+  return f.pkey.replace("-", "");
+}
+
+/** Figures a freshly-"read" uploaded spreadsheet would contain, keyed by template id — stand-ins
+ * for the parsing step on org/return's "Upload template" filing mode. */
+export const UPLOAD_SAMPLE: Record<string, Record<string, string | number>> = {
+  rt1: { customers: 10450000, digital: 8790000, txValue: 3310000, failRate: 0.7, fraudN: 380, fraudLoss: 212.4, cmpRecv: 40200, cmpRes: 41900, officer: "C. Obi" },
+  rt2: { incidents: 12, major: 0, in24: 0, downtime: 0.5, summary: "" },
+  rt3: { activities: 40, dsar: 90, dsarMet: 88, breaches: 0, dpo: "Data protection officer" },
+};
+
+function periodFor(t: ReturnTemplate, today: string): { period: string; pkey: string; due: string } {
+  if (t.freq === "Monthly") return { period: "Nov 2026", pkey: "2026-11", due: dPlus("2026-12-01", t.dueDays) };
+  if (t.freq === "Yearly") return { period: "2026", pkey: "2026", due: dPlus("2026-12-31", t.dueDays) };
+  void today;
+  return { period: "Q4 2026", pkey: "2026-Q4", due: dPlus("2026-12-31", t.dueDays) };
+}
+
+/** Opens the first filing period for every eligible organisation when a brand-new template publishes. */
+export function createFilingsForTemplate(t: ReturnTemplate) {
+  if (FILINGS.some((f) => f.tpl === t.id)) return;
+  const { period, pkey, due } = periodFor(t, TODAY);
+  retOrgsForTemplate(t).forEach((o, i) => {
+    FILINGS.push({ id: `rn${t.id}${i}`, tpl: t.id, period, pkey, due, org: o.id, status: "Not started", values: {}, history: [], queries: [], reminders: 0, source: "Online", ver: 1 });
+  });
+}
+
+/** Saves a draft, or publishes (bumping the version and opening filings on first publish). */
+export function saveTemplate(t: ReturnTemplate, mode: "draft" | "publish", today: string) {
+  t.updated = fmtD(today);
+  if (mode === "publish") {
+    t.version = t.status === "Active" ? nextVer(t.version) : "v1.0";
+    t.status = "Active";
+  }
+  const ix = RETURN_TEMPLATES.findIndex((x) => x.id === t.id);
+  if (ix >= 0) RETURN_TEMPLATES[ix] = t;
+  else RETURN_TEMPLATES.push(t);
+  if (mode === "publish") createFilingsForTemplate(t);
+}
+
+/** Holds a freshly-"uploaded" draft between the regulator returns list (where the file is chosen)
+ * and the template builder route, which reads and clears it on mount. Nothing is written into
+ * RETURN_TEMPLATES until the person saves or publishes it there. */
+export const PENDING_UPLOAD: { draft: ReturnTemplate | null } = { draft: null };
+
+let newTplSeq = 0;
+
+export function makeBlankTemplate(): ReturnTemplate {
+  newTplSeq += 1;
+  return {
+    id: `rtnew${newTplSeq}`,
+    code: "",
+    name: "",
+    freq: "Quarterly",
+    types: [],
+    dueDays: 30,
+    grace: "",
+    status: "Draft",
+    version: "v0.1",
+    source: "Built online",
+    updated: fmtD(TODAY),
+    reminders: "7, 3, 1",
+    desc: "",
+    fields: [{ key: "f1", label: "", type: "number", unit: "", req: true, min: 0, max: "", lte: "", help: "" }],
+  };
+}
+
+let uploadedTplSeq = 0;
+
+/** A fresh draft created from the regulator's "Upload a template" flow — mirrors the prototype's
+ * hardcoded parsed example, since this mock has no real spreadsheet to read. */
+export function makeUploadedDraft(today: string): ReturnTemplate {
+  uploadedTplSeq += 1;
+  const field = (key: string, label: string, type: ReturnFieldType, o: Partial<ReturnField> = {}): ReturnField => ({ key, label, type, unit: "", req: true, min: "", max: "", lte: "", help: "", ...o });
+  return {
+    id: `rtup${uploadedTplSeq}`,
+    code: "AGN",
+    name: "Agent network return",
+    freq: "Quarterly",
+    types: ["Payment solution service provider"],
+    dueDays: 30,
+    grace: "",
+    status: "Draft",
+    version: "v0.1",
+    source: "Uploaded template",
+    updated: fmtD(today),
+    reminders: "7, 3, 1",
+    desc: "Read from agent-network-return.xlsx.",
+    fields: [
+      field("agents", "Active agents", "number", { min: 0 }),
+      field("newAgents", "New agents this quarter", "number", { min: 0 }),
+      field("states", "States covered", "number", { min: 0, max: 37 }),
+      field("agentTx", "Agent transaction value", "number", { unit: "₦ million", min: 0 }),
+      field("agentCmp", "Agent-related complaints", "number", { min: 0 }),
+    ],
+  };
 }

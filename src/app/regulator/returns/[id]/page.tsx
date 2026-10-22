@@ -92,7 +92,7 @@ export default function RegulatorFilingPage({ params }: { params: Promise<{ id: 
   }
 
   return (
-    <AppShell workspace="regulator">
+    <AppShell workspace="regulator" crumbs={[{ label: "Data returns", href: "/regulator/returns" }, { label: `${o?.name ?? ""} · ${t.code} ${f.period}` }]}>
       <div className="rh">
         <span className="logo s48" style={{ background: o?.color }}>{o?.initials}</span>
         <div className="rh-main">

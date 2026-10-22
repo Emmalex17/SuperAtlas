@@ -2,6 +2,7 @@
 
 import { useReducer, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { AppShell } from "@/components/AppShell";
 import { PageHead, Chip, Tabs, Tile, Button, AlertBox, Field } from "@/components/ui";
 import { Dialog } from "@/components/Overlay";
@@ -20,13 +21,17 @@ import {
   RET_CARDS,
   RET_CHIP_TONE,
   remindFiling,
+  makeUploadedDraft,
+  PENDING_UPLOAD,
   TODAY,
   type Filing,
   type ReturnTemplate,
 } from "@/lib/returns";
+import { DEADLINES } from "@/lib/cases";
 import { ORGANISATIONS, TEAM, catLabel } from "@/lib/mockData";
+import ReturnsInsights from "./Insights";
 
-type Tab = "filings" | "templates" | "schedule";
+type Tab = "filings" | "insights" | "templates" | "schedule";
 
 function reviewers() {
   return TEAM.filter((t) => ["Reviewer", "Supervisor", "Admin"].includes(t.role) && t.status === "Active");
@@ -59,6 +64,7 @@ export default function ReturnsPage() {
   const [escTo, setEscTo] = useState(reviewers()[0]?.name ?? "");
   const [escNote, setEscNote] = useState("Late with the Sep 2026 cyber incident return after reminders.");
   const [schedOpen, setSchedOpen] = useState<ReturnTemplate | null>(null);
+  const [uploadOpen, setUploadOpen] = useState(false);
 
   const active = RETURN_TEMPLATES.filter((t) => t.status === "Active");
   const pool = activeFilings();
@@ -83,6 +89,12 @@ export default function ReturnsPage() {
   function escalateGo() {
     setEscOpen(false);
     toast(`Escalated to ${escTo || "supervision lead"}`, "ok", "arrow-fat-line-up");
+  }
+
+  function parseUpload() {
+    setUploadOpen(false);
+    PENDING_UPLOAD.draft = makeUploadedDraft(TODAY);
+    router.push("/regulator/returns/template/new");
   }
 
   let filingsBody: React.ReactNode = null;
@@ -168,21 +180,21 @@ export default function ReturnsPage() {
             <div className="h4">Return templates</div>
             <div className="cap muted">Each template says what is filed, by whom and how often. Organisations fill it in online or upload the spreadsheet.</div>
           </div>
-          <Button variant="secondary" size="sm" icon="upload-simple" testId="rt-upload">Upload a template</Button>
+          <Button variant="secondary" size="sm" icon="upload-simple" onClick={() => setUploadOpen(true)} testId="rt-upload">Upload a template</Button>
         </div>
         <div className="tbl-wrap">
           <table className="tbl">
             <thead><tr><th>Template</th><th>Frequency</th><th>Who files</th><th className="num">Fields</th><th>Built</th><th>Status</th><th className="act-col" /></tr></thead>
             <tbody>
               {RETURN_TEMPLATES.map((t) => (
-                <tr key={t.id} data-test={`rt-${t.id}`}>
+                <tr key={t.id} className="click" onClick={() => router.push(`/regulator/returns/template/${t.id}`)} data-test={`rt-${t.id}`}>
                   <td><div className="row gap8"><Tile icon="table" size="sm" /><div><div className="strong">{t.name}</div><div className="cap mono muted">{t.code} {t.version} · updated {t.updated}</div></div></div></td>
                   <td className="small">{t.freq}</td>
                   <td className="small wrap" style={{ maxWidth: 260 }}>{t.types.join(", ")}<div className="cap muted">{retOrgs(t)} organisations</div></td>
                   <td className="num tnum">{t.fields.length}</td>
                   <td className="small">{t.source === "Uploaded template" ? <><Icon name="file-xls" /> Uploaded</> : "Online"}</td>
                   <td><Chip tone={t.status === "Active" ? "ok" : "neu"}>{t.status}</Chip></td>
-                  <td className="act-col"><Button variant="tertiary" size="sm" onClick={() => setSchedOpen(t)}>{t.status === "Draft" ? "Continue" : "Edit"}</Button></td>
+                  <td className="act-col" onClick={(e) => e.stopPropagation()}><Button variant="tertiary" size="sm" onClick={() => router.push(`/regulator/returns/template/${t.id}`)}>{t.status === "Draft" ? "Continue" : "Edit"}</Button></td>
                 </tr>
               ))}
             </tbody>
@@ -190,13 +202,15 @@ export default function ReturnsPage() {
         </div>
       </div>
     );
+  } else if (tab === "insights") {
+    filingsBody = <ReturnsInsights />;
   } else {
     filingsBody = (
       <div className="card p0">
         <div className="tbl-tools">
           <div className="grow">
             <div className="h4">Schedule and reminders</div>
-            <div className="cap muted">When each return is due and when filers are reminded.</div>
+            <div className="cap muted">When each return is due and when filers are reminded. Default grace period: <b>{DEADLINES.returnsGrace} days</b> (<Link href="/regulator/settings/deadlines">change</Link>).</div>
           </div>
         </div>
         <div className="tbl-wrap">
@@ -226,10 +240,11 @@ export default function ReturnsPage() {
 
   return (
     <AppShell workspace="regulator">
-      <PageHead over="NITDA" title="Data returns" sub="Periodic figures filed straight to NITDA. No firm involved." actions={<Button icon="plus">New template</Button>} />
+      <PageHead over="NITDA" title="Data returns" sub="Periodic figures filed straight to NITDA. No firm involved." actions={<Button icon="plus" onClick={() => router.push("/regulator/returns/template/new")} testId="rt-new">New template</Button>} />
       <Tabs
         items={[
           { id: "filings", label: "Filings", count: pool.filter(RET_CARDS[1][3]).length || undefined },
+          { id: "insights", label: "Insights" },
           { id: "templates", label: "Templates", count: RETURN_TEMPLATES.length },
           { id: "schedule", label: "Schedule" },
         ]}
@@ -242,6 +257,19 @@ export default function ReturnsPage() {
         </div>
       ) : null}
       <div style={{ marginTop: 16 }}>{filingsBody}</div>
+
+      <Dialog open={uploadOpen} onClose={() => setUploadOpen(false)}>
+        <div className="row"><Icon name="upload-simple" /><h2 className="h3">Upload a return template</h2></div>
+        <p className="muted small">Upload the spreadsheet organisations already use. SuperAtlas reads the column headings and turns them into fields you can check.</p>
+        <div className="col gap12" style={{ marginTop: 16 }}>
+          <button type="button" className="drop" onClick={parseUpload} data-test="rt-up-file">
+            <Tile icon="file-xls" tone="ok" size="sm" />
+            <b className="small">Choose an Excel or CSV file</b>
+            <span className="cap muted">.xlsx or .csv · first row holds the headings</span>
+          </button>
+          <p className="cap muted">Example file: <b>agent-network-return.xlsx</b> with 5 headings.</p>
+        </div>
+      </Dialog>
 
       <Dialog open={escOpen} onClose={() => setEscOpen(false)}>
         <div className="row"><Icon name="arrow-fat-line-up" /><h2 className="h3">Escalate late filings</h2></div>
