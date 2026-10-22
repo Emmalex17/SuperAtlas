@@ -536,7 +536,7 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 
 ### `org/answer`: Answer
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Organisation (Zenith) · Layout: app · Breadcrumb: Obligations > ISR 2026 annual assessment
 - Reference: `screens/org_answer.jpg`
 - Headings and section titles: “ISR 2026 annual assessment”
@@ -546,7 +546,7 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 
 ### `org/submit`: Review and submit
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Organisation (Zenith) · Layout: app · Breadcrumb: Obligations > ISR 2026 annual assessment > Review and submit
 - Reference: `screens/org_submit.jpg`
 - Headings and section titles: “Review and submit” · “By section” · “Not answered yet” · “Answered No” · “Flagged for you” · “Submit”
@@ -554,7 +554,7 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 
 ### `org/evidence`: Evidence library
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Organisation (Zenith) · Layout: app · Breadcrumb: Evidence library
 - Reference: `screens/org_evidence.jpg`
 - Headings and section titles: “Evidence library”
@@ -565,7 +565,7 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 
 ### `firm/assess`: Assessment
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Assurance firm (Deloitte) · Layout: app · Breadcrumb: Engagements > Zenith Bank Plc
 - Reference: `screens/firm_assess.jpg`
 - Headings and section titles: “Zenith Bank Plc” · “The organisation's answers” · “Outcome · 4-point compliance scale”
@@ -574,23 +574,23 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 - Buttons and links: “ISR-1.1 Board-approved information security policy” · “ISR-1.2 Named chief information security officer” · “ISR-1.3 Annual information security risk assessment” · “ISR-2.1 Inventory of critical information assets” · “ISR-4.1 Multi-factor authentication for privileged access” · “ISR-4.2 Quarterly access review” · “ISR-7.1 Report major incidents within 24 hours” · “ISR-7.2 Test the incident response plan yearly” · “Ask” · “Raise a finding” · “Save and next”
 - Status chips seen: “Answering” · “Yes”
 - Tab states (each must match its screenshot):
-    - [ ] “Information requests”: `screens/firm_assess__information-requests.jpg` · shows: “No information requests”
-    - [ ] “Interviews”: `screens/firm_assess__interviews.jpg`
-    - [ ] “Findings”: `screens/firm_assess__findings.jpg` · shows: “No findings”
-    - [ ] “Report and sign-off”: `screens/firm_assess__report-and-sign-off.jpg` · shows: “Findings” · “Sign-off”
+    - [x] “Information requests”: `screens/firm_assess__information-requests.jpg` · shows: “No information requests”
+    - [x] “Interviews”: `screens/firm_assess__interviews.jpg`
+    - [x] “Findings”: `screens/firm_assess__findings.jpg` · shows: “No findings”
+    - [x] “Report and sign-off”: `screens/firm_assess__report-and-sign-off.jpg` · shows: “Findings” · “Sign-off”
 
 ### `org/assessment`: Assessment
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Organisation (Zenith) · Layout: app · Breadcrumb: Obligations > ISR 2026 annual assessment
 - Reference: `screens/org_assessment.jpg`
 - Headings and section titles: “ISR 2026 annual assessment” · “No information requests”
 - Tabs: “Requests from assessor” · “Interviews” · “Outcome preview” · “Your answers”
 - Status chips seen: “Answering”
 - Tab states (each must match its screenshot):
-    - [ ] “Interviews”: `screens/org_assessment__interviews.jpg` · shows: “No interviews yet”
-    - [ ] “Outcome preview”: `screens/org_assessment__outcome-preview.jpg` · shows: “No preview yet”
-    - [ ] “Your answers”: `screens/org_assessment__your-answers.jpg`
+    - [x] “Interviews”: `screens/org_assessment__interviews.jpg` · shows: “No interviews yet”
+    - [x] “Outcome preview”: `screens/org_assessment__outcome-preview.jpg` · shows: “No preview yet”
+    - [x] “Your answers”: `screens/org_assessment__your-answers.jpg`
 
 ## P7. Review, publishing and findings
 
