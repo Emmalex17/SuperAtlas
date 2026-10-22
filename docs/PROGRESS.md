@@ -31,9 +31,24 @@ The earlier (now superseded) `ddf4619`/`2ec46d0` commits were never reverted or 
   4. Confirm `main` and `staging` are in sync — `git diff origin/staging origin/main --stat` is empty (zero content drift). The hashes themselves (`git rev-parse origin/main` / `origin/staging`) will usually differ once any promotion has used a merge commit, which is expected, not a problem — see "Deployment-identity fix" above for why. Record both hashes and confirm the diff is empty here.
 - **Never** commit directly to `main`, **never** force-push, **never** promote `staging` → `main` while a check is red.
 
-## Current state (2026-10-21, ~23:05)
+## Current state (2026-10-22, ~06:50)
 
-**Phase:** Step 1 (audit) done. Step 2 (foundations) substantially done. **P1, P2, P3 and P4 (Step 3) are all fully closed: 16/16, 24/24, 32/32, and 8/8 Matches.** Next: P5 (Programmes and engagements).
+**Phase:** Step 1 (audit) done. Step 2 (foundations) substantially done. **P1-P5 (Step 3) are all fully closed: 16/16, 24/24, 32/32, 8/8, and 11/11 Matches.** Next: P6 (Answering and assessment).
+
+**P5 is complete — 11/11 Matches (up from 3/11 at session start).** Built:
+1. `programmes` list: List/Calendar view toggle + full Calendar (month grid of Opens/Due events), wired "New programme"/"Continue setup"/scoring-settings buttons.
+2. `programmes/new`: the 6-step programme wizard (Basics → Scope → Question set → Scoring and deadlines → Settings → Review and launch), reusing the shared `SuggestQuestionsDialog` for per-requirement AI drafts in the programme's own editable question-set copy.
+3. `programmes/view` (`[id]/page.tsx`): Overview header actions (Send reminder to all / Edit programme / more-menu) + cycle picker + Key-dates Reminders row; Organisations tab bulk-select/assign-firm (with a real independence check)/review-request flows; Questions tab answer-part badges; Cycles tab full 7-column table + Run-next-cycle; Settings tab Reminders row.
+4. `programmes/view` → Analytics tab (`Analytics.tsx`, new file): the full 5-sub-tab surface (Progress/Results/Sections/Over time/Remediation) with the shared filter bar, built entirely on the pre-existing chart kit (`src/lib/charts.ts`) and `KTile`/`ChartCard`/`MiniTable` components from earlier phases — this was the single largest remaining gap in the whole PARITY_PROMPT effort and turned out tractable specifically because that chart-kit infrastructure already existed.
+5. `org/obligations`'s Choose-a-firm dialog: Accredited-firms/Another-firm segmented toggle, the non-accredited-firm request form, independence-conflict row blocking, declined-last-request banner.
+
+**Key data fix found while building:** seeded a real PwC/GTB independence conflict (`FIRMS.pwc.clients`, with a new `FirmClient.orgId` field) matching the prototype's own demo scenario exactly — without it, the Assign-firm dialog's conflict-blocking logic had no case in our data to ever exercise, so it couldn't be verified as actually working. Live-verified it now correctly blocks the assignment.
+
+**Deliberate adaptation (documented, not a gap):** Analytics' chart kit renders static SVG/HTML strings (`dangerouslySetInnerHTML`), not interactive React elements, so per-chart-element drill-down dialogs (click a bar → see the org list) are not wired — each `ChartCard` instead offers the existing "View as table" toggle. This is the same adaptation P3's `organisations/category` screen already used and shipped as a "Matches" screen, so it is a precedent-consistent choice, not a shortcut invented for this phase.
+
+All new/changed screens live-verified in browser (not just visually): the full wizard end-to-end (create → schedule → edit draft → re-save, with AI-suggested questions), the Assign-firm independence block, the Review-request approve flow, all 5 Analytics sub-tabs against real multi-cycle (2024/2025/2026) data with zero console errors, and org/obligations' non-accredited-firm request flow end to end.
+
+Verified: `tsc --noEmit`, `eslint src`, `npm run build` all clean. Committed across 4 staging commits (`c49893b`, `deece17`, `289aa25`, `97da221`; all Emmalex17, no co-author lines), each pushed and confirmed Ready, promoted via PR #45 (merge commit `b5eddbc`), confirmed production Ready (new routes 200). `origin/main` = `b5eddbc46671dd63d3ef1a11d07476a2ed303dc3`, `origin/staging` = `97da2219be34de36779d60b9f4772cd316674251`, `git diff origin/staging origin/main --stat` empty (zero content drift).
 
 **P4 is complete — 8/8 Matches (up from 1/8 at session start).** Built the three missing screens:
 1. `library/requirement` (standalone requirement view: Previous/Next/Edit, Questions-asked with badges + Suggest-questions-with-AI, Evidence required, Guidance, Details/Applies-to sidebar).
