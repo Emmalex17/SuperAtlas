@@ -31,9 +31,18 @@ The earlier (now superseded) `ddf4619`/`2ec46d0` commits were never reverted or 
   4. Confirm `main` and `staging` are in sync — `git diff origin/staging origin/main --stat` is empty (zero content drift). The hashes themselves (`git rev-parse origin/main` / `origin/staging`) will usually differ once any promotion has used a merge commit, which is expected, not a problem — see "Deployment-identity fix" above for why. Record both hashes and confirm the diff is empty here.
 - **Never** commit directly to `main`, **never** force-push, **never** promote `staging` → `main` while a check is red.
 
-## Current state (2026-10-22, ~09:15)
+## Current state (2026-10-22, ~13:30)
 
-**Phase:** Step 1 (audit) done. Step 2 (foundations) substantially done. **P1-P7 (Step 3) are all fully closed: 16/16, 24/24, 32/32, 8/8, 11/11, 11/11, and 18/18 Matches.** Next: P8 (Data returns).
+**Phase:** Step 1 (audit) done. Step 2 (foundations) substantially done. **P1-P8 (Step 3) are all fully closed: 16/16, 24/24, 32/32, 8/8, 11/11, 11/11, 18/18, and 8/8 Matches.** Next: P9 (Compliance and enforcement).
+
+**P8 is complete — 8/8 Matches (up from 2/8 at session start).** Built:
+1. `regulator/returns` Insights tab (new `Insights.tsx`, mirroring the prototype's `retInsights()`): 4 KTiles, a stacked "Filing on time by return and period" chart and a "late by organisation" bar chart, both with the chart kit's "View as table" toggle.
+2. `regulator/returns/template/[id]` — the return-template builder, built from scratch (route didn't exist). Basics, "who files" type checkboxes, a Fields table (label/type/unit/min/max/not-more-than/required) with Edit/Preview toggle, Save draft/Publish — publishing a brand-new template opens the first filing period for every eligible organisation, matching `ACT.rtSave`.
+3. Wired the dead "New template" and "Upload a template" buttons, and fixed the Templates-tab row action (was wrongly opening the Schedule dialog) to open the builder. Added the "Default grace period … (change)" line to the Schedule tab.
+4. `org/return`: the "Upload template" filing mode (seg toggle, "Download template" button, drop zone that auto-fills figures), the one-time "Filed. Receipt …" success banner, wired the dead "Download filed copy" buttons, and the sign-off dialog (Prepared by/Approved by/declaration) that was missing entirely — submission went straight through with no confirmation before.
+5. Added the `Data returns > …` breadcrumb to both filing-detail screens (`returns/filing`, `org/return`) — confirmed this is not a structural gap (`AppShell`'s `crumbs` prop already exists and is used elsewhere), just not passed on these two pages.
+
+Verified: `tsc --noEmit`, `eslint src`, `npm run build` all clean. Live-verified end to end: Insights tab charts/table-toggle, template builder create→publish (new filings appeared for the right 15 organisations), an org return filed via the upload-template path through the sign-off dialog to a receipt, "Download filed copy" toast. Committed as `9a96f0c` + `e0f3e3c` (Emmalex17, no co-author lines), pushed to staging, confirmed Ready (200 on `/regulator/returns` and `/organisation/returns`), promoted via PR #48 (merge commit `aa18969`), confirmed production Ready (200 on both routes). `origin/main` = `aa189698e1a766f2b941e89b7e3034f62265b2d6`, `origin/staging` = `e0f3e3c008aaddba46ca798e3966a3b4b832256a`, `git diff origin/staging origin/main --stat` empty (zero content drift).
 
 **P7 is complete — 18/18 Matches (up from 8/18 at session start).** Built:
 1. `firm/findings` (Fixes to verify / Being fixed / Verified and closed tabs) and `firm/finding` (the firm's verify/not-fixed decision panel) — the whole firm-side finding workflow was missing entirely. Added a "Findings" item to the firm sidebar nav (was absent) with a live Fix-submitted count.
