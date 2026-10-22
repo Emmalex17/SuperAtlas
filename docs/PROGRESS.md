@@ -31,9 +31,23 @@ The earlier (now superseded) `ddf4619`/`2ec46d0` commits were never reverted or 
   4. Confirm `main` and `staging` are in sync — `git diff origin/staging origin/main --stat` is empty (zero content drift). The hashes themselves (`git rev-parse origin/main` / `origin/staging`) will usually differ once any promotion has used a merge commit, which is expected, not a problem — see "Deployment-identity fix" above for why. Record both hashes and confirm the diff is empty here.
 - **Never** commit directly to `main`, **never** force-push, **never** promote `staging` → `main` while a check is red.
 
-## Current state (2026-10-22, ~06:50)
+## Current state (2026-10-22, ~08:00)
 
-**Phase:** Step 1 (audit) done. Step 2 (foundations) substantially done. **P1-P5 (Step 3) are all fully closed: 16/16, 24/24, 32/32, 8/8, and 11/11 Matches.** Next: P6 (Answering and assessment).
+**Phase:** Step 1 (audit) done. Step 2 (foundations) substantially done. **P1-P6 (Step 3) are all fully closed: 16/16, 24/24, 32/32, 8/8, 11/11, and 11/11 Matches.** Next: P7 (Review, publishing and findings).
+
+**P6 is complete — 11/11 Matches (up from 0/11 at session start, the worst-scoring phase of the whole audit).** Built:
+1. `org/answer` rebuilt from a single scrolling page into the prototype's one-question-at-a-time wizard: sidebar section/question nav with progress, All/Unanswered/Mine/Flagged filters, per-question flagging and assignment, the "Assign questions" dialog, "Explain this question" AI box, "Rephrase with AI", real Upload/Add-a-link/From-evidence-library evidence actions, and a "Previous answer" reference dialog.
+2. `org/submit` extracted to its own route (`.../answer/[id]/submit`) — by-section progress, Not-answered/Answered-No/Flagged-for-you lists that jump back to the question via `?q=`, and the submitted-receipt view.
+3. `org/evidence`'s Upload dialog (name/type/expiry) and a drawer (integrity record + "Used in" list) on each row.
+4. `firm/assess` rebuilt with all 5 tabs: Requirements now shows "The organisation's answers" per question (value, comment, evidence pills, interview pill, Ask button) plus a divergence warning when the assessor's outcome conflicts with the org's own answers; new Information requests, Interviews and Findings tabs; Report and sign-off gained the full stepper (outcomes → preview → quality review → sign-off → submit) with real gating. Live-verified end to end: recorded all 8 outcomes, shared the preview, recorded quality review, signed off, submitted — case correctly moved to "Report submitted".
+5. `org/assessment` built from scratch (didn't exist anywhere before) — Requests from assessor, Interviews (slot-picking), Outcome preview (per-requirement comments), Your answers. `org/obligations`'s submitted-case action now correctly routes here with a real "Respond (N)" count instead of opening the locked answer wizard.
+6. A shared `ThreadsPanel` component (`src/components/Threads.tsx`) for the information-request thread view both firm/assess and org/assessment need.
+
+**Data-layer work underpinning all of the above:** widened `Question` with `comment`/`evidence`/`interview` flags (carried through `makeQSet` from the library's `NormQuestion`) and `Case` with properly typed `Thread`/`Interview`/`PreviewComment`/`QualityReview` structures, replacing a placeholder `threads: unknown[]`. Added ~20 new mutators (`toggleFlag`, `askInformation`, `replyToThread`, `proposeInterview`, `raiseFinding`, `shareOutcomePreview`, `recordQualityReview`, etc.).
+
+**Real, previously-undiscovered data-quality bug found and fixed:** all 1,029 seed answers across every case had `status: "answered"` stored but no actual `v` value — meaning `answerComplete()` (used by this phase's new completeness checks) always disagreed with `caseProgress()`'s `status`-based check used elsewhere (e.g. the Obligations table's "41%"). Backfilled plausible values per question type via a one-time script; confirmed org/answer's own progress bar now agrees with the Obligations table everywhere.
+
+Verified: `tsc --noEmit`, `eslint src`, `npm run build` all clean. Committed as `3865f60` + `4424ebe` (Emmalex17, no co-author lines), pushed to staging.
 
 **P5 is complete — 11/11 Matches (up from 3/11 at session start).** Built:
 1. `programmes` list: List/Calendar view toggle + full Calendar (month grid of Opens/Due events), wired "New programme"/"Continue setup"/scoring-settings buttons.
