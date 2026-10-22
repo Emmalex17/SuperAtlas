@@ -31,9 +31,22 @@ The earlier (now superseded) `ddf4619`/`2ec46d0` commits were never reverted or 
   4. Confirm `main` and `staging` are in sync — `git diff origin/staging origin/main --stat` is empty (zero content drift). The hashes themselves (`git rev-parse origin/main` / `origin/staging`) will usually differ once any promotion has used a merge commit, which is expected, not a problem — see "Deployment-identity fix" above for why. Record both hashes and confirm the diff is empty here.
 - **Never** commit directly to `main`, **never** force-push, **never** promote `staging` → `main` while a check is red.
 
-## Current state (2026-10-21, ~18:30)
+## Current state (2026-10-21, ~23:05)
 
-**Phase:** Step 1 (audit) done. Step 2 (foundations) substantially done. **P1, P2 and P3 (Step 3) are all fully closed: 16/16, 24/24, and 32/32 Matches.** Next: P4 (Requirements library).
+**Phase:** Step 1 (audit) done. Step 2 (foundations) substantially done. **P1, P2, P3 and P4 (Step 3) are all fully closed: 16/16, 24/24, 32/32, and 8/8 Matches.** Next: P5 (Programmes and engagements).
+
+**P4 is complete — 8/8 Matches (up from 1/8 at session start).** Built the three missing screens:
+1. `library/requirement` (standalone requirement view: Previous/Next/Edit, Questions-asked with badges + Suggest-questions-with-AI, Evidence required, Guidance, Details/Applies-to sidebar).
+2. `library/edit` (combined new/edit requirement editor: editable question rows, evidence add/remove, Suggest-with-AI, Applies-to checkbox grid, Weight/Scoring-scheme fields).
+3. `library/ai` (3-step "Add a regulation with AI" wizard: Upload/Read/Review drafts, confidence bars, accept/reject/edit per draft, publishes a new Draft regulation).
+
+Plus wired every previously-dead button on `library` and `library/[id]` (Add regulation, Import spreadsheet, Actions card, section/requirement add/rename, Add question), and extracted a shared `SuggestQuestionsDialog` component (`src/components/SuggestQuestions.tsx`) used by both `library/requirement` and `library/edit`.
+
+**Key architectural fix found while building:** restructured `RegRequirement.questions` from a per-render-derived raw-tuple shape to a `NormQuestion[]` normalized **once** at module load (`normalizeRegsQuestions(REGS)`, mirroring the prototype's own one-time `SEED.regs.forEach` pass in `data.js`). The original approach silently dropped Evidence/Interview flags on any question added after the seed data, since `normQ()`'s flag-derivation only works for index-0 questions — caught via live browser testing (added a question with Evidence checked, it didn't render the badge), not just type-checking.
+
+All three new screens live-verified end-to-end in browser (not just visually): the Suggest-questions-with-AI flow (3→7 questions, badges intact, toast correct), the new-requirement create flow (auto-numbered ref `ISR-7.3`, save, navigate), and the full AI wizard (upload → read → accept 6/reject 1 → publish new Draft "Cyber Resilience Regulation 2026" regulation) — all with zero console errors on a freshly-restarted dev server (ruling out stale-chunk false positives).
+
+Verified: `tsc --noEmit`, `eslint src`, `npm run build` all clean. Committed as `bfae02c` (Emmalex17, no co-author line), pushed to staging, confirmed Ready (all 3 new routes 200), promoted via PR #44 (merge commit `1bc6bb1`), confirmed production Ready (all 3 new routes 200). `origin/main` = `1bc6bb1cab41c483a78b4a26376c7b6564c2a3c4`, `origin/staging` = `bfae02c14d1dbd6eefca3a87cddd307f9c8f3cdd`, `git diff origin/staging origin/main --stat` empty (zero content drift).
 
 **P3 is complete — 32/32 Matches (up from 10/32 at session start).** Full build list, in order:
 1. `organisations/category` (category ranking screen) + shared compliance helpers in `cases.ts`/`enforcement.ts`.

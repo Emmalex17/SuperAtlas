@@ -97,7 +97,7 @@ export function chBars(rows: { l: string; v: number; vl?: string | number; col?:
 }
 
 /* Stacked bars: parts of a whole per row — the prototype's chStack(). */
-export function chStack(rows: { l: string; vals: { n: number }[]; total?: number }[], parts: { l: string; col: string; ink?: string }[], o: { key?: boolean } = {}): string {
+export function chStack(rows: { l: string; vals: { n: number }[]; total?: number | string }[], parts: { l: string; col: string; ink?: string }[], o: { key?: boolean } = {}): string {
   const key = o.key !== false ? `<div class="ch-key">${parts.map((p) => `<span><i style="background:${p.col}"></i>${esc(p.l)}</span>`).join("")}</div>` : "";
   const body = rows
     .map((r) => {

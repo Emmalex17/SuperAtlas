@@ -8,7 +8,7 @@ import seriesData from "./data/series.json";
 import complianceData from "./data/compliance.json";
 import schemesData from "./data/schemes.json";
 import deadlinesData from "./data/deadlines.json";
-import { ORGANISATIONS, allCategoryTypes, addAudit } from "./mockData";
+import { ORGANISATIONS, allCategoryTypes, addAudit, FIRMS, type Firm } from "./mockData";
 import type { IconName } from "./icons";
 
 /** A requirement's raw question, as the regulation text states it: the question itself, plus a hint describing the expected kind of answer (e.g. "Yes / No / Not applicable", "Date", "Short text"). */
@@ -1038,4 +1038,249 @@ export function publishAiRegulation(name: string, accepted: AiExtractItem[]): st
   });
   addAudit("Added regulation with AI", `${name} · ${accepted.length} requirements`);
   return id;
+}
+
+/* ================= P5: Programmes and engagements ================= */
+
+export function progActivity(p: Programme, who: string, what: string) {
+  p.activity.unshift(["Today", who, what]);
+}
+
+export function accredited(): Firm[] {
+  return FIRMS.filter((f) => f.status === "Accredited" || f.status === "Renewal due");
+}
+
+export function conflictOf(f: Firm, orgId: string) {
+  return (f.clients ?? []).find((c) => c.orgId === orgId);
+}
+
+function hintForChoice(q: NormQuestion): string {
+  if (q.choice === "yn") return "Yes / No / Not applicable";
+  if (q.choice === "date") return "Date";
+  if (q.choice === "number") return "Number";
+  if (q.choice === "text") return q.comment ? "Long text" : "Short text";
+  return "Short text";
+}
+
+/** Converts an AI-suggested (library-shaped) question into a programme qset's simpler
+ * {id, text, hint} shape — used when "Suggest with AI" adds drafts to a programme's own copy. */
+export function questionFromNorm(q: NormQuestion, id: string): Question {
+  return { id, text: q.q, hint: hintForChoice(q) };
+}
+
+export const QSET_HINTS = ["Yes / No / Not applicable", "Date", "Number", "Short text", "Long text"];
+
+/** A programme takes its own editable copy of the regulation's current requirement set — the
+ * prototype's makeQSet() (bdata.js). Edited for this programme only; the library is unaffected. */
+export function makeQSet(reg: Regulation): QSet {
+  return {
+    ver: reg.version,
+    sections: reg.sections.map((s) => ({
+      id: s.id,
+      name: s.name,
+      on: true,
+      reqs: s.reqs.map((r) => ({
+        ref: r.ref,
+        t: r.t,
+        text: r.text,
+        guidance: r.guidance,
+        weight: r.weight,
+        evidence: r.evidence ? [...r.evidence] : [],
+        questions: r.questions.map((q, i) => ({ id: `${r.ref}#${i}`, text: q.q, hint: hintForChoice(q) })),
+      })),
+    })),
+  };
+}
+
+/** Every answer part a question asks for, derived from its stored hint string for display —
+ * the Questions tab's equivalent of the library's qParts() badges. */
+export function qsetQParts(q: Question): { choiceLabel: string; comment: boolean } {
+  return { choiceLabel: q.hint, comment: q.hint === "Yes / No / Not applicable" || q.hint === "Long text" };
+}
+
+export function createDraftProgramme(): Programme {
+  const reg = REGS.find((r) => r.status === "Published") ?? REGS[0];
+  const defScheme = SCHEMES.find((s) => s.def) ?? SCHEMES[0];
+  return {
+    id: `p-${Date.now()}`,
+    name: "",
+    reg: reg.id,
+    ver: reg.version,
+    status: "Draft",
+    opens: "2027-01-15",
+    closes: "2027-03-31",
+    created: "Today",
+    types: reg.applies.filter((a) => allCategoryTypes().some((t) => t.name === a)).slice(0, 2),
+    desc: "",
+    firmMode: "regulator",
+    preview: true,
+    publisher: "regulator",
+    by: "M. Bello",
+    scheme: defScheme.id,
+    reminders: DEADLINES.reminders,
+    escalate: DEADLINES.escalate,
+    exclude: [],
+    series: "",
+    cycle: "",
+    qset: makeQSet(reg),
+    activity: [],
+  };
+}
+
+/** Saves a draft or launched programme — the prototype's saveProg(). Creates the programme's
+ * series (and its first cycle number) the first time it is saved. */
+export function saveProgramme(p: Programme) {
+  if (!p.series) {
+    p.series = `s-${p.id}`;
+    p.cycle = (p.opens || "2027").slice(0, 4);
+    SERIES.push({ id: p.series, name: p.name.replace(/\s*\b20\d\d\b\s*/, " ").trim(), reg: p.reg, freq: "Yearly" });
+  }
+  const i = PROGRAMMES.findIndex((x) => x.id === p.id);
+  if (i >= 0) PROGRAMMES[i] = p;
+  else PROGRAMMES.unshift(p);
+}
+
+/** Launches a programme now, or schedules it for its opening date if that is in the future —
+ * the prototype's ACT.form_pw final step. Returns true if scheduled, false if launched now. */
+export function launchOrSchedule(p: Programme, today: string, byName: string): boolean {
+  const future = p.opens > today;
+  p.status = future ? "Scheduled" : "Open";
+  p.locked = future ? "" : "Today";
+  if (!future) {
+    scopeOrgs(p).forEach((o) => {
+      CASES.push({
+        id: `c-${Date.now()}-${o.id}`,
+        prog: p.id,
+        org: o.id,
+        firm: "",
+        firmStatus: "",
+        team: [],
+        lead: "",
+        answers: {},
+        assign: {},
+        outcomes: {},
+        findings: [],
+        threads: [],
+        interviews: [],
+        stage: p.firmMode === "organisation" ? "Firm to choose" : "Firm to assign",
+        due: p.closes,
+      });
+    });
+  }
+  progActivity(p, byName, future ? `scheduled the programme to open on ${fmtD(p.opens)}` : `launched the programme to ${scopeOrgs(p).length} organisations`);
+  saveProgramme(p);
+  addAudit(future ? "Scheduled programme" : "Launched programme", p.name);
+  return future;
+}
+
+/** Bulk-assigns an assurance firm to cases, skipping any organisation the firm has an active
+ * independence conflict with — the prototype's ACT.assignGo(). */
+export function assignFirmToCases(programmeId: string, caseIds: string[], firmId: string, byName: string): { assigned: number; blocked: number } {
+  const p = progOf(programmeId);
+  const firm = FIRMS.find((f) => f.id === firmId);
+  if (!firm) return { assigned: 0, blocked: caseIds.length };
+  let assigned = 0;
+  caseIds.forEach((cid) => {
+    const c = caseOf(cid);
+    if (!c || conflictOf(firm, c.org)) return;
+    c.firm = firm.id;
+    c.firmStatus = "Assigned";
+    c.stage = "Awaiting firm";
+    c.lead = "";
+    assigned++;
+  });
+  if (assigned) {
+    progActivity(p, byName, `assigned ${firm.name} to ${assigned} organisation${assigned === 1 ? "" : "s"}`);
+    addAudit("Assigned firm", `${firm.name} · ${assigned} organisations · ${p.name}`);
+  }
+  return { assigned, blocked: caseIds.length - assigned };
+}
+
+/** Regulator approves a non-accredited firm an organisation asked to use, for this programme
+ * only — the prototype's ACT.firmReqGo('yes'). Creates a one-off firm record if needed. */
+export function approveFirmRequest(caseId: string, byName: string) {
+  const c = caseOf(caseId);
+  if (!c || !c.reqFirm) return;
+  const org = ORGANISATIONS.find((o) => o.id === c.org);
+  const id = `x-${c.reqFirm.name.toLowerCase().replace(/[^a-z]+/g, "-")}`;
+  if (!FIRMS.find((f) => f.id === id)) {
+    FIRMS.push({
+      id,
+      name: c.reqFirm.name,
+      initials: c.reqFirm.name.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase(),
+      color: "#5E6A71",
+      types: ["Data protection (DPCO)"],
+      status: "Approved for one programme",
+      assigned: 0,
+      renews: "—",
+      since: "—",
+      city: "—",
+      people: [{ name: "Lead assessor", initials: "LA", role: "Lead auditor", title: "", cred: c.reqFirm.creds, expires: "—", status: "Active" }],
+      clients: [],
+      oneOff: true,
+    });
+  }
+  c.firm = id;
+  c.firmStatus = "Approved";
+  c.stage = "Answering";
+  c.lead = "Lead assessor";
+  const p = progOf(c.prog);
+  progActivity(p, byName, `approved ${org?.name ?? "the organisation"}'s firm request`);
+  addAudit("Approved firm request", `${org?.name ?? ""} · ${p.name}`);
+}
+
+/** Regulator declines a non-accredited firm request — the prototype's ACT.firmReqGo('no'). */
+export function declineFirmRequest(caseId: string, note: string, byName: string) {
+  const c = caseOf(caseId);
+  if (!c) return;
+  const org = ORGANISATIONS.find((o) => o.id === c.org);
+  c.firmStatus = "Declined";
+  c.stage = "Firm to choose";
+  c.declineNote = note;
+  c.reqFirm = undefined;
+  const p = progOf(c.prog);
+  progActivity(p, byName, `declined ${org?.name ?? "the organisation"}'s firm request`);
+  addAudit("Declined firm request", `${org?.name ?? ""} · ${p.name}`);
+}
+
+/** Sends a reminder to every organisation in a programme that has not submitted — the
+ * prototype's ACT.progRemindAll(). */
+export function remindAllOutstanding(programmeId: string, byName: string): number {
+  const p = progOf(programmeId);
+  const n = casesOf(programmeId).filter((c) => !isSubmitted(c)).length;
+  progActivity(p, byName, `sent a reminder to ${n} organisations`);
+  return n;
+}
+
+/** Drafts the next yearly cycle from the latest one, or reuses an already-drafted future cycle
+ * if one exists — the prototype's ACT.progNext(). Returns the cycle's programme id to open in
+ * the edit wizard. */
+export function nextCycle(programmeId: string, byName: string): { id: string; reused: boolean } {
+  const p = progOf(programmeId);
+  const cyc = cyclesOf(p.series);
+  const pending = cyc.find((c) => ["Draft", "Scheduled"].includes(c.status) && +c.cycle > +p.cycle);
+  if (pending) return { id: pending.id, reused: true };
+  const last = cyc[0];
+  const y = String(+last.cycle + 1);
+  const yr = (d: string) => (d ? String(+d.slice(0, 4) + 1) + d.slice(4) : d);
+  const n: Programme = {
+    ...last,
+    id: `p-${Date.now()}`,
+    cycle: y,
+    name: last.name.replace(/\b20\d\d\b/, y),
+    status: "Draft",
+    opens: yr(last.opens),
+    closes: yr(last.closes),
+    created: "Today",
+    by: byName,
+    activity: [["Today", byName, `drafted cycle ${y} from cycle ${last.cycle}`]],
+    locked: "",
+    edited: 0,
+    published: undefined,
+    exclude: [],
+    qset: JSON.parse(JSON.stringify(last.qset)) as QSet,
+  };
+  PROGRAMMES.push(n);
+  addAudit("Drafted next programme cycle", n.name);
+  return { id: n.id, reused: false };
 }

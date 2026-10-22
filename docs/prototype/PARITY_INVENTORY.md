@@ -474,7 +474,7 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 
 ### `programmes`: Programmes
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Regulator (M. Bello) · Layout: app · Breadcrumb: Programmes
 - Reference: `screens/programmes.jpg`
 - Headings and section titles: “Programmes”
@@ -485,7 +485,7 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 
 ### `programmes/new`: Programme setup
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Regulator (M. Bello) · Layout: app · Breadcrumb: Programmes > New programme
 - Reference: `screens/programmes_new.jpg`
 - Headings and section titles: “New programme”
@@ -494,7 +494,7 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 
 ### `programmes/view`: Programme
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Regulator (M. Bello) · Layout: app · Breadcrumb: Programmes > ISR 2026 annual assessment
 - Reference: `screens/programmes_view.jpg`
 - Headings and section titles: “ISR annual assessment” · “Progress” · “Key dates” · “Recent activity”
@@ -503,16 +503,16 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 - Buttons and links: “Send reminder to all”
 - Status chips seen: “Open” · “Answering” · “Firm to assign” · “Submitted” · “Report submitted”
 - Tab states (each must match its screenshot):
-    - [ ] “Analytics”: `screens/programmes_view__analytics.jpg` · shows: “11 of 26 submitted, 42 days before the deadline” · “Nothing published yet; 21 of 26 have a firm in place” · “Submission by category” · “Not submitted yet”
-    - [ ] “Organisations”: `screens/programmes_view__organisations.jpg`
-    - [ ] “Firms”: `screens/programmes_view__firms.jpg`
-    - [ ] “Questions 17”: `screens/programmes_view__questions-17.jpg`
-    - [ ] “Cycles 3”: `screens/programmes_view__cycles-3.jpg` · shows: “Cycles”
-    - [ ] “Settings”: `screens/programmes_view__settings.jpg`
+    - [x] “Analytics”: `screens/programmes_view__analytics.jpg` · shows: “11 of 26 submitted, 42 days before the deadline” · “Nothing published yet; 21 of 26 have a firm in place” · “Submission by category” · “Not submitted yet”
+    - [x] “Organisations”: `screens/programmes_view__organisations.jpg`
+    - [x] “Firms”: `screens/programmes_view__firms.jpg`
+    - [x] “Questions 17”: `screens/programmes_view__questions-17.jpg`
+    - [x] “Cycles 3”: `screens/programmes_view__cycles-3.jpg` · shows: “Cycles”
+    - [x] “Settings”: `screens/programmes_view__settings.jpg`
 
 ### `org/obligations`: Obligations
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Organisation (Zenith) · Layout: app · Breadcrumb: Obligations
 - Reference: `screens/org_obligations.jpg`
 - Headings and section titles: “Obligations”
@@ -523,7 +523,7 @@ How to read an entry: **route** is the prototype route (hash) and the screen to 
 
 ### `firm/engagements`: Engagements
 
-- [ ] **Built and matches the prototype**
+- [x] **Built and matches the prototype**
 - Workspace: Assurance firm (Deloitte) · Layout: app · Breadcrumb: Engagements
 - Reference: `screens/firm_engagements.jpg`
 - Headings and section titles: “Engagements”

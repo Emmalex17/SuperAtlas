@@ -1,16 +1,21 @@
 "use client";
 
-import { use, useState } from "react";
+import { use, useEffect, useReducer, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { notFound } from "next/navigation";
 import { AppShell } from "@/components/AppShell";
-import { Chip, Tabs, Kv, Tile, AlertBox } from "@/components/ui";
+import { Button, Chip, Tabs, Kv, Tile, Field, AlertBox } from "@/components/ui";
+import { Dialog, Drawer } from "@/components/Overlay";
+import { Popover, MenuItem } from "@/components/Popover";
+import { useToast } from "@/components/Toast";
 import { Icon } from "@/lib/icons";
+import AnalyticsTab from "./Analytics";
 import {
   PROGRAMMES,
   progOf,
   regOfProg,
   casesOf,
+  caseOf,
   scopeOrgs,
   progStats,
   caseProgress,
@@ -18,8 +23,17 @@ import {
   seriesOf,
   cyclesOf,
   qsetQs,
+  qsetQParts,
   schemeOf,
   fmtD,
+  benchOf,
+  accredited,
+  conflictOf,
+  assignFirmToCases,
+  approveFirmRequest,
+  declineFirmRequest,
+  remindAllOutstanding,
+  nextCycle,
   type Programme,
   type Case,
 } from "@/lib/cases";
@@ -39,9 +53,10 @@ function firmOf(id: string) {
   return FIRMS.find((f) => f.id === id);
 }
 
-type Tab = "overview" | "organisations" | "firms" | "questions" | "cycles" | "settings";
+type Tab = "overview" | "analytics" | "organisations" | "firms" | "questions" | "cycles" | "settings";
 
 function OverviewTab({ p, cs }: { p: Programme; cs: Case[] }) {
+  const router = useRouter();
   const groups = stageGroups(TENANT.short);
   const s = progStats(p);
   return (
@@ -69,7 +84,7 @@ function OverviewTab({ p, cs }: { p: Programme; cs: Case[] }) {
                       const o = orgOf(c.org);
                       const f = firmOf(c.firm);
                       return (
-                        <tr key={c.id}>
+                        <tr key={c.id} className="click" onClick={() => router.push(`/regulator/programmes/${p.id}?tab=organisations`)}>
                           <td><div className="org"><span className="logo s32" style={{ background: o?.color }}>{o?.initials}</span><div><div className="nm">{o?.name}</div><div className="sub">{f ? f.name : "Needs a firm"}</div></div></div></td>
                           <td><Chip tone={STAGE_TONE[c.stage] ?? "neu"}>{c.stage}</Chip></td>
                           <td><div className="pbar"><div className="bar"><i style={{ width: `${caseProgress(c)}%` }} /></div><span className="cap tnum">{caseProgress(c)}%</span></div></td>
@@ -87,7 +102,7 @@ function OverviewTab({ p, cs }: { p: Programme; cs: Case[] }) {
         <div className="col gap16">
           <div className="card col gap8">
             <div className="h4">Key dates</div>
-            <Kv pairs={[["Opens", fmtD(p.opens)], ["Due", fmtD(p.closes)], ["Questions locked", p.locked || "At launch"]]} />
+            <Kv pairs={[["Opens", fmtD(p.opens)], ["Due", fmtD(p.closes)], ["Reminders", `${String(p.reminders)} days before`], ["Questions locked", p.locked || "At launch"]]} />
           </div>
           <div className="card col gap8">
             <div className="h4">Recent activity</div>
@@ -110,12 +125,52 @@ function OverviewTab({ p, cs }: { p: Programme; cs: Case[] }) {
   );
 }
 
-function OrganisationsTab({ p, cs }: { p: Programme; cs: Case[] }) {
+function OrganisationsTab({
+  p,
+  cs,
+  sel,
+  setSel,
+  onAssign,
+  onReview,
+}: {
+  p: Programme;
+  cs: Case[];
+  sel: string[];
+  setSel: (v: string[]) => void;
+  onAssign: (caseIds: string[]) => void;
+  onReview: (c: Case) => void;
+}) {
+  const toast = useToast();
+  const showSel = p.firmMode === "regulator" && p.status === "Open";
+  function toggle(id: string) {
+    setSel(sel.includes(id) ? sel.filter((x) => x !== id) : [...sel, id]);
+  }
+  function toggleAll() {
+    setSel(sel.length === cs.length ? [] : cs.map((c) => c.id));
+  }
+  function sendReminder() {
+    const n = sel.length;
+    setSel([]);
+    toast(`Reminder sent to ${n} organisation${n === 1 ? "" : "s"}`, "ok", "bell");
+  }
   return (
     <div className="card p0">
+      {showSel ? (
+        <div className="tbl-tools">
+          <span className={`small ${sel.length ? "strong" : "muted"}`}>{sel.length ? `${sel.length} selected` : "Select organisations to assign a firm or send a reminder"}</span>
+          <span className="grow" />
+          <Button variant="outline" size="sm" icon="bell" disabled={!sel.length} onClick={sendReminder}>Send reminder</Button>
+          <Button size="sm" icon="user-plus" testId="bulk-assign" disabled={!sel.length} onClick={() => onAssign(sel)}>Assign firm</Button>
+        </div>
+      ) : null}
       <div className="tbl-wrap">
         <table className="tbl">
-          <thead><tr><th>Organisation</th><th>Assurance firm</th><th>Stage</th><th>Answered</th><th>Due</th></tr></thead>
+          <thead>
+            <tr>
+              {showSel ? <th style={{ width: 36 }}><input type="checkbox" aria-label="Select all" checked={!!sel.length && sel.length === cs.length} onChange={toggleAll} /></th> : null}
+              <th>Organisation</th><th>Assurance firm</th><th>Stage</th><th>Answered</th><th>Due</th><th className="act-col" />
+            </tr>
+          </thead>
           <tbody>
             {cs.length ? (
               cs.map((c) => {
@@ -123,6 +178,7 @@ function OrganisationsTab({ p, cs }: { p: Programme; cs: Case[] }) {
                 const f = firmOf(c.firm);
                 return (
                   <tr key={c.id}>
+                    {showSel ? <td><input type="checkbox" aria-label={`Select ${o?.name}`} data-test={`sel-${c.org}`} checked={sel.includes(c.id)} onChange={() => toggle(c.id)} /></td> : null}
                     <td><div className="org"><span className="logo s32" style={{ background: o?.color }}>{o?.initials}</span><div><div className="nm">{o?.name}</div><div className="sub">{o ? catLabel(o.type, o.tier) : ""}</div></div></div></td>
                     <td className="small">
                       {f ? (
@@ -136,11 +192,18 @@ function OrganisationsTab({ p, cs }: { p: Programme; cs: Case[] }) {
                     <td><Chip tone={STAGE_TONE[c.stage] ?? "neu"}>{c.stage}</Chip></td>
                     <td><div className="pbar"><div className="bar"><i style={{ width: `${caseProgress(c)}%` }} /></div><span className="cap tnum">{caseProgress(c)}%</span></div></td>
                     <td className="small muted">{fmtD(c.due)}</td>
+                    <td className="act-col">
+                      {c.stage === "Firm approval" ? (
+                        <Button variant="secondary" size="sm" testId={`firmreq-${c.org}`} onClick={() => onReview(c)}>Review request</Button>
+                      ) : c.stage === "Firm to assign" && p.status === "Open" ? (
+                        <Button variant="tertiary" size="sm" onClick={() => onAssign([c.id])}>Assign firm</Button>
+                      ) : null}
+                    </td>
                   </tr>
                 );
               })
             ) : (
-              <tr><td colSpan={5}><div className="col" style={{ alignItems: "center", padding: 24 }}><Icon name="buildings" /><div className="h4">No organisations yet</div><p className="muted small">{p.status === "Scheduled" ? "Organisations are added when the programme opens." : "They are added when the programme opens."}</p></div></td></tr>
+              <tr><td colSpan={showSel ? 7 : 6}><div className="col" style={{ alignItems: "center", padding: 24 }}><Icon name="buildings" /><div className="h4">No organisations yet</div><p className="muted small">They are added when the programme opens.</p></div></td></tr>
             )}
           </tbody>
         </table>
@@ -212,6 +275,7 @@ function QuestionsTab({ p }: { p: Programme }) {
             {sec?.reqs.map((r) =>
               r.questions.map((q) => {
                 n++;
+                const parts = qsetQParts(q);
                 return (
                   <div className="q-card" key={q.id}>
                     <div className="row top">
@@ -219,7 +283,10 @@ function QuestionsTab({ p }: { p: Programme }) {
                       <div className="grow">
                         <div className="strong">{q.text}</div>
                         <div className="row wrap gap8" style={{ marginTop: 6 }}>
-                          <span className="cap muted">{q.hint}</span>
+                          <span className="qp">
+                            <span className="qp-c">{parts.choiceLabel}</span>
+                            {parts.comment ? <span className="qp-p"><Icon name="chat-text" />Comment</span> : null}
+                          </span>
                           <span className="cap mono">{r.ref}</span>
                         </div>
                       </div>
@@ -235,22 +302,39 @@ function QuestionsTab({ p }: { p: Programme }) {
   );
 }
 
-function CyclesTab({ p }: { p: Programme }) {
+function CyclesTab({ p, onRunNext }: { p: Programme; onRunNext: () => void }) {
   const router = useRouter();
   const cyc = cyclesOf(p.series);
+  const b = benchOf(p);
   return (
     <div className="card p0">
+      <div className="tbl-tools">
+        <div className="grow">
+          <div className="h4">Cycles</div>
+          <div className="cap muted">Each cycle reuses the programme&apos;s set-up. Results stay with the cycle they were assessed in.</div>
+        </div>
+        <Button variant="secondary" size="sm" icon="arrow-clockwise" testId="prog-next" onClick={onRunNext}>Run next cycle</Button>
+      </div>
       <div className="tbl-wrap">
         <table className="tbl">
-          <thead><tr><th>Cycle</th><th>Window</th><th className="num">Organisations</th><th>Status</th></tr></thead>
+          <thead><tr><th>Cycle</th><th>Window</th><th className="num">Organisations</th><th>Submitted</th><th className="num">Average score</th><th className="num">Met benchmark ({b})</th><th>Status</th></tr></thead>
           <tbody>
             {cyc.map((c) => {
+              const ccs = casesOf(c.id);
+              const pub = ccs.filter((x) => x.stage === "Published");
+              const scores = pub.map((x) => x.score).filter((v): v is number => v != null);
+              const avgScore = scores.length ? Math.round(scores.reduce((a, v) => a + v, 0) / scores.length) : null;
+              const met = scores.filter((v) => v >= b).length;
               const s = progStats(c);
+              const notOpenYet = c.status === "Draft" || c.status === "Scheduled";
               return (
-                <tr key={c.id} className={`click ${c.id === p.id ? "strong" : ""}`} onClick={() => router.push(`/regulator/programmes/${c.id}`)}>
-                  <td>Cycle {c.cycle}{c.id === p.id ? <span className="cap muted"> · viewing</span> : null}</td>
+                <tr key={c.id} className={`click ${c.id === p.id ? "sel" : ""}`} data-test={`cyc-${c.cycle}`} onClick={() => router.push(`/regulator/programmes/${c.id}`)}>
+                  <td><b>{c.cycle}</b>{c.id === p.id ? <Chip tone="brand">Viewing</Chip> : null}</td>
                   <td className="small">{fmtD(c.opens)} – {fmtD(c.closes)}</td>
-                  <td className="num tnum">{s.n}</td>
+                  <td className="num tnum">{ccs.length || scopeOrgs(c).length}</td>
+                  <td>{notOpenYet ? <span className="cap muted">Not open yet</span> : <div className="pbar"><div className="bar"><i style={{ width: `${s.pct}%` }} /></div><span className="cap tnum">{s.done}/{s.n}</span></div>}</td>
+                  <td className="num tnum">{avgScore ?? "—"}</td>
+                  <td className="num tnum">{scores.length ? `${met} of ${scores.length}` : "—"}</td>
                   <td><Chip tone={PROG_STATUS_TONE[c.status] ?? "neu"}>{c.status}</Chip></td>
                 </tr>
               );
@@ -272,6 +356,7 @@ function SettingsTab({ p }: { p: Programme }) {
           ["Regulation", `${reg.ref} ${p.ver} · ${reg.name}`],
           ["Categories", p.types.join(", ")],
           ["Scoring scheme", sc.name],
+          ["Reminders", `${String(p.reminders)} days before; escalate after ${String(p.escalate)} days`],
           ["Firms", p.firmMode === "organisation" ? "Organisations engage their own; non-accredited firms need approval" : `${TENANT.short} assigns`],
           ["Outcome preview", p.preview ? "On: organisations can see and comment, not change" : "Off"],
           ["Publishing", p.publisher === "firm" ? "Delegated to the firm (approved reports only)" : `${TENANT.short} publishes`],
@@ -281,10 +366,117 @@ function SettingsTab({ p }: { p: Programme }) {
   );
 }
 
+function AssignFirmDialog({
+  programmeId,
+  caseIds,
+  onClose,
+  onDone,
+}: {
+  programmeId: string;
+  caseIds: string[];
+  onClose: () => void;
+  onDone: (assigned: number, firmName: string) => void;
+}) {
+  const fs = accredited();
+  const [firmId, setFirmId] = useState(fs[0]?.id ?? "");
+  const firm = firmOf(firmId);
+  const rows = caseIds.map((cid) => caseOf(cid)).filter((c): c is Case => !!c);
+  const ok = firm ? rows.filter((c) => !conflictOf(firm, c.org)).length : 0;
+
+  return (
+    <Dialog open onClose={onClose} wide>
+      <div className="row"><Icon name="user-plus" /><h2 className="h3">Assign an assurance firm</h2></div>
+      <p className="muted small">{caseIds.length} organisation{caseIds.length === 1 ? "" : "s"} selected. The firm is asked to accept and name its team.</p>
+      <div className="col gap12">
+        <Field label="Firm" htmlFor="af-firm">
+          <select className="sel" id="af-firm" data-test="af-firm" value={firmId} onChange={(e) => setFirmId(e.target.value)}>
+            {fs.map((f) => <option key={f.id} value={f.id}>{f.name} · {f.types.join(", ")}</option>)}
+          </select>
+        </Field>
+        <div className="card flat tight">
+          <div className="overline" style={{ marginBottom: 4 }}>Independence check</div>
+          {rows.map((c) => {
+            const o = orgOf(c.org);
+            const cf = firm ? conflictOf(firm, c.org) : undefined;
+            return (
+              <div className="row small" style={{ padding: "8px 0", borderTop: "1px solid var(--border)" }} key={c.id}>
+                <span className="logo s24" style={{ background: o?.color }}>{o?.initials}</span>
+                <span className="grow">{o?.name}</span>
+                {cf ? <Chip tone="bad" icon="prohibit">Blocked: advised since {cf.since}</Chip> : c.firm ? <Chip tone="warn">Replaces {firmOf(c.firm)?.name}</Chip> : <Chip tone="ok" icon="check">OK</Chip>}
+              </div>
+            );
+          })}
+        </div>
+        {firm && ok < rows.length ? (
+          <AlertBox tone="warn" title={`${rows.length - ok} cannot be assigned to ${firm.name}`} body={`The firm advised ${rows.length - ok === 1 ? "this organisation" : "these organisations"} recently. Pick another firm for ${rows.length - ok === 1 ? "it" : "them"}.`} />
+        ) : null}
+        <div className="row end">
+          <Button variant="outline" onClick={onClose}>Cancel</Button>
+          <Button testId="af-go" disabled={!ok} onClick={() => { const res = assignFirmToCases(programmeId, caseIds, firmId, "M. Bello"); onDone(res.assigned, firm?.name ?? ""); }}>Assign to {ok}</Button>
+        </div>
+      </div>
+    </Dialog>
+  );
+}
+
+function ReviewRequestDrawer({ c, onClose, onDone }: { c: Case | null; onClose: () => void; onDone: (approved: boolean) => void }) {
+  const toast = useToast();
+  const [note, setNote] = useState("");
+  if (!c || !c.reqFirm) return <Drawer open={false} onClose={onClose}>{null}</Drawer>;
+  const o = orgOf(c.org);
+  const r = c.reqFirm;
+  return (
+    <Drawer open onClose={onClose}>
+      <div className="row top">
+        <div className="grow">
+          <div className="overline">Firm request · {progOf(c.prog).name}</div>
+          <h2 className="h3" style={{ marginTop: 4 }}>{o?.name} wants to use {r.name}</h2>
+        </div>
+        <button className="icon-btn" aria-label="Close" onClick={onClose}><Icon name="x" /></button>
+      </div>
+      <AlertBox tone="warn" title="This firm is not accredited" body={`${r.name} is not on ${TENANT.short}'s accredited list. Approving lets it assess ${o?.name} for this programme only.`} />
+      <Kv pairs={[["Requested by", `${r.by} · ${r.when}`], ["Firm contact", r.contact], ["Credentials", r.creds], ["Reason", r.reason]]} />
+      <div className="file"><Icon name="file-text" /><span className="grow">{r.file}</span></div>
+      <Field label="Note to the organisation" htmlFor="fr-note" hint="Required if you decline">
+        <textarea className="ta" id="fr-note" rows={2} value={note} onChange={(e) => setNote(e.target.value)} />
+      </Field>
+      <div className="row end">
+        <Button
+          variant="danger-soft"
+          onClick={() => {
+            if (!note) { toast("Add a note so the organisation knows why", "bad"); return; }
+            declineFirmRequest(c.id, note, "M. Bello");
+            onDone(false);
+          }}
+        >
+          Decline
+        </Button>
+        <Button icon="seal-check" testId="firmreq-approve" onClick={() => { approveFirmRequest(c.id, "M. Bello"); onDone(true); }}>Approve for this programme</Button>
+      </div>
+    </Drawer>
+  );
+}
+
 export default function ProgrammePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const found = PROGRAMMES.find((x) => x.id === id);
   const [tab, setTab] = useState<Tab>("overview");
+  const [sel, setSel] = useState<string[]>([]);
+  const [assignFor, setAssignFor] = useState<string[] | null>(null);
+  const [reviewCase, setReviewCase] = useState<Case | null>(null);
+  const [moreOpen, setMoreOpen] = useState(false);
+  const moreRef = useRef<HTMLButtonElement | null>(null);
+  const [, bump] = useReducer((x: number) => x + 1, 0);
+  const router = useRouter();
+  const toast = useToast();
+
+  useEffect(() => {
+    const t = new URLSearchParams(window.location.search).get("tab");
+    if (t === "analytics") {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time read of the browser-only URL query string, used only to land on the Analytics tab when the cycle picker there navigates here.
+      setTab("analytics");
+    }
+  }, []);
 
   if (!found) notFound();
 
@@ -307,16 +499,44 @@ export default function ProgrammePage({ params }: { params: Promise<{ id: string
               <Chip tone={PROG_STATUS_TONE[p.status] ?? "neu"}>{p.status}</Chip>
             </div>
             <div className="ph-meta">
-              <span>Cycle {p.cycle}</span>
+              <span className="cyc-pick">
+                <Icon name="arrows-clockwise" />
+                {cyc.length > 1 ? (
+                  <select className="sel" aria-label="Cycle" data-test="prog-cycle" value={p.id} onChange={(e) => router.push(`/regulator/programmes/${e.target.value}`)}>
+                    {cyc.map((c) => <option key={c.id} value={c.id}>Cycle {c.cycle}</option>)}
+                  </select>
+                ) : (
+                  <>Cycle {p.cycle}</>
+                )}
+              </span>
               <span><Icon name="book-open-text" />{reg.ref} {p.ver}</span>
               <span><Icon name="calendar-blank" />{fmtD(p.opens)} – {fmtD(p.closes)}</span>
               <span><Icon name="buildings" />{cs.length || scopeOrgs(p).length} organisations</span>
             </div>
           </div>
+          <div className="row wrap gap8">
+            {p.status === "Draft" || p.status === "Scheduled" ? (
+              <Button variant="secondary" icon="pencil-simple" onClick={() => router.push(`/regulator/programmes/new?edit=${p.id}`)}>Edit programme</Button>
+            ) : p.status === "Open" ? (
+              <Button
+                variant="outline"
+                icon="bell"
+                onClick={() => {
+                  const n = remindAllOutstanding(p.id, "M. Bello");
+                  bump();
+                  toast(`Reminder sent to ${n} organisations that have not submitted`, "ok", "bell");
+                }}
+              >
+                Send reminder to all
+              </Button>
+            ) : null}
+            <button ref={moreRef} className="icon-btn bordered" aria-label="More actions" title="More actions" data-test={`more-prog-${p.id}`} onClick={() => setMoreOpen((v) => !v)}><Icon name="dots-three" /></button>
+          </div>
         </div>
         <Tabs
           items={[
             { id: "overview", label: "Overview" },
+            { id: "analytics", label: "Analytics" },
             { id: "organisations", label: "Organisations", count: reqN || undefined },
             { id: "firms", label: "Firms" },
             { id: "questions", label: "Questions", count: qsetQs(p.qset).length },
@@ -328,11 +548,74 @@ export default function ProgrammePage({ params }: { params: Promise<{ id: string
         />
       </div>
       {tab === "overview" ? <OverviewTab p={p} cs={cs} /> : null}
-      {tab === "organisations" ? <OrganisationsTab p={p} cs={cs} /> : null}
+      {tab === "analytics" ? <AnalyticsTab p={p} /> : null}
+      {tab === "organisations" ? (
+        <OrganisationsTab
+          p={p}
+          cs={cs}
+          sel={sel}
+          setSel={setSel}
+          onAssign={(ids) => setAssignFor(ids)}
+          onReview={(c) => setReviewCase(c)}
+        />
+      ) : null}
       {tab === "firms" ? <FirmsTab cs={cs} /> : null}
       {tab === "questions" ? <QuestionsTab p={p} /> : null}
-      {tab === "cycles" ? <CyclesTab p={p} /> : null}
+      {tab === "cycles" ? (
+        <CyclesTab
+          p={p}
+          onRunNext={() => {
+            const res = nextCycle(p.id, "M. Bello");
+            toast(res.reused ? `Cycle ${progOf(res.id).cycle} is already set up` : `Cycle ${progOf(res.id).cycle} drafted. Check the dates, then launch.`, "info");
+            router.push(`/regulator/programmes/new?edit=${res.id}`);
+          }}
+        />
+      ) : null}
       {tab === "settings" ? <SettingsTab p={p} /> : null}
+
+      <Popover open={moreOpen} onClose={() => setMoreOpen(false)} anchorRef={moreRef}>
+        <MenuItem
+          icon={<Icon name="arrow-clockwise" />}
+          onClick={() => {
+            setMoreOpen(false);
+            const res = nextCycle(p.id, "M. Bello");
+            toast(res.reused ? `Cycle ${progOf(res.id).cycle} is already set up` : `Cycle ${progOf(res.id).cycle} drafted from cycle ${p.cycle}. Check the dates, then launch.`, "ok", "arrow-clockwise");
+            router.push(`/regulator/programmes/new?edit=${res.id}`);
+          }}
+        >
+          Run next cycle
+        </MenuItem>
+        <MenuItem
+          icon={<Icon name="export" />}
+          onClick={() => { setMoreOpen(false); toast("Export started. You will get an email with the CSV file."); }}
+        >
+          Export cycle results (CSV)
+        </MenuItem>
+      </Popover>
+
+      {assignFor ? (
+        <AssignFirmDialog
+          programmeId={p.id}
+          caseIds={assignFor}
+          onClose={() => setAssignFor(null)}
+          onDone={(assigned, firmName) => {
+            setAssignFor(null);
+            setSel([]);
+            bump();
+            toast(`${firmName} assigned to ${assigned} organisation${assigned === 1 ? "" : "s"}. Waiting for the firm to accept.`, "ok", "user-plus");
+          }}
+        />
+      ) : null}
+
+      <ReviewRequestDrawer
+        c={reviewCase}
+        onClose={() => setReviewCase(null)}
+        onDone={(approved) => {
+          setReviewCase(null);
+          bump();
+          toast(approved ? "Approved. The firm can start." : "Declined. The organisation will choose another firm.", approved ? "ok" : "info");
+        }}
+      />
     </AppShell>
   );
 }
