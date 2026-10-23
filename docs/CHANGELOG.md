@@ -26,6 +26,8 @@ One entry per phase (`docs/BACKEND_SPEC.md` section 15), newest first. Each entr
 
 **Verified:** `tsc`/`eslint`/`next build` clean, including the four new routes. Sent a real email through the full template → Brevo pipeline (not just the raw API call from Step 0) via a temporary test route, confirmed accepted with a message ID, then deleted the test route. Confirmed the `pg_cron` job is scheduled and active, and the vault secret is readable. The job's first live call will 404 until this ships to production (the URL it calls is the production domain) — expected, not a bug; verified after promotion.
 
+**Shipped and confirmed in production** (not just staging): promoted via PR #61 (merge commit `3498ef6`). `/api/health` returns `{"ok":true}` on `superatlas-green.vercel.app`. The `pg_cron` job's first two scheduled runs (18:55, 19:00 WAT) 404'd because they fired before the production deploy finished — expected, documented above — but a manual trigger immediately after promotion returned `200 {"ok":true,"processed":0,"sent":0,"failed":0}`, confirming the full chain (`pg_cron` → `pg_net` → the live route → vault-secret auth → `processOutbox()`) genuinely works end to end, not just that each piece exists in isolation.
+
 **Not done yet in this phase:** bootstrap script (live NITDA + starter admin invite, demo tenant + six demo accounts), sign-in/invitation/profile server actions, screens switched from mock to live data, tests. Continuing.
 
 ---
