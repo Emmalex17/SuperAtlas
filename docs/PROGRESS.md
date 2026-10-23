@@ -2,6 +2,30 @@
 
 Read this first when resuming. Keep it updated after every screen or significant step, per `docs/PARITY_PROMPT.md`.
 
+## Dashboard parity regression — found and fixed 2026-10-23
+
+**The earlier "150/150 Matches, 0 Different, 0 Missing" claim recorded below (P10 completion) was wrong.** The user did their own independent screenshot-by-screenshot comparison of the prototype against production and caught real, user-visible defects on all three dashboards that the original P10 self-verification missed. This section exists so a future session does not re-trust that "150/150" line at face value without checking current `src/` — the general staleness warning already in this file applies to this entry too, now.
+
+**Root cause:** the prototype seeds its demo data across several source files — `data.js` (14 base orgs), plus `cdata.js` and `b56data.js`, which programmatically add 29 more organisations so the analytics read properly. `cdata.js`'s payments/fintech/cloud batch (8 orgs: Tollgate, Linkbridge, Signalpay, Cascade, Pocketline, Ledgerline, Quillfin, Stratus) was never ported into `src/lib/mockData.ts`'s `ORGANISATIONS` array. That single gap cascaded into the regulator dashboard's wrong organisation count (28 vs the prototype's 36), wrong "not assessed" figure, and three missing category pills — exactly what the user's screenshots showed.
+
+**Everything found and fixed in this pass** (full list and reasoning in commit `1648c24`):
+1. Added the 8 missing organisations.
+2. The "Finish setting up" onboarding card was missing entirely on the organisation and firm dashboards — `ensureOrgOnboard`/`ensureFirmOnboard` had a comment claiming they "mirror the prototype's lazy default," which was false: the prototype's seed explicitly gives Zenith and Deloitte a *partial* onboard state (`{profile:true, logo:false, ...}`), not an all-complete one. Seeded that correctly, and rebuilt the card itself (it had been a stripped-down counter, missing the "next: X" label, progress bar, and step chips) as a new shared `SetupCard` component in `ui.tsx`.
+3. `FILED_STATUSES` was missing `"Queried"` (the prototype's `FILED` array has it) — this alone moved returns-on-time from the correct 76% down to a wrong 71%.
+4. The regulator dashboard's compliance-status-by-programme chart counted every verified org against every programme instead of scoping by the programme's applicable types (`scopeOrgs`) — inflated totals (36 instead of 26/29) and wrong "not assessed" splits.
+5. The firm dashboard's per-person workload count only checked `lead`, not team members — showed 0 instead of 2 for a team member with active engagements.
+6. Several subtitle/footer strings across all three dashboards were truncated mid-sentence ("click to see who/which/open", "click a figure to see the list" all dropped).
+7. The organisation dashboard's hero line dropped the tier ("Commercial bank" instead of "Commercial bank · National").
+8. The regulator sidebar's "Organisations" nav badge only counted pending classification requests, not pending-verification organisations too (showed 1, prototype shows 3) — and separately, the firm sidebar's "Engagements" badge had its own incorrect inline reimplementation of the Requests-group logic instead of reusing the already-correct `engGroup()` from `cases.ts`.
+
+**Also noticed, not fixed (flagged for a future cleanup, out of scope for this fix):** `/firm/assessments` is an orphaned placeholder page ("coming soon") with no nav entry pointing to it any more since P10 removed the link — dead code, not a visual defect.
+
+Verified: `tsc --noEmit`, `eslint`, `npm run build` all clean. Live-verified on the local dev server, the staging deployment, and production after promotion — all three dashboards cross-checked line-by-line against the user's own prototype screenshots (org counts, category pills, returns %, onboarding cards, workload counts, nav badges). Committed as `1648c24` (Emmalex17, no co-author line per standing rule), pushed to `staging`, confirmed Ready, promoted via PR #52 (merge commit `13cc664`), confirmed production Ready and serving the fix (checked `/regulator` directly on the new production deployment). `origin/main` = `13cc664`, `origin/staging` = `1648c24`, `git diff origin/staging origin/main --stat` empty (zero content drift).
+
+**Open item:** this was a targeted fix for the specific defects the user's screenshots surfaced, not a re-run of the full 150-row audit. A broader, more skeptical re-audit of the remaining ~70 screens (the original deliberate audit was interrupted partway through P2) is still warranted before trusting any future "all Matches" claim for this project.
+
+---
+
 ## Deployment-identity fix — resolved 2026-10-21 ~07:25
 
 **Cause (confirmed via `vercel inspect` on the blocked deployment):** commits `ddf4619`/`2ec46d0` (and, it turned out, `00e9c99`/`76fca2e` too) were authored with email `emmanuel.adedeji@opexconsult.co.uk`, which GitHub resolves to login `emmanueladedeji-svg` — not `Emmalex17`, the repo/Vercel project owner. Vercel's exact message: *"The deployment was blocked because the commit author doesn't have permission to create deployments for this project."*
