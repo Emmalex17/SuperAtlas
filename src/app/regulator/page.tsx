@@ -20,6 +20,10 @@ import {
   avg,
   TODAY,
   COMP_STATUSES,
+  currentCycle,
+  scopeOrgs,
+  progOf,
+  CASES,
 } from "@/lib/cases";
 import { FILINGS, tplOf, isFiled, type Filing } from "@/lib/returns";
 import { watchlist, enfOpenFor, ENF_TONE } from "@/lib/enforcement";
@@ -76,7 +80,10 @@ export default function RegulatorDashboard() {
     { l: "Not assessed", col: "var(--neu-strong)", ink: "var(--text)" },
   ];
   const stRows = sers.map((sr) => {
-    const ids = orgs.map((o) => o.id);
+    const cur = currentCycle(sr.id);
+    const scope = cur ? scopeOrgs(cur).map((o) => o.id) : [];
+    const caseOrgs = CASES.filter((c) => progOf(c.prog).series === sr.id).map((c) => c.org);
+    const ids = [...new Set([...scope, ...caseOrgs])].filter((id) => ORGANISATIONS.find((o) => o.id === id)?.status === "Verified");
     return {
       l: sr.name,
       vals: parts.map((pt) => ({ n: ids.filter((id) => compStatus(latestResult(id, sr.id)) === pt.l).length })),
@@ -181,19 +188,19 @@ export default function RegulatorDashboard() {
           <div className="cap muted">{onF.length} of {allF.length} in the latest period</div>
         </button>
       </div>
-      <p className="scope-line cap muted">All {orgs.length} organisations under supervision · latest published results</p>
+      <p className="scope-line cap muted">All {orgs.length} organisations under supervision · latest published results · click a figure to see the list</p>
 
       <div className="ch-grid2">
         <ChartCard
           title={`${nonc.length} organisations non-compliant in at least one programme`}
-          sub="Compliance status by programme, from each organisation's latest published result"
+          sub="Compliance status by programme, from each organisation's latest published result · click to see who"
           chart={<Html html={stack} />}
           table={<MiniTable head={["Programme", ...parts.map((p) => p.l)]} rows={stRows.map((r) => [r.l, ...r.vals.map((v) => v.n)])} />}
           testId="dash-status"
         />
         <ChartCard
           title="Average score by category"
-          sub="Latest published score"
+          sub="Latest published score · click a category to open it"
           chart={<Html html={catBars} />}
           table={<MiniTable head={["Category", "Organisations", "Average score", "Non-compliant"]} rows={catRows.map((r) => [r.t, r.n, r.a ?? "—", r.nc])} />}
           foot={
@@ -242,7 +249,7 @@ export default function RegulatorDashboard() {
         </div>
         <ChartCard
           title={drops.length ? `${drops.length} biggest drops since the previous cycle` : "No drops since the previous cycle"}
-          sub="Score in the previous and latest cycle"
+          sub="Score in the previous and latest cycle · click to open"
           chart={<Html html={dropsChart} />}
           testId="dash-drops"
         />

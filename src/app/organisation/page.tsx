@@ -4,16 +4,16 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { AppShell } from "@/components/AppShell";
 import { MyHero } from "@/components/MyHero";
-import { Chip, CompChip, StatusChip, Button, Tile } from "@/components/ui";
+import { Chip, CompChip, StatusChip, Button, Tile, SetupCard } from "@/components/ui";
 import { Scorecard, type ScorecardData } from "@/components/Scorecard";
 import { myCases, progOf, caseProgress, compStatus, benchOf, latestResult, NC_OPEN, fmtD } from "@/lib/cases";
 import { mySeries, orgExposure, LV_TONE, buildOrgScorecard, type ExposureItem } from "@/lib/enforcement";
-import { ORGANISATIONS, FIRMS, ensureOrgOnboard } from "@/lib/mockData";
+import { ORGANISATIONS, FIRMS, ensureOrgOnboard, catLabel, type OrgOnboard } from "@/lib/mockData";
 import { getSession } from "@/lib/auth";
 import { taskTotal, orgTodo } from "@/lib/tasks";
 
 const ORG_ID = "zenith";
-const ORG_STEPS: [string, string][] = [
+const ORG_STEPS: [keyof OrgOnboard, string][] = [
   ["profile", "Organisation profile"],
   ["logo", "Logo"],
   ["officers", "Key officers"],
@@ -29,7 +29,6 @@ export default function OrganisationDashboard() {
 
   const org = ORGANISATIONS.find((o) => o.id === ORG_ID);
   const onboard = org ? ensureOrgOnboard(org) : null;
-  const doneSteps = onboard ? ORG_STEPS.filter(([k]) => onboard[k as keyof typeof onboard]).length : ORG_STEPS.length;
 
   const sers = mySeries(ORG_ID);
   const ex: ExposureItem[] = orgExposure(ORG_ID, "organisation");
@@ -52,7 +51,7 @@ export default function OrganisationDashboard() {
       <MyHero
         entity={org ? { name: org.name, initials: org.initials, color: org.color } : undefined}
         firstName={firstName}
-        line={`Supervised by NITDA as ${org?.type ?? ""}${sers.length ? `. Overall: ${(latestResult(ORG_ID, sers[0].id) ? compStatus(latestResult(ORG_ID, sers[0].id)) : "Not assessed").toLowerCase()}${hi ? `, with ${hi} high exposure item${hi === 1 ? "" : "s"}` : ""}.` : ". No published results yet."}`}
+        line={`Supervised by NITDA as ${org ? catLabel(org.type, org.tier) : ""}. ${sers.length ? `Overall: ${(latestResult(ORG_ID, sers[0].id) ? compStatus(latestResult(ORG_ID, sers[0].id)) : "Not assessed").toLowerCase()}${hi ? `, with ${hi} high exposure item${hi === 1 ? "" : "s"}` : ""}.` : "No published results yet."}`}
         top={top}
         totalTasks={totalTasks}
         actions={
@@ -63,17 +62,7 @@ export default function OrganisationDashboard() {
         }
       />
 
-      {doneSteps < ORG_STEPS.length ? (
-        <div className="card col gap12 setup-card">
-          <div className="row">
-            <div className="grow">
-              <div className="h4">Finish setting up</div>
-              <div className="cap muted">{doneSteps} of {ORG_STEPS.length} done</div>
-            </div>
-            <Button size="sm" iconRight="arrow-right" onClick={() => router.push("/organisation/welcome")} testId="continue-setup">Continue setup</Button>
-          </div>
-        </div>
-      ) : null}
+      {onboard ? <SetupCard steps={ORG_STEPS} done={onboard} onContinue={() => router.push("/organisation/welcome")} /> : null}
 
       {sers.length ? (
         <>

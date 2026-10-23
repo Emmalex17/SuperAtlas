@@ -3,15 +3,15 @@
 import { useRouter } from "next/navigation";
 import { AppShell } from "@/components/AppShell";
 import { MyHero } from "@/components/MyHero";
-import { ChartCard, MiniTable, StatusChip, Button } from "@/components/ui";
+import { ChartCard, MiniTable, StatusChip, Button, SetupCard } from "@/components/ui";
 import { chBars, CH } from "@/lib/charts";
 import { myEngs, engGroup, allFindings, avg1, progOf, fmtD, RATINGS, TODAY, type Case } from "@/lib/cases";
-import { FIRMS, ORGANISATIONS, ensureFirmOnboard } from "@/lib/mockData";
+import { FIRMS, ORGANISATIONS, ensureFirmOnboard, type FirmOnboard } from "@/lib/mockData";
 import { getSession } from "@/lib/auth";
 import { myTasks, taskTotal, dueText } from "@/lib/tasks";
 
 const FIRM_ID = "deloitte";
-const FIRM_STEPS: [string, string][] = [
+const FIRM_STEPS: [keyof FirmOnboard, string][] = [
   ["profile", "Firm profile"],
   ["logo", "Logo"],
   ["people", "Lead auditor and assessors"],
@@ -33,7 +33,6 @@ export default function FirmDashboard() {
 
   const firm = FIRMS.find((f) => f.id === FIRM_ID);
   const onboard = firm ? ensureFirmOnboard(firm) : null;
-  const doneSteps = onboard ? FIRM_STEPS.filter(([k]) => onboard[k as keyof typeof onboard]).length : FIRM_STEPS.length;
 
   const cs = myEngs(FIRM_ID);
   const act = cs.filter((c) => ["Requests", "Active", "Submitted"].includes(engGroup(c)));
@@ -51,7 +50,10 @@ export default function FirmDashboard() {
 
   const people = (firm?.people ?? []).filter((p) => p.status !== "Removed");
   const load = people
-    .map((p) => ({ l: p.name, lh: `${p.name} (${p.role})`, v: act.filter((c) => c.lead === p.name).length, col: act.filter((c) => c.lead === p.name).length > 4 ? CH.bad : CH.brand }))
+    .map((p) => {
+      const n = act.filter((c) => c.lead === p.name || c.team.includes(p.name)).length;
+      return { l: p.name, lh: `${p.name} (${p.role})`, v: n, col: n > 4 ? CH.bad : CH.brand };
+    })
     .sort((a, b) => b.v - a.v);
   const loadBars = chBars(load);
 
@@ -84,17 +86,7 @@ export default function FirmDashboard() {
         }
       />
 
-      {doneSteps < FIRM_STEPS.length ? (
-        <div className="card col gap12 setup-card">
-          <div className="row">
-            <div className="grow">
-              <div className="h4">Finish setting up</div>
-              <div className="cap muted">{doneSteps} of {FIRM_STEPS.length} done</div>
-            </div>
-            <Button size="sm" iconRight="arrow-right" onClick={() => router.push("/firm/welcome")} testId="continue-setup">Continue setup</Button>
-          </div>
-        </div>
-      ) : null}
+      {onboard ? <SetupCard steps={FIRM_STEPS} done={onboard} onContinue={() => router.push("/firm/welcome")} /> : null}
 
       <div className="ktiles">
         <div className="ktile" data-test="fk-act">
@@ -151,7 +143,7 @@ export default function FirmDashboard() {
         </div>
         <ChartCard
           title={load.some((x) => x.v > 4) ? `${load.filter((x) => x.v > 4).length} people have more than 4 active engagements` : "Team workload is even"}
-          sub="Active engagements per person, as lead"
+          sub="Active engagements per person, as lead or team member · click to see which"
           chart={<Html html={loadBars} />}
           table={<MiniTable head={["Person", "Active engagements"]} rows={load.map((x) => [x.l, x.v])} />}
           testId="f-load"
@@ -160,7 +152,7 @@ export default function FirmDashboard() {
 
       <ChartCard
         title={`${act.length} active, ${groups[3].v} completed`}
-        sub="Engagements by stage"
+        sub="Engagements by stage · click to see which"
         chart={<Html html={stageBars} />}
         testId="f-stage"
       />

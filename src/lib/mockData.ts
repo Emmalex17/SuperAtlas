@@ -62,7 +62,8 @@ export const ORGANISATIONS: Organisation[] = [
   { id: "zenith", name: "Zenith Bank Plc", initials: "ZB", color: "#C8102E", sector: "Banking", type: "Commercial bank", tier: "National", status: "Verified", officer: "A. Okonkwo", joined: "Mar 2026", last: "Today", hq: "Lagos", tags: ["Listed", "D-SIB"], web: "zenithbank.com", rc: "RC 000000 (sample)", email: "compliance@zenith.example",
     officers: [{ initials: "AO", name: "A. Okonkwo", role: "Chief compliance officer", email: "a.okonkwo@zenith.example" }],
     colleagues: [{ email: "c.eze@zenith.example", name: "C. Eze", role: "Contributor", status: "Active" }],
-    invite: { email: "a.okonkwo@zenith.example", history: [["1 Mar 2026", "Invitation sent", "M. Bello"], ["2 Mar 2026", "Invitation accepted", "A. Okonkwo"]] } },
+    invite: { email: "a.okonkwo@zenith.example", history: [["1 Mar 2026", "Invitation sent", "M. Bello"], ["2 Mar 2026", "Invitation accepted", "A. Okonkwo"]] },
+    onboard: { profile: true, logo: false, officers: false, people: false, group: false } },
   { id: "uba", name: "United Bank for Africa Plc", initials: "UB", color: "#D71920", sector: "Banking", type: "Commercial bank", tier: "International", status: "Verified", officer: "F. Adeyemi", joined: "Mar 2026", last: "Yesterday", hq: "Lagos", tags: ["Listed", "D-SIB"], web: "ubagroup.com",
     invite: { email: "compliance@ubagroup.example", history: [["1 Mar 2026", "Invitation sent", "M. Bello"], ["4 Mar 2026", "Invitation accepted", "F. Adeyemi"]] } },
   { id: "gtb", name: "Guaranty Trust Bank Ltd", initials: "GT", color: "#E35205", sector: "Banking", type: "Commercial bank", tier: "International", status: "Verified", officer: "O. Bakare", joined: "Apr 2026", last: "2 days ago", hq: "Lagos", tags: ["D-SIB"], web: "gtbank.com",
@@ -133,6 +134,22 @@ export const ORGANISATIONS: Organisation[] = [
     invite: { email: "compliance@mangrove.example", history: [["1 Mar 2024", "Invitation sent", "J. Okeke"], ["4 Mar 2024", "Invitation accepted", "I. Peters"]] } },
   { id: "okrahill", name: "Okra Hill Microfinance Bank", initials: "OH", color: "#7A8B2E", sector: "Banking", type: "Microfinance bank", tier: "Unit", status: "Verified", officer: "O. Salami", joined: "Mar 2025", last: "12 Oct", hq: "Ibadan", tags: [], web: "okrahill.example",
     invite: { email: "compliance@okrahill.example", history: [["1 Mar 2024", "Invitation sent", "J. Okeke"], ["4 Mar 2024", "Invitation accepted", "O. Salami"]] } },
+  { id: "tollgate", name: "Tollgate Payments Ltd", initials: "TP", color: "#334155", sector: "Payments", type: "Payment solution service provider", tier: "PSSP", status: "Verified", officer: "P. Akin", joined: "Feb 2025", last: "Today", hq: "Lagos", tags: [], web: "tollgate.example",
+    invite: { email: "compliance@tollgate.example", history: [["1 Mar 2024", "Invitation sent", "J. Okeke"], ["4 Mar 2024", "Invitation accepted", "P. Akin"]] } },
+  { id: "linkbridge", name: "Linkbridge Payments Ltd", initials: "LP", color: "#0F766E", sector: "Payments", type: "Payment solution service provider", tier: "PTSP", status: "Verified", officer: "Y. Bala", joined: "Apr 2025", last: "Yesterday", hq: "Lagos", tags: [], web: "linkbridge.example",
+    invite: { email: "compliance@linkbridge.example", history: [["1 Mar 2024", "Invitation sent", "J. Okeke"], ["4 Mar 2024", "Invitation accepted", "Y. Bala"]] } },
+  { id: "signalpay", name: "Signalpay Ltd", initials: "SP", color: "#B91C1C", sector: "Payments", type: "Payment solution service provider", tier: "PSSP", status: "Verified", officer: "Z. Eze", joined: "Jul 2025", last: "2 days ago", hq: "Lagos", tags: [], web: "signalpay.example",
+    invite: { email: "compliance@signalpay.example", history: [["1 Mar 2024", "Invitation sent", "J. Okeke"], ["4 Mar 2024", "Invitation accepted", "Z. Eze"]] } },
+  { id: "cascade", name: "Cascade Mobile Money Ltd", initials: "CM", color: "#0369A1", sector: "Payments", type: "Mobile money operator", tier: "", status: "Verified", officer: "H. Obi", joined: "Feb 2025", last: "4 days ago", hq: "Lagos", tags: [], web: "cascade.example",
+    invite: { email: "compliance@cascade.example", history: [["1 Mar 2024", "Invitation sent", "J. Okeke"], ["4 Mar 2024", "Invitation accepted", "H. Obi"]] } },
+  { id: "pocketline", name: "Pocketline Mobile Money Ltd", initials: "PM", color: "#7C3AED", sector: "Payments", type: "Mobile money operator", tier: "", status: "Verified", officer: "P. Akin", joined: "Apr 2025", last: "12 Oct", hq: "Lagos", tags: [], web: "pocketline.example",
+    invite: { email: "compliance@pocketline.example", history: [["1 Mar 2024", "Invitation sent", "J. Okeke"], ["4 Mar 2024", "Invitation accepted", "P. Akin"]] } },
+  { id: "ledgerline", name: "Ledgerline Technologies Ltd", initials: "LT", color: "#15803D", sector: "Digital economy", type: "Fintech platform", tier: "", status: "Verified", officer: "Y. Bala", joined: "Jul 2025", last: "Today", hq: "Lagos", tags: [], web: "ledgerline.example",
+    invite: { email: "compliance@ledgerline.example", history: [["1 Mar 2024", "Invitation sent", "J. Okeke"], ["4 Mar 2024", "Invitation accepted", "Y. Bala"]] } },
+  { id: "quillfin", name: "Quillfin Ltd", initials: "QF", color: "#BE185D", sector: "Digital economy", type: "Fintech platform", tier: "", status: "Verified", officer: "Z. Eze", joined: "Feb 2025", last: "Yesterday", hq: "Lagos", tags: [], web: "quillfin.example",
+    invite: { email: "compliance@quillfin.example", history: [["1 Mar 2024", "Invitation sent", "J. Okeke"], ["4 Mar 2024", "Invitation accepted", "Z. Eze"]] } },
+  { id: "stratus", name: "Stratus Cloud Nigeria Ltd", initials: "SN", color: "#475569", sector: "Digital economy", type: "Cloud service provider", tier: "", status: "Verified", officer: "H. Obi", joined: "Apr 2025", last: "2 days ago", hq: "Lagos", tags: [], web: "stratus.example",
+    invite: { email: "compliance@stratus.example", history: [["1 Mar 2024", "Invitation sent", "J. Okeke"], ["4 Mar 2024", "Invitation accepted", "H. Obi"]] } },
 ];
 
 export type ClassificationRequest = {
@@ -211,7 +228,8 @@ export const FIRMS: Firm[] = [
     clients: [
       { org: "Northgate Bank Plc", initials: "NB", color: "#1F4E79", service: "IT strategy advisory", since: "Jan 2026" },
       { org: "Kestrel Payments Ltd", initials: "KP", color: "#8A5A00", service: "Remediation support", since: "Jul 2025" },
-    ] },
+    ],
+    onboard: { profile: true, logo: false, people: false, clients: false } },
   { id: "kpmg", name: "KPMG Professional Services", initials: "K", color: "#00338D", types: ["Audit & assurance", "Data protection (DPCO)"], status: "Accredited", assigned: 11, renews: "Mar 2027", since: "Mar 2024", city: "Lagos", web: "kpmg.com/ng",
     people: [
       { name: "O. Fashola", initials: "OF", role: "Lead auditor", title: "Partner", cred: "FCA, CIPP/E", expires: "Mar 2028", status: "Active" },

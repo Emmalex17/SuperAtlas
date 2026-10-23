@@ -65,7 +65,7 @@ export const FILINGS = filingsData as unknown as Filing[];
 
 export const TODAY = "2026-10-19";
 export const VAR_FLAG = 50;
-export const FILED_STATUSES: Filing["status"][] = ["Submitted", "Resubmitted", "Accepted"];
+export const FILED_STATUSES: Filing["status"][] = ["Submitted", "Resubmitted", "Accepted", "Queried"];
 
 export function tplOf(id: string): ReturnTemplate {
   return RETURN_TEMPLATES.find((t) => t.id === id) ?? RETURN_TEMPLATES[0];

@@ -482,3 +482,32 @@ export function MiniTable({ head, rows }: { head: string[]; rows: ReactNode[][] 
     </div>
   );
 }
+
+/** The org/firm onboarding progress card on the dashboard — the prototype's setupCard(). Hidden once every step is done. */
+export function SetupCard<K extends string>({ steps, done, onContinue }: { steps: [K, string][]; done: Record<K, boolean>; onContinue: () => void }) {
+  const n = steps.filter(([k]) => done[k]).length;
+  if (n === steps.length) return null;
+  const next = steps.find(([k]) => !done[k]);
+  return (
+    <div className="card col gap12 setup-card">
+      <div className="row">
+        <div className="grow">
+          <div className="h4">Finish setting up</div>
+          <div className="cap muted">{n} of {steps.length} done{next ? ` · next: ${next[1]}` : ""}</div>
+        </div>
+        <div style={{ width: 160 }}>
+          <div className="bar"><i style={{ width: `${(n / steps.length) * 100}%` }} /></div>
+        </div>
+        <Button size="sm" iconRight="arrow-right" onClick={onContinue} testId="continue-setup">Continue setup</Button>
+      </div>
+      <div className="setup-chips">
+        {steps.map(([k, l]) => (
+          <span key={k} className={done[k] ? "done" : ""}>
+            <Icon name={done[k] ? "check-circle" : "circle-dashed"} />
+            {l}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
