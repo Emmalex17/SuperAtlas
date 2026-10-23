@@ -3,7 +3,7 @@
 import { useEffect, useReducer, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AppShell } from "@/components/AppShell";
-import { Button, Chip, Tile, Tag, Kv } from "@/components/ui";
+import { Button, Chip, Tile, Tag, DetailList } from "@/components/ui";
 import { SuggestQuestionsDialog } from "@/components/SuggestQuestions";
 import { useToast } from "@/components/Toast";
 import { Icon } from "@/lib/icons";
@@ -110,7 +110,7 @@ export default function RequirementPage() {
         <aside className="col gap16">
           <div className="card col gap12">
             <div className="h4">Details</div>
-            <Kv
+            <DetailList
               pairs={[
                 ["Reference", <span className="mono" key="ref">{q.ref}</span>],
                 ["Regulation", <button type="button" key="reg" className="link-btn" onClick={() => router.push(`/regulator/library/${reg.id}`)}>{reg.ref} {reg.version}</button>],

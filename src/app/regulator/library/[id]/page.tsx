@@ -3,7 +3,7 @@
 import { use, useReducer, useState } from "react";
 import { useRouter, notFound } from "next/navigation";
 import { AppShell } from "@/components/AppShell";
-import { Button, Chip, Tabs, Kv, Tag, Field } from "@/components/ui";
+import { Button, Chip, Tabs, DetailList, Tag, Field } from "@/components/ui";
 import { Dialog } from "@/components/Overlay";
 import { useToast } from "@/components/Toast";
 import { Icon, type IconName } from "@/lib/icons";
@@ -228,6 +228,7 @@ export default function RegulationPage({ params }: { params: Promise<{ id: strin
   const [tab, setTab] = useState<Tab>("structure");
   const [open, setOpen] = useState<Record<string, boolean>>(() => Object.fromEntries((r?.sections ?? []).map((s, i) => [s.id, i < 2])));
   const [query, setQuery] = useState("");
+  const [asideOpen, setAsideOpen] = useState(true);
 
   const [editOpen, setEditOpen] = useState(false);
   const [editName, setEditName] = useState("");
@@ -356,11 +357,12 @@ export default function RegulationPage({ params }: { params: Promise<{ id: strin
 
   return (
     <AppShell workspace="regulator" crumbs={[{ label: "Requirements library", href: "/regulator/library" }, { label: r.name }]}>
-      <div className="reg-layout">
+      <div className={`reg-layout ${asideOpen ? "" : "full"}`}>
+        {asideOpen ? (
         <aside className="col gap16">
           <div className="card col gap12">
             <div className="h4">Details</div>
-            <Kv pairs={det} />
+            <DetailList pairs={det} />
             {r.applies.length ? (
               <div>
                 <div className="cap muted" style={{ marginBottom: 6 }}>Applies to</div>
@@ -380,11 +382,16 @@ export default function RegulationPage({ params }: { params: Promise<{ id: strin
             )}
           </div>
         </aside>
+        ) : null}
         <section className="col gap16" style={{ minWidth: 0 }}>
           <div>
             <div className="row wrap gap8">
               <span className="tag mono">{r.ref}</span>
               <Chip tone={REG_STATUS_TONE[r.status] ?? "neu"}>{r.status}</Chip>
+              <span className="grow" />
+              <Button variant="outline" size="sm" icon="sidebar-simple" onClick={() => setAsideOpen((v) => !v)} testId="toggle-details">
+                {asideOpen ? "Hide details" : "Show details"}
+              </Button>
             </div>
             <h1 className="h1" style={{ marginTop: 6 }}>{r.name}</h1>
             {r.desc ? <p className="muted" style={{ marginTop: 4, maxWidth: "80ch" }}>{r.desc}</p> : null}

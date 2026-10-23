@@ -209,6 +209,23 @@ export function Kv({ pairs }: { pairs: [string, ReactNode][] }) {
   );
 }
 
+/** The narrower "Details" sidebar list on the regulation and requirement pages — the prototype's
+ * `<dl class="det">`, used nowhere else. Deliberately stacks label above value (the prototype's own
+ * .det keeps them side by side, right-aligned) so a long value — a regulation's full name, say —
+ * wraps using the card's full width instead of being squeezed against the right edge. */
+export function DetailList({ pairs }: { pairs: [string, ReactNode][] }) {
+  return (
+    <dl className="det">
+      {pairs.map(([k, v]) => (
+        <div key={k}>
+          <dt>{k}</dt>
+          <dd>{v}</dd>
+        </div>
+      ))}
+    </dl>
+  );
+}
+
 export function TrendChip({ delta }: { delta: number }) {
   if (delta > 0) return <Chip tone="ok" icon="trend-up">+{delta} pts</Chip>;
   if (delta < 0) return <Chip tone="bad" icon="trend-down">{delta} pts</Chip>;

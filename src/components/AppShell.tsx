@@ -377,7 +377,13 @@ export function AppShell({ workspace, crumbs, children }: { workspace: Workspace
           return (
             <div key={item.href}>
               {showSection ? <div className="sb-sec">{item.section}</div> : null}
-              <Link key={item.href} href={item.href} className={`nav ${active ? "on" : ""} ${item.count ? "has-count" : ""}`} title={item.count ? `${item.label}: ${item.count} waiting for you` : undefined}>
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`nav ${active ? "on" : ""} ${item.count ? "has-count" : ""}`}
+                title={item.count ? `${item.label}: ${item.count} waiting for you` : ""}
+                data-tip={`${item.label}${item.count ? ` · ${item.count} waiting for you` : ""}`}
+              >
                 <Icon name={item.icon} />
                 <span>{item.label}</span>
                 {item.count ? <span className="count">{item.count}</span> : null}
@@ -386,7 +392,7 @@ export function AppShell({ workspace, crumbs, children }: { workspace: Workspace
           );
         })}
         <div className="sb-bottom">
-          <button className="nav" type="button" onClick={() => setHelpOpen(true)}>
+          <button className="nav" type="button" onClick={() => setHelpOpen(true)} data-tip="Help">
             <Icon name="question" />
             <span>Help</span>
           </button>
@@ -396,6 +402,7 @@ export function AppShell({ workspace, crumbs, children }: { workspace: Workspace
               className={`nav ${
                 pathname.startsWith("/regulator/settings") || pathname === "/regulator/profile" || pathname.startsWith("/regulator/profile/") || pathname === "/regulator/team" ? "on" : ""
               }`}
+              data-tip="Settings"
             >
               <Icon name="gear-six" />
               <span>Settings</span>
