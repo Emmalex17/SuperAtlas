@@ -114,6 +114,27 @@ export type Database = {
           },
         ]
       }
+      auth_attempts: {
+        Row: {
+          at: string
+          email: string
+          id: string
+          success: boolean
+        }
+        Insert: {
+          at?: string
+          email: string
+          id?: string
+          success: boolean
+        }
+        Update: {
+          at?: string
+          email?: string
+          id?: string
+          success?: boolean
+        }
+        Relationships: []
+      }
       email_outbox: {
         Row: {
           attempts: number
