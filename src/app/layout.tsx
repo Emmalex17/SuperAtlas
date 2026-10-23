@@ -44,8 +44,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${sans.variable} ${mono.variable} ${serif.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col">
+    <html lang="en" className={`${sans.variable} ${mono.variable} ${serif.variable} antialiased`}>
+      <body>
         <ToastProvider>{children}</ToastProvider>
         <Analytics />
       </body>
