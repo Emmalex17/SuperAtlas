@@ -2,6 +2,18 @@
 
 Read this first when resuming. Keep it updated after every screen or significant step, per `docs/PARITY_PROMPT.md`.
 
+## Collapsed-sidebar nav labels and requirement Details card cramping — fixed 2026-10-23
+
+**What the user reported:** collapsing the sidebar (the rail toggle) left the icons looking "misarranged," with section-label text still showing; separately, the Requirements library's per-regulation and per-requirement "Details" sidebar cards had text (e.g. a regulation's full title) squeezed right up against the card edge.
+
+**Collapsed sidebar, confirmed root cause:** the prototype hides the "SUPERVISE"/"ASSESS"/"COLLECT" section labels in rail mode via `.app.rail .sb-sec{font-size:0;padding:6px 0;width:28px;border-top:1px solid rgba(255,255,255,.14);margin-top:6px}` (collapsing each to a thin divider line) — this rule was missing from `globals.css` entirely, so the full-size 10.5px label text rendered crammed into the 68px rail, pushing the icons below it out of alignment. Added the missing rule. Also found and fixed in passing: the rail-mode hover tooltip CSS (`.app.rail .sb .nav[data-tip]:hover::before`) already existed but no nav link ever had a `data-tip` attribute to show — added it to every sidebar item (and the Help/Settings buttons), matching `core.js`'s `data-tip="${label}${count ? ' · ' + count + ' waiting for you' : ''}"`. Verified on all three workspace sidebars (regulator, organisation, firm).
+
+**Details card, confirmed root cause:** `library/[id]` and `library/requirement` both used the `Kv` component (`.kv`, a fixed 170px label column) for their "Details" sidebar card, where the prototype's source (`library.js`) specifies `<dl class="det">` instead for exactly these two cards — the only two places in the entire prototype that use `.det`. Added a `DetailList` component rendering that markup. **Note the distinction:** matching the prototype's actual component choice alone only partly helped (the prototype's own `.det` is also a side-by-side, right-aligned layout that would still cramp a long value) — the user explicitly asked for the value to sit *under* the label, which is a deliberate improvement beyond the prototype's own (equally cramped) design, not a parity fix. Implemented it that way since `.det` is used nowhere else in the app, so the change can't affect any other screen. Also added a show/hide toggle for the Details sidebar on the regulation page (new — not in the prototype) so the requirements/questions/evidence table can use the full page width.
+
+Verified: `tsc --noEmit`, `eslint`, `npm run build` all clean. Live-verified on staging: collapsed sidebar clean on all three workspaces, Details cards stack cleanly on both library pages, hide/show toggle works. Committed as `c987b5a` (Emmalex17, no co-author line), pushed to `staging`, confirmed Ready, promoted via PR #58 (merge commit `3e27fe6`), confirmed production Ready. `origin/main` = `3e27fe6`, `git diff origin/staging origin/main --stat` empty (zero content drift).
+
+---
+
 ## Sticky sidebar and stray `overline` CSS — found and fixed 2026-10-23
 
 **What the user reported:** the sidebar/topbar scrolled away with the page instead of staying pinned, and a stray line appeared above certain text (KPI card labels, landing page section labels) — described as "underlining" but it was literally CSS `overline` (a line above the text, not below).
