@@ -60,7 +60,7 @@ p{margin:0}
 .cap{font-size:12px;line-height:16px}
 .strong{font-weight:500}
 .semi{font-weight:600}
-.overline{font-size:12px;line-height:16px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--text-2)}
+.overline{font-size:12px;line-height:16px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--text-2);text-decoration-line:none!important}
 .h-display{font:600 32px/40px var(--serif);letter-spacing:-.02em}
 .h1{font:600 24px/32px var(--serif);letter-spacing:-.01em}
 .h2{font:600 20px/28px var(--serif);letter-spacing:-.005em}
