@@ -13,10 +13,10 @@ import { NOTIFICATIONS } from "@/lib/mockData";
 import { myTasks, taskTotal, dueText } from "@/lib/tasks";
 import { searchIndex, searchRun } from "@/lib/search";
 import { orgIdFor, firmIdFor } from "@/lib/mockData";
-import { CASES, allFindings } from "@/lib/cases";
+import { CASES, allFindings, engGroup } from "@/lib/cases";
 import { ENF_CASES } from "@/lib/enforcement";
 import { FILINGS } from "@/lib/returns";
-import { CLASS_REQS, ACC_APPS } from "@/lib/mockData";
+import { CLASS_REQS, ACC_APPS, ORGANISATIONS } from "@/lib/mockData";
 
 export type NavItem = { icon: IconName; label: string; href: string; section?: string; count?: number };
 
@@ -43,7 +43,7 @@ function withGroupHeaders<T extends { group: string }>(rows: T[]): { row: T; sho
 function regulatorCount(key: "organisations" | "firms" | "enforcement" | "reviews" | "findings" | "returns"): number {
   switch (key) {
     case "organisations":
-      return CLASS_REQS.filter((r) => r.status === "Pending").length;
+      return ORGANISATIONS.filter((o) => o.status === "Pending verification").length + CLASS_REQS.filter((r) => r.status === "Pending").length;
     case "firms":
       return ACC_APPS.filter((a) => a.status === "In review").length;
     case "enforcement":
@@ -91,7 +91,7 @@ export function buildNav(account: Account): NavItem[] {
   }
   // firm
   const firmId = firmIdFor(account.entityName);
-  const engagementsCount = firmId ? CASES.filter((c) => c.firm === firmId && (c.stage === "Firm to choose" || c.firmStatus === "Invited")).length : 0;
+  const engagementsCount = firmId ? CASES.filter((c) => c.firm === firmId && engGroup(c) === "Requests").length : 0;
   const firmFindingsCount = firmId ? allFindings().filter((x) => x.c.firm === firmId && x.f.status === "Fix submitted").length : 0;
   return [
     { icon: "squares-four", label: "My dashboard", href: "/firm" },
