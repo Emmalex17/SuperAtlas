@@ -3,7 +3,7 @@
 import { createContext, useContext, useEffect, useReducer, useRef, useState, type ReactNode } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
-import { Lockup, LogoMark, Button, Tile } from "@/components/ui";
+import { LogoMark, Button, Tile } from "@/components/ui";
 import { Dialog, Drawer, Popover } from "@/components/Overlay";
 import { useToast } from "@/components/Toast";
 import { Icon, type IconName } from "@/lib/icons";
@@ -16,7 +16,7 @@ import { orgIdFor, firmIdFor } from "@/lib/mockData";
 import { CASES, allFindings, engGroup } from "@/lib/cases";
 import { ENF_CASES } from "@/lib/enforcement";
 import { FILINGS } from "@/lib/returns";
-import { CLASS_REQS, ACC_APPS, ORGANISATIONS } from "@/lib/mockData";
+import { CLASS_REQS, ACC_APPS, ORGANISATIONS, FIRMS, TENANT } from "@/lib/mockData";
 
 export type NavItem = { icon: IconName; label: string; href: string; section?: string; count?: number };
 
@@ -95,7 +95,7 @@ export function buildNav(account: Account): NavItem[] {
   const firmFindingsCount = firmId ? allFindings().filter((x) => x.c.firm === firmId && x.f.status === "Fix submitted").length : 0;
   return [
     { icon: "squares-four", label: "My dashboard", href: "/firm" },
-    { icon: "handshake", label: "Engagements", href: "/firm/engagements", section: "Work", count: engagementsCount },
+    { icon: "kanban", label: "Engagements", href: "/firm/engagements", section: "Work", count: engagementsCount },
     { icon: "flag", label: "Findings", href: "/firm/findings", count: firmFindingsCount },
     { icon: "users", label: "Team", href: "/firm/team", section: "Firm" },
     { icon: "identification-card", label: "Profile", href: "/firm/profile" },
@@ -144,6 +144,59 @@ export function AppShell({ workspace, crumbs, children }: { workspace: Workspace
   const [, bump] = useReducer((x: number) => x + 1, 0);
   const rootRef = useRef<HTMLDivElement>(null);
 
+  // Collapsible sidebar rail — icons only between 761 and 1100px (auto), or whenever the person
+  // pins it collapsed/expanded via the toggle or the "[" shortcut. Matches the prototype's railOn().
+  const [navMode, setNavMode] = useState<"auto" | "collapsed" | "expanded">(() => {
+    if (typeof window === "undefined") return "auto";
+    try {
+      return (window.localStorage.getItem("sa-nav") as "auto" | "collapsed" | "expanded" | null) || "auto";
+    } catch {
+      return "auto";
+    }
+  });
+  const [viewportWidth, setViewportWidth] = useState(() => (typeof window === "undefined" ? 1280 : window.innerWidth));
+  useEffect(() => {
+    function onResize() {
+      setViewportWidth(window.innerWidth);
+    }
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+  const rail = viewportWidth > 760 && (navMode === "collapsed" || (navMode === "auto" && viewportWidth <= 1100));
+  function toggleRail() {
+    setNavMode((prev) => {
+      const currentlyOn = window.innerWidth > 760 && (prev === "collapsed" || (prev === "auto" && window.innerWidth <= 1100));
+      const next = currentlyOn ? "expanded" : "collapsed";
+      try {
+        window.localStorage.setItem("sa-nav", next);
+      } catch {
+        // ignore
+      }
+      return next;
+    });
+  }
+
+  // Mobile nav drawer: a hamburger in the topbar toggles a class on <body> (the ported CSS already
+  // hides/reveals the sidebar and scrim off that class); close it on navigation, outside click, or Escape.
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  useEffect(() => {
+    document.body.classList.toggle("nav-open", mobileNavOpen);
+    return () => document.body.classList.remove("nav-open");
+  }, [mobileNavOpen]);
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- closes the mobile drawer in response to an external signal (the route changing), not a derived value; there is no event to hook this to since Link navigation isn't routed through our own click handler.
+    setMobileNavOpen(false);
+  }, [pathname]);
+  useEffect(() => {
+    if (!mobileNavOpen) return;
+    function onDocClick(e: MouseEvent) {
+      const target = e.target as Element;
+      if (!target.closest(".sb") && !target.closest(".menu-btn")) setMobileNavOpen(false);
+    }
+    document.addEventListener("click", onDocClick, true);
+    return () => document.removeEventListener("click", onDocClick, true);
+  }, [mobileNavOpen]);
+
   // Keeps "—" placeholders dressed as words everywhere in the app shell, matching the
   // prototype's polishDom() pass, which re-runs after every render/dialog/drawer open.
   useEffect(() => {
@@ -171,7 +224,8 @@ export function AppShell({ workspace, crumbs, children }: { workspace: Workspace
     }
   }, [checked, account, workspace, router]);
 
-  // Ctrl/⌘K and "/" open the command palette from anywhere on an app screen; Escape closes it.
+  // Ctrl/⌘K and "/" open the command palette from anywhere on an app screen; "[" toggles the
+  // collapsed sidebar rail; Escape closes the mobile nav drawer when nothing else claims it.
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
       const typing = /INPUT|TEXTAREA|SELECT/.test((document.activeElement as HTMLElement)?.tagName || "");
@@ -181,6 +235,11 @@ export function AppShell({ workspace, crumbs, children }: { workspace: Workspace
       } else if (e.key === "/" && !typing) {
         e.preventDefault();
         setPaletteOpen(true);
+      } else if (e.key === "[" && !typing) {
+        e.preventDefault();
+        toggleRail();
+      } else if (e.key === "Escape") {
+        setMobileNavOpen(false);
       }
     }
     window.addEventListener("keydown", onKey);
@@ -207,25 +266,27 @@ export function AppShell({ workspace, crumbs, children }: { workspace: Workspace
     };
   }, [account]);
 
+  // Pure countdown — side effects (sign-out, navigation) must not live inside this updater, since React
+  // invokes it during the render phase and a router update there would collide with AppShell's own render.
   useEffect(() => {
     if (!idleWarn) return;
     const interval = setInterval(() => {
-      setIdleSeconds((n) => {
-        if (n <= 1) {
-          clearInterval(interval);
-          signOut();
-          router.push("/signin");
-          return 0;
-        }
-        return n - 1;
-      });
+      setIdleSeconds((n) => (n <= 1 ? 0 : n - 1));
     }, 1000);
     return () => clearInterval(interval);
-  }, [idleWarn, router]);
+  }, [idleWarn]);
+
+  useEffect(() => {
+    if (!idleWarn || idleSeconds > 0) return;
+    signOut();
+    router.push("/signin");
+  }, [idleWarn, idleSeconds, router]);
 
   if (!checked || !account || account.workspace !== workspace) return null;
 
   const nav = buildNav(account);
+  const brandEntity =
+    workspace === "organisation" ? ORGANISATIONS.find((o) => o.id === orgIdFor(account.entityName)) : workspace === "firm" ? FIRMS.find((f) => f.id === firmIdFor(account.entityName)) : undefined;
   const unreadNotifs = NOTIFICATIONS.filter((n) => n.workspace === workspace && n.unread);
   const tasks = myTasks(account);
   const totalTasks = taskTotal(account);
@@ -275,19 +336,36 @@ export function AppShell({ workspace, crumbs, children }: { workspace: Workspace
     toast("All notifications marked as read");
   }
 
+  const workspaceSub = workspace === "regulator" ? "Supervision workspace" : workspace === "organisation" ? "Organisation workspace" : "Assurance firm workspace";
+
   return (
-    <div className="app" ref={rootRef}>
+    <div className={`app ${rail ? "rail" : ""}`} ref={rootRef}>
       <aside className="sb">
         <div className="sb-brand">
-          <Lockup dark size={24} />
-        </div>
-        <div className="sb-org">
-          <span className="av s24">{account.initials}</span>
+          {brandEntity ? (
+            <span className="logo s36" style={{ background: brandEntity.color }}>
+              {brandEntity.initials}
+            </span>
+          ) : (
+            <span className="logo s36 tenant-mark" style={{ background: TENANT.col }}>
+              {TENANT.initials}
+            </span>
+          )}
           <div className="grow" style={{ minWidth: 0 }}>
-            <div className="small strong" style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-              {account.entityName}
-            </div>
+            <b className="ell" style={{ display: "block" }}>
+              {brandEntity ? brandEntity.name : TENANT.short}
+            </b>
+            <span>{brandEntity ? `Supervised by ${TENANT.short}` : workspaceSub}</span>
           </div>
+          <button
+            className="sb-toggle"
+            type="button"
+            onClick={toggleRail}
+            aria-label={`${rail ? "Expand" : "Collapse"} sidebar`}
+            title={`${rail ? "Expand" : "Collapse"} sidebar ( [ )`}
+          >
+            <Icon name="sidebar-simple" />
+          </button>
         </div>
         {withSectionBreaks(nav).map(({ item, showSection }) => {
           const active =
@@ -331,6 +409,9 @@ export function AppShell({ workspace, crumbs, children }: { workspace: Workspace
       </aside>
       <div className="main">
         <div className="topbar">
+          <button className="icon-btn menu-btn" type="button" aria-label="Menu" onClick={() => setMobileNavOpen((o) => !o)}>
+            <Icon name="list" />
+          </button>
           <nav className="crumbs grow" aria-label="Breadcrumb">
             {crumbs && crumbs.length ? (
               crumbs.map((c, i) => (
