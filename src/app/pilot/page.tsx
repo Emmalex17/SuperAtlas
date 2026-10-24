@@ -4,7 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import { Button, Field, Tile } from "@/components/ui";
 import { isEmail } from "@/lib/authHelpers";
-import { mkNav, mkFooter } from "@/lib/landingContent";
+import { mkFooter } from "@/lib/landingContent";
+import { SiteHeader } from "@/components/landing/SiteHeader";
 
 const PHASES: [string, string][] = [
   ["Configure", "We map one regulation or standard, your workflow and branding into SuperAtlas."],
@@ -41,7 +42,7 @@ export default function PilotPage() {
 
   return (
     <div className="mk">
-      <div dangerouslySetInnerHTML={{ __html: mkNav() }} />
+      <SiteHeader />
       <section className="band b-white" style={{ paddingBlock: 64 }}>
         <div className="wrap">
           <div className="head" style={{ marginBottom: 32 }}>

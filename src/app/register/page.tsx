@@ -6,7 +6,8 @@ import { Button, Field, Tile } from "@/components/ui";
 import { Icon } from "@/lib/icons";
 import { isEmail } from "@/lib/authHelpers";
 import { CATEGORIES, tiersOf, catLabel } from "@/lib/mockData";
-import { mkNav, mkFooter } from "@/lib/landingContent";
+import { mkFooter } from "@/lib/landingContent";
+import { SiteHeader } from "@/components/landing/SiteHeader";
 
 const STEPS = ["Organisation", "Category", "Licence", "Your details", "Review"];
 
@@ -99,7 +100,7 @@ export default function RegisterPage() {
 
   return (
     <div className="mk" style={{ background: "var(--canvas)", minHeight: "100vh" }}>
-      <div dangerouslySetInnerHTML={{ __html: mkNav() }} />
+      <SiteHeader />
       <div style={{ maxWidth: 960, margin: "0 auto", padding: "40px var(--side-gutter-r) 80px var(--side-gutter-l)", display: "flex", flexDirection: "column", gap: 24 }}>
         {done ? (
           <div className="card col gap16" style={{ padding: 40, alignItems: "flex-start" }}>
