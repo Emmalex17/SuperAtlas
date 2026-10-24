@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { mkNav, mkFooter, heroCopyHtml, sectionProof, sectionIntro, storyFeature1Html, storyFeature2Html, tailSectionsHtml } from "@/lib/landingContent";
+import { mkFooter, heroCopyHtml, sectionProof, sectionIntro, storyFeature1Html, storyFeature2Html, tailSectionsHtml } from "@/lib/landingContent";
 import { MioHero } from "@/components/landing/MioHero";
 import { FeatureVideo } from "@/components/landing/FeatureVideo";
+import { SiteHeader } from "@/components/landing/SiteHeader";
 
 export default function Home() {
   const ref = useRef<HTMLDivElement>(null);
@@ -17,7 +18,7 @@ export default function Home() {
 
   return (
     <div className="mk" ref={ref}>
-      <div dangerouslySetInnerHTML={{ __html: mkNav() }} />
+      <SiteHeader />
 
       <section className="band hero" aria-labelledby="hero-h">
         <span className="glow g1" />

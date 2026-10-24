@@ -5,7 +5,8 @@ import Link from "next/link";
 import { Button, Field, Tile } from "@/components/ui";
 import { Icon } from "@/lib/icons";
 import { isEmail } from "@/lib/authHelpers";
-import { mkNav, mkFooter } from "@/lib/landingContent";
+import { mkFooter } from "@/lib/landingContent";
+import { SiteHeader } from "@/components/landing/SiteHeader";
 
 const WHO_LABEL: Record<string, string> = { regulator: "Regulator", organisation: "Supervised organisation", firm: "Assurance firm" };
 const SLOT_LABEL: Record<string, string> = { morning: "Morning (9:00 to 12:00 WAT)", midday: "Midday (12:00 to 14:00 WAT)", afternoon: "Afternoon (14:00 to 17:00 WAT)" };
@@ -53,7 +54,7 @@ export default function DemoPage() {
 
   return (
     <div className="mk">
-      <div dangerouslySetInnerHTML={{ __html: mkNav() }} />
+      <SiteHeader />
       <section className="band b-canvas" style={{ paddingBlock: 56 }}>
         <div className="wrap split">
           <div>
