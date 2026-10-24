@@ -2,6 +2,16 @@
 
 Read this first when resuming. Keep it updated after every screen or significant step, per `docs/PARITY_PROMPT.md`.
 
+## Landing-page sticky header fix — 2026-10-24
+
+**User-reported bug:** the landing page's header scrolled away instead of staying pinned at the top while the page scrolled underneath it.
+
+**Root cause:** `.mk-nav` had `position: sticky; top: 0` set correctly — the CSS was never the problem. The header was rendered via `dangerouslySetInnerHTML={{ __html: mkNav() }}` inside an otherwise-empty wrapper `<div>` in each page (`app/page.tsx`, `demo/page.tsx`, `pilot/page.tsx`, `register/page.tsx`). With no other content, that div auto-sized to exactly the header's own height (72px) — and a `position: sticky` element can only float within its own containing block's box. A containing block no taller than the element itself leaves zero room to stick: the moment any scrolling happened, the header immediately exited its box and reverted to normal flow (scrolled away like a static element). Confirmed by moving the header out of the wrapper via a live DOM test (sticky started working immediately, no other change needed), and cross-checked on production in a real, foregrounded Chrome tab (not just the automated preview pane) before concluding this was a genuine bug rather than a test-environment artifact — the automated pane's `window.scrollTo()` calls proved unreliable for this kind of layout check when the pane was backgrounded, which cost significant investigation time before the real-browser cross-check settled it.
+
+**Fix:** converted the header from an HTML string (`mkNav()`) into a real React component, `src/components/landing/SiteHeader.tsx`, rendered directly (no wrapper div) so its containing block is the full-height page container instead. Applied to all four pages that shared the bug. Removed `mkNav()` and the already-dead, already-deprecated `landingPageHtml()` that referenced it; `NAV_LINKS` is now exported from `landingContent.ts` for `SiteHeader` to reuse.
+
+**Verified:** `tsc --noEmit`, `eslint`, `npm run build` all clean. Live-verified on localhost and cross-checked on production: header `rectTop` stays at `0` after scrolling 400-1200px on all four pages (previously tracked scroll distance 1:1, i.e. scrolled fully away); mobile hamburger menu (the `.mk-nav-cb` checkbox-hack) still opens/closes correctly; desktop layout pixel-identical to before. Committed as `f543ec8` (Emmalex17, no co-author line per standing rule), pushed to `staging`, Vercel build `success`. Opened PR #65 (`staging` → `main`), merged (merge commit `b7e694d`), production deployment `success`, confirmed live on `superatlas-green.vercel.app` (`/` and `/demo` both checked directly). `origin/main` = `b7e694d`.
+
 ## Collapsed-sidebar nav labels and requirement Details card cramping — fixed 2026-10-23
 
 **What the user reported:** collapsing the sidebar (the rail toggle) left the icons looking "misarranged," with section-label text still showing; separately, the Requirements library's per-regulation and per-requirement "Details" sidebar cards had text (e.g. a regulation's full title) squeezed right up against the card edge.
