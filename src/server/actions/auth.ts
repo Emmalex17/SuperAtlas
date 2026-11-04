@@ -11,23 +11,20 @@ import {
   ChangePasswordSchema,
   ChangeEmailSchema,
   UpdateProfileSchema,
+  UpdateNotificationPrefsSchema,
   ok,
   fail,
   type ActionResult,
 } from "@/contracts/actions";
+import { isCommonPassword } from "@/server/passwordPolicy";
+import { checkRateLimit, recordRateLimitAttempt } from "@/server/rateLimit";
+import { queueEmail } from "@/server/email/outbox";
+import type { Json } from "@/contracts/database";
 
 const LOCKOUT_WINDOW_MINUTES = 15;
 const LOCKOUT_MAX_FAILURES = 5;
 const RESEND_MIN_GAP_SECONDS = 60;
 const RESEND_MAX_PER_HOUR = 5;
-
-/**
- * A short, well-known list, not an exhaustive check — section 7.2's "checked against common
- * passwords" doesn't name a source, so this covers the obvious cases (the password equal to
- * the account's own email, or one of the handful of passwords everyone tries first) rather
- * than pulling in a long breached-password corpus for a pilot of a handful of accounts.
- */
-const COMMON_PASSWORDS = new Set(["password1234", "123456789012", "qwertyuiop12", "passwordpassword"]);
 
 function genericSignInError() {
   return fail("invalid", "Email or password is not right.");
@@ -224,6 +221,9 @@ export async function signOut(): Promise<ActionResult<{ signedOut: true }>> {
   return ok({ signedOut: true });
 }
 
+const RESET_WINDOW_SECONDS = 15 * 60;
+const RESET_MAX_PER_WINDOW = 3;
+
 export async function requestPasswordReset(input: unknown): Promise<ActionResult<{ requested: true }>> {
   const parsed = RequestPasswordResetSchema.safeParse(input);
   if (!parsed.success) {
@@ -231,6 +231,15 @@ export async function requestPasswordReset(input: unknown): Promise<ActionResult
     // screen always shows the same confirmation (spec 7.4).
     return ok({ requested: true });
   }
+
+  // Rate-limiting by the attempted email string, not by whether it has an account — telling
+  // someone "too many requests" reveals nothing about account existence (spec 18).
+  const { limited } = await checkRateLimit("password_reset", parsed.data.email, RESET_WINDOW_SECONDS, RESET_MAX_PER_WINDOW);
+  if (limited) {
+    return fail("rate_limited", "Too many requests. Wait 15 minutes before asking again.");
+  }
+  await recordRateLimitAttempt("password_reset", parsed.data.email);
+
   const supabase = await createClient();
   await supabase.auth.resetPasswordForEmail(parsed.data.email, {
     redirectTo: `${process.env.APP_URL}/reset`,
@@ -243,7 +252,7 @@ export async function resetPassword(input: unknown): Promise<ActionResult<{ rese
   if (!parsed.success) {
     return fail("invalid", parsed.error.issues[0]?.message ?? "Choose a longer password.", { password: "Check this field." });
   }
-  if (COMMON_PASSWORDS.has(parsed.data.password)) {
+  if (isCommonPassword(parsed.data.password)) {
     return fail("invalid", "Choose a less common password.", { password: "Check this field." });
   }
 
@@ -255,17 +264,23 @@ export async function resetPassword(input: unknown): Promise<ActionResult<{ rese
   if (error) {
     return fail("invalid", "That password was not accepted. Try a different one.");
   }
+  // A forgotten-password reset is a password change — spec 18's "sign out everywhere on
+  // password change" applies here too, not just to changePassword's own current-password flow.
+  await supabase.auth.signOut({ scope: "others" });
 
-  if (userData.user) {
+  if (userData.user?.email) {
     const membership = await getActiveMembership(userData.user.id);
     if (membership) {
+      const admin = createAdminClient();
+      const { data: profile } = await admin.from("profiles").select("full_name").eq("user_id", userData.user.id).maybeSingle();
       await writeAudit({
         tenantId: membership.tenant_id,
         actorUserId: userData.user.id,
-        actorName: userData.user.email ?? "",
+        actorName: profile?.full_name ?? userData.user.email,
         workspace: membership.workspace,
         action: "Password reset",
       });
+      await sendPasswordChangedEmail(admin, membership.tenant_id, userData.user.email, profile?.full_name ?? "");
     }
   }
   return ok({ reset: true });
@@ -276,7 +291,7 @@ export async function changePassword(input: unknown): Promise<ActionResult<{ cha
   if (!parsed.success) {
     return fail("invalid", "Check the password fields.", { newPassword: "Check this field." });
   }
-  if (COMMON_PASSWORDS.has(parsed.data.newPassword)) {
+  if (isCommonPassword(parsed.data.newPassword)) {
     return fail("invalid", "Choose a less common password.", { newPassword: "Check this field." });
   }
 
@@ -318,9 +333,21 @@ export async function changePassword(input: unknown): Promise<ActionResult<{ cha
       workspace: membership.workspace,
       action: "Password changed",
     });
+    await sendPasswordChangedEmail(admin, membership.tenant_id, userData.user.email, profile?.full_name ?? "");
   }
 
   return ok({ changed: true });
+}
+
+async function sendPasswordChangedEmail(admin: ReturnType<typeof createAdminClient>, tenantId: string, toEmail: string, fullName: string) {
+  const { data: tenant } = await admin.from("tenants").select("name").eq("id", tenantId).single();
+  await queueEmail({
+    tenantId,
+    toEmail,
+    toName: fullName || undefined,
+    template: "password_changed",
+    params: { tenantName: tenant?.name ?? "SuperAtlas", fullName, replyTo: process.env.EMAIL_REPLY_TO ?? "" },
+  });
 }
 
 export async function changeEmail(input: unknown): Promise<ActionResult<{ requested: true }>> {
@@ -390,6 +417,65 @@ export async function updateProfile(input: unknown): Promise<ActionResult<{ upda
   return ok({ updated: true });
 }
 
+export async function updateNotificationPrefs(input: unknown): Promise<ActionResult<{ updated: true }>> {
+  const parsed = UpdateNotificationPrefsSchema.safeParse(input);
+  if (!parsed.success) {
+    return fail("invalid", "Those preferences could not be saved.");
+  }
+
+  const supabase = await createClient();
+  const { data: userData } = await supabase.auth.getUser();
+  if (!userData.user) {
+    return fail("unauthenticated", "Sign in again to update your preferences.");
+  }
+
+  const { error } = await supabase
+    .from("profiles")
+    .update({ notification_prefs: parsed.data.prefs as unknown as Json })
+    .eq("user_id", userData.user.id);
+  if (error) {
+    return fail("invalid", "Those preferences could not be saved.");
+  }
+
+  return ok({ updated: true });
+}
+
+export type DemoAccountInfo = { email: string; name: string; workspace: string; password: string };
+
+const DEMO_ACCOUNTS: { email: string; name: string; workspace: string; passwordEnv: string }[] = [
+  { email: "m.bello@nitda.gov.ng", name: "NITDA", workspace: "Regulator", passwordEnv: "DEMO_PASSWORD_NITDA" },
+  { email: "a.okonkwo@zenith.example", name: "Zenith Bank", workspace: "Organisation", passwordEnv: "DEMO_PASSWORD_ZENITH" },
+  { email: "c.obi@moniepoint.example", name: "Moniepoint (data returns)", workspace: "Organisation", passwordEnv: "DEMO_PASSWORD_MONIEPOINT" },
+  { email: "k.sule@opay.example", name: "OPay (enforcement)", workspace: "Organisation", passwordEnv: "DEMO_PASSWORD_OPAY" },
+  { email: "t.adebayo@deloitte.example", name: "Deloitte", workspace: "Assurance firm", passwordEnv: "DEMO_PASSWORD_DELOITTE" },
+];
+
+/**
+ * The demo access panel (spec section 14.2: "lists these accounts with Copy and Use buttons
+ * and shows each fixed password. The server renders the passwords from the secrets.") — the
+ * passwords are read from env vars here, server-side, and never baked into the client bundle.
+ */
+export async function listDemoAccounts(): Promise<ActionResult<DemoAccountInfo[]>> {
+  return ok(
+    DEMO_ACCOUNTS.map((a) => ({
+      email: a.email,
+      name: a.name,
+      workspace: a.workspace,
+      password: process.env[a.passwordEnv] ?? "",
+    })),
+  );
+}
+
+export async function signOutOtherSessions(): Promise<ActionResult<{ signedOut: true }>> {
+  const supabase = await createClient();
+  const { data: userData } = await supabase.auth.getUser();
+  if (!userData.user) {
+    return fail("unauthenticated", "Sign in again.");
+  }
+  await supabase.auth.signOut({ scope: "others" });
+  return ok({ signedOut: true });
+}
+
 export type SessionInfo = {
   user: { id: string; email: string };
   tenant: { id: string; slug: string; name: string; isDemo: boolean };
@@ -397,6 +483,9 @@ export type SessionInfo = {
   role: string;
   orgId: string | null;
   firmId: string | null;
+  /** The regulator's, organisation's or firm's own name — whichever the workspace is scoped
+   * to. Lets a caller build a display session without a second round trip to resolve it. */
+  entityName: string;
   permissions: string[];
   isDemo: boolean;
   profile: { fullName: string; jobTitle: string | null; phone: string | null; initials: string | null };
@@ -418,12 +507,10 @@ export async function getSession(): Promise<ActionResult<SessionInfo | null>> {
     return ok(null);
   }
 
-  const { data: perms } = await admin
-    .from("role_permissions")
-    .select("permission")
-    .eq("tenant_id", membership.tenant_id)
-    .eq("role", membership.role)
-    .eq("allowed", true);
+  const [{ data: perms }, entityName] = await Promise.all([
+    admin.from("role_permissions").select("permission").eq("tenant_id", membership.tenant_id).eq("role", membership.role).eq("allowed", true),
+    resolveEntityName(admin, membership),
+  ]);
 
   const tenant = membership.tenants;
   return ok({
@@ -433,6 +520,7 @@ export async function getSession(): Promise<ActionResult<SessionInfo | null>> {
     role: membership.role,
     orgId: membership.org_id,
     firmId: membership.firm_id,
+    entityName,
     permissions: (perms ?? []).map((p) => p.permission),
     isDemo: profile?.is_demo ?? false,
     profile: {
@@ -442,4 +530,19 @@ export async function getSession(): Promise<ActionResult<SessionInfo | null>> {
       initials: profile?.initials ?? null,
     },
   });
+}
+
+async function resolveEntityName(
+  admin: ReturnType<typeof createAdminClient>,
+  membership: { org_id: string | null; firm_id: string | null; tenants: { name: string } | null },
+): Promise<string> {
+  if (membership.org_id) {
+    const { data } = await admin.from("organisations").select("name").eq("id", membership.org_id).maybeSingle();
+    if (data) return data.name;
+  }
+  if (membership.firm_id) {
+    const { data } = await admin.from("firms").select("name").eq("id", membership.firm_id).maybeSingle();
+    if (data) return data.name;
+  }
+  return membership.tenants?.name ?? "";
 }

@@ -1,14 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { AuthShell } from "@/components/AuthShell";
-import { Button, Field, AlertBox, Lockup, Tile } from "@/components/ui";
+import { Button, Field, Lockup, Tile } from "@/components/ui";
 import { Icon } from "@/lib/icons";
 import { isEmail, pwRules } from "@/lib/authHelpers";
+import { createClient } from "@/lib/supabase/client";
+import { requestPasswordReset, resetPassword } from "@/server/actions/auth";
 
-type Step = "request" | "sent" | "expired" | "limit" | "set" | "done";
+type Step = "checking" | "request" | "sent" | "expired" | "limit" | "set" | "done";
 
 const BackLink = () => (
   <Link href="/signin" className="small strong">
@@ -18,36 +20,64 @@ const BackLink = () => (
 
 export default function ResetPasswordPage() {
   const router = useRouter();
-  const [step, setStep] = useState<Step>("request");
+  const [step, setStep] = useState<Step>("checking");
   const [email, setEmail] = useState("");
-  const [sends, setSends] = useState(0);
   const [emailErr, setEmailErr] = useState<string | undefined>();
+  const [requesting, setRequesting] = useState(false);
   const [pw, setPw] = useState("");
   const [pw2, setPw2] = useState("");
   const [pwErr, setPwErr] = useState<string | undefined>();
   const [pw2Err, setPw2Err] = useState<string | undefined>();
+  const [saving, setSaving] = useState(false);
 
-  function submitRequest(e: React.FormEvent) {
+  // Supabase's browser client processes the recovery link's URL fragment on load and fires
+  // PASSWORD_RECOVERY once a session is established from it; an expired or already-used link
+  // instead lands here with an #error= fragment and no session.
+  useEffect(() => {
+    if (window.location.hash.includes("error=")) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time read of a browser-only URL fragment, which cannot be observed during SSR.
+      setStep("expired");
+      return;
+    }
+    const supabase = createClient();
+    const { data: sub } = supabase.auth.onAuthStateChange((event) => {
+      if (event === "PASSWORD_RECOVERY") setStep("set");
+    });
+    supabase.auth.getSession().then(({ data }) => {
+      if (!data.session) setStep((s) => (s === "checking" ? "request" : s));
+    });
+    return () => sub.subscription.unsubscribe();
+  }, []);
+
+  async function submitRequest(e: React.FormEvent) {
     e.preventDefault();
     if (!isEmail(email)) {
       setEmailErr("Enter a valid email address");
       return;
     }
     setEmailErr(undefined);
-    setSends(1);
-    setStep("sent");
-  }
-
-  function resend() {
-    if (sends >= 3) {
+    setRequesting(true);
+    const result = await requestPasswordReset({ email });
+    setRequesting(false);
+    if (!result.ok && result.error.code === "rate_limited") {
       setStep("limit");
       return;
     }
-    setSends((s) => s + 1);
     setStep("sent");
   }
 
-  function submitNewPassword(e: React.FormEvent) {
+  async function resend() {
+    setRequesting(true);
+    const result = await requestPasswordReset({ email });
+    setRequesting(false);
+    if (!result.ok && result.error.code === "rate_limited") {
+      setStep("limit");
+      return;
+    }
+    setStep("sent");
+  }
+
+  async function submitNewPassword(e: React.FormEvent) {
     e.preventDefault();
     setPwErr(undefined);
     setPw2Err(undefined);
@@ -59,10 +89,19 @@ export default function ResetPasswordPage() {
       setPw2Err("The two passwords do not match");
       return;
     }
+    setSaving(true);
+    const result = await resetPassword({ password: pw });
+    setSaving(false);
+    if (!result.ok) {
+      setPwErr(result.error.message);
+      return;
+    }
     setStep("done");
   }
 
   const rules = pwRules(pw);
+
+  if (step === "checking") return null;
 
   return (
     <AuthShell>
@@ -72,7 +111,7 @@ export default function ResetPasswordPage() {
             <Lockup size={26} />
             <h2 className="h1" style={{ marginTop: 28 }}>Reset your password</h2>
             <p className="muted" style={{ marginTop: 6 }}>
-              Enter the email you sign in with. If it matches an account, we will send a link that works once, for 30 minutes.
+              Enter the email you sign in with. If it matches an account, we will send a link that works once, for 1 hour.
             </p>
           </div>
           <form className="col gap16" onSubmit={submitRequest} noValidate>
@@ -86,7 +125,7 @@ export default function ResetPasswordPage() {
                 onChange={(e) => setEmail(e.target.value)}
               />
             </Field>
-            <Button type="submit" size="lg" block>Send reset link</Button>
+            <Button type="submit" size="lg" block disabled={requesting}>{requesting ? "Sending…" : "Send reset link"}</Button>
           </form>
           <BackLink />
         </>
@@ -98,29 +137,11 @@ export default function ResetPasswordPage() {
           <div>
             <h2 className="h1">Check your email</h2>
             <p className="muted" style={{ marginTop: 6 }}>
-              If <b style={{ color: "var(--text)" }}>{email}</b> has an account, a reset link is on its way. It expires in 30 minutes. Check your spam folder if it does not arrive.
+              If <b style={{ color: "var(--text)" }}>{email}</b> has an account, a reset link is on its way. It expires in 1 hour. Check your spam folder if it does not arrive.
             </p>
           </div>
-          {sends > 1 ? (
-            <AlertBox tone="info" title="New link sent" body="Only the newest link works. Older links have stopped working." />
-          ) : null}
-          <div className="col gap8">
-            <div className="overline">Your inbox</div>
-            {Array.from({ length: sends }, (_, i) => sends - 1 - i).map((n, i) => (
-              <div key={n} className={`mail-row ${i ? "old" : ""}`}>
-                <Icon name="envelope-simple" />
-                <div className="grow">
-                  <div className="strong small">Reset your SuperAtlas password</div>
-                  <div className="cap muted">no-reply@superatlas.example · {i === 0 ? "just now" : i * 2 + " minutes ago"}</div>
-                </div>
-                <Button variant={i ? "outline" : "secondary"} size="sm" onClick={() => setStep(i ? "expired" : "set")}>
-                  Open link
-                </Button>
-              </div>
-            ))}
-          </div>
           <div className="row between">
-            <button className="link-btn small" onClick={resend}>Resend link</button>
+            <button className="link-btn small" onClick={resend} disabled={requesting}>{requesting ? "Sending…" : "Resend link"}</button>
             <button className="link-btn small" onClick={() => setStep("request")}>Use a different email</button>
           </div>
           <BackLink />
@@ -133,10 +154,10 @@ export default function ResetPasswordPage() {
           <div>
             <h2 className="h1">This link has expired</h2>
             <p className="muted" style={{ marginTop: 6 }}>
-              Reset links work once and stop working after 30 minutes, or when a newer link is sent. Ask for a new one.
+              Reset links work once and stop working after an hour, or when a newer link is sent. Ask for a new one.
             </p>
           </div>
-          <Button size="lg" block onClick={resend}>Send a new link</Button>
+          <Button size="lg" block onClick={() => setStep("request")}>Send a new link</Button>
           <BackLink />
         </>
       )}
@@ -147,7 +168,7 @@ export default function ResetPasswordPage() {
           <div>
             <h2 className="h1">Too many requests</h2>
             <p className="muted" style={{ marginTop: 6 }}>
-              We have sent 3 reset links in the last 15 minutes. To protect the account, wait 15 minutes before asking again. Use the newest link if you have it.
+              We have sent too many reset links in the last 15 minutes. To protect the account, wait 15 minutes before asking again. Use the newest link if you have it.
             </p>
           </div>
           <Link href="/signin"><Button variant="outline" size="lg" block>Back to sign in</Button></Link>
@@ -159,7 +180,7 @@ export default function ResetPasswordPage() {
           <div>
             <Lockup size={26} />
             <h2 className="h1" style={{ marginTop: 28 }}>Choose a new password</h2>
-            <p className="muted" style={{ marginTop: 6 }}>For {email}. Saving signs you out of every other device.</p>
+            <p className="muted" style={{ marginTop: 6 }}>Saving signs you out of every other device.</p>
           </div>
           <form className="col gap16" onSubmit={submitNewPassword} noValidate>
             <Field label="New password" error={pwErr} htmlFor="rs-pw">
@@ -189,7 +210,7 @@ export default function ResetPasswordPage() {
                 <input className={`inp ${pw2Err ? "invalid" : ""}`} id="rs-pw2" type="password" autoComplete="new-password" value={pw2} onChange={(e) => setPw2(e.target.value)} />
               </div>
             </Field>
-            <Button type="submit" size="lg" block>Save new password</Button>
+            <Button type="submit" size="lg" block disabled={saving}>{saving ? "Saving…" : "Save new password"}</Button>
           </form>
         </>
       )}

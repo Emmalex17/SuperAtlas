@@ -8,19 +8,19 @@ import { Button, Field, AlertBox, Lockup } from "@/components/ui";
 import { DemoAccess } from "@/components/DemoAccess";
 import { Icon } from "@/lib/icons";
 import { isEmail } from "@/lib/authHelpers";
-import { checkCredentials } from "@/lib/auth";
+import { ACCOUNTS, WORKSPACE_HOME, establishSession, setPendingRealEmail, sessionFromBackend } from "@/lib/auth";
+import { signIn, getSession } from "@/server/actions/auth";
 
 export default function SignInPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [fails, setFails] = useState(0);
-  const [error, setError] = useState<{ email?: string; pw?: string; form?: boolean }>({});
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<{ email?: string; pw?: string; form?: string }>({});
+  const [locked, setLocked] = useState(false);
   const [signedOut, setSignedOut] = useState(false);
   const [passwordChanged, setPasswordChanged] = useState(false);
-
-  const locked = fails >= 5;
 
   useEffect(() => {
     if (window.sessionStorage.getItem("superatlas.resetBanner")) {
@@ -33,32 +33,53 @@ export default function SignInPage() {
     }
   }, []);
 
-  function useDemoAccount(demoEmail: string) {
+  function useDemoAccount(demoEmail: string, demoPassword: string) {
     setEmail(demoEmail);
-    setPassword("demo-password");
+    setPassword(demoPassword);
     setError({});
     setTimeout(() => document.querySelector<HTMLButtonElement>('[data-test="signin-submit"]')?.focus(), 0);
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (locked) return;
+    if (locked || submitting) return;
     const nextError: typeof error = {};
     if (!isEmail(email)) nextError.email = "Enter the email address you were invited with";
     if (!password) nextError.pw = "Enter your password";
+    if (nextError.email || nextError.pw) {
+      setError(nextError);
+      return;
+    }
 
-    if (!nextError.email && !nextError.pw) {
-      const account = checkCredentials(email, password);
-      if (!account) {
-        setFails((f) => f + 1);
-        setError({ form: true });
-        return;
+    setSubmitting(true);
+    setError({});
+    const result = await signIn({ email, password });
+    setSubmitting(false);
+
+    if (!result.ok) {
+      if (result.error.code === "rate_limited") {
+        setLocked(true);
       }
-      setError({});
+      setError({ form: result.error.message });
+      return;
+    }
+
+    if (result.data.needsCode) {
+      setPendingRealEmail(email.trim().toLowerCase());
       router.push("/verify");
       return;
     }
-    setError(nextError);
+
+    // Demo account: no code needed. The password check already established the real session;
+    // fetch it to build the display Account the rest of the (still mostly mock-data) app reads.
+    const session = await getSession();
+    if (!session.ok || !session.data) {
+      setError({ form: "Something went wrong. Try again." });
+      return;
+    }
+    const account = ACCOUNTS[email.toLowerCase()] ?? sessionFromBackend(email.toLowerCase(), session.data);
+    establishSession(account);
+    router.push(WORKSPACE_HOME[account.workspace]);
   }
 
   return (
@@ -79,11 +100,7 @@ export default function SignInPage() {
           actions={<Button variant="secondary" size="sm" onClick={() => router.push("/reset")}>Reset password</Button>}
         />
       ) : error.form ? (
-        <AlertBox
-          tone="bad"
-          title="Email or password is incorrect"
-          body={`Check both and try again. ${5 - fails} attempt${5 - fails === 1 ? "" : "s"} left before the account locks for 15 minutes.`}
-        />
+        <AlertBox tone="bad" title="Could not sign in" body={error.form} />
       ) : passwordChanged ? (
         <AlertBox tone="ok" title="Password changed" body="Sign in with your new password. You were signed out of other devices." />
       ) : signedOut ? (
@@ -135,7 +152,7 @@ export default function SignInPage() {
           </label>
           <Link href="/reset" className="small strong">Forgot password?</Link>
         </div>
-        <Button type="submit" size="lg" block disabled={locked} testId="signin-submit">Sign in</Button>
+        <Button type="submit" size="lg" block disabled={locked || submitting} testId="signin-submit">{submitting ? "Signing in…" : "Sign in"}</Button>
       </form>
 
       <div className="col gap6 small muted">

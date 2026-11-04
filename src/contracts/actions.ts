@@ -69,3 +69,57 @@ export const UpdateProfileSchema = z.object({
   phone: z.string().trim().max(50).optional(),
 });
 export type UpdateProfileInput = z.infer<typeof UpdateProfileSchema>;
+
+export const UpdateNotificationPrefsSchema = z.object({
+  prefs: z.record(z.string(), z.unknown()),
+});
+export type UpdateNotificationPrefsInput = z.infer<typeof UpdateNotificationPrefsSchema>;
+
+// --- invitations module (spec section 7.2, section 11) ---
+// Phase 1 scope is colleague invites only: inviting a person into the inviter's own tenant/
+// workspace/org/firm. inviteOrganisation/inviteFirm (which create a new organisation or firm
+// record) need columns the organisations/firms tables don't have yet — those land in phase 2
+// alongside the full org/firm profile columns, per 20261023140200_org_firm_identity.sql.
+
+export const InviteColleagueSchema = z.object({
+  email: z.string().trim().toLowerCase().email(),
+  role: z.string().trim().min(1).max(100),
+});
+export type InviteColleagueInput = z.infer<typeof InviteColleagueSchema>;
+
+export const InviteIdSchema = z.object({
+  invitationId: z.string().uuid(),
+});
+export type InviteIdInput = z.infer<typeof InviteIdSchema>;
+
+export const GetInviteSchema = z.object({
+  token: z.string().trim().min(1),
+});
+export type GetInviteInput = z.infer<typeof GetInviteSchema>;
+
+export const AcceptInviteSchema = z.object({
+  token: z.string().trim().min(1),
+  name: z.string().trim().min(1).max(200),
+  password: PasswordSchema,
+});
+export type AcceptInviteInput = z.infer<typeof AcceptInviteSchema>;
+
+// --- team module (spec section 7.3, section 11) ---
+
+export const ChangeRoleSchema = z.object({
+  membershipId: z.string().uuid(),
+  role: z.string().trim().min(1).max(100),
+});
+export type ChangeRoleInput = z.infer<typeof ChangeRoleSchema>;
+
+export const MembershipIdSchema = z.object({
+  membershipId: z.string().uuid(),
+});
+export type MembershipIdInput = z.infer<typeof MembershipIdSchema>;
+
+export const SetRolePermissionsSchema = z.object({
+  role: z.string().trim().min(1).max(100),
+  permission: z.string().trim().min(1).max(100),
+  allowed: z.boolean(),
+});
+export type SetRolePermissionsInput = z.infer<typeof SetRolePermissionsSchema>;

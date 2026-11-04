@@ -3,19 +3,20 @@
 import { useEffect, useRef, useState } from "react";
 import { Icon } from "@/lib/icons";
 import { useToast } from "@/components/Toast";
+import { listDemoAccounts, type DemoAccountInfo } from "@/server/actions/auth";
 
-const DEMO_ACCTS: { workspace: string; name: string; email: string }[] = [
-  { workspace: "Regulator", name: "NITDA", email: "m.bello@nitda.gov.ng" },
-  { workspace: "Organisation", name: "Zenith Bank", email: "a.okonkwo@zenith.example" },
-  { workspace: "Organisation", name: "Moniepoint (data returns)", email: "c.obi@moniepoint.example" },
-  { workspace: "Organisation", name: "OPay (enforcement)", email: "k.sule@opay.example" },
-  { workspace: "Assurance firm", name: "Deloitte", email: "t.adebayo@deloitte.example" },
-];
-
-export function DemoAccess({ onUse }: { onUse: (email: string) => void }) {
+export function DemoAccess({ onUse }: { onUse: (email: string, password: string) => void }) {
   const [open, setOpen] = useState(false);
+  const [accounts, setAccounts] = useState<DemoAccountInfo[]>([]);
   const toast = useToast();
   const wrapRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open || accounts.length) return;
+    listDemoAccounts().then((result) => {
+      if (result.ok) setAccounts(result.data);
+    });
+  }, [open, accounts.length]);
 
   useEffect(() => {
     if (!open) return;
@@ -33,10 +34,10 @@ export function DemoAccess({ onUse }: { onUse: (email: string) => void }) {
     };
   }, [open]);
 
-  function copy(email: string) {
-    navigator.clipboard?.writeText(email).then(
-      () => toast(`Copied ${email}`, "ok", "copy"),
-      () => toast(`Copied ${email}`, "ok", "copy")
+  function copy(text: string, label: string) {
+    navigator.clipboard?.writeText(text).then(
+      () => toast(`Copied ${label}`, "ok", "copy"),
+      () => toast(`Copied ${label}`, "ok", "copy"),
     );
   }
 
@@ -47,17 +48,19 @@ export function DemoAccess({ onUse }: { onUse: (email: string) => void }) {
       </button>
       {open ? (
         <div className="demo-pop" role="region" aria-label="Demo accounts">
-          <div className="cap muted" style={{ padding: "2px 4px 6px" }}>Prototype only. Any password and any 6-digit code work.</div>
-          {DEMO_ACCTS.map((a) => (
+          <div className="cap muted" style={{ padding: "2px 4px 6px" }}>Each account&apos;s real password. Sign-in skips the email code for these.</div>
+          {accounts.map((a) => (
             <div className="demo-row" key={a.email}>
               <span className="grow" style={{ minWidth: 0 }}>
                 <b>{a.name}</b>
-                <span>{a.workspace} · {a.email}</span>
+                <span>
+                  {a.workspace} · {a.email} · <code className="mono">{a.password || "…"}</code>
+                </span>
               </span>
-              <button type="button" className="btn btn-secondary btn-sm" aria-label={`Copy ${a.email}`} onClick={() => copy(a.email)} data-test={`copy-${a.email.split("@")[0]}`}>
+              <button type="button" className="btn btn-secondary btn-sm" aria-label={`Copy password for ${a.email}`} onClick={() => copy(a.password, "password")} data-test={`copy-${a.email.split("@")[0]}`}>
                 <Icon name="copy" /><span>Copy</span>
               </button>
-              <button type="button" className="btn btn-primary btn-sm" onClick={() => { setOpen(false); onUse(a.email); }} data-test={`demo-${a.email.split("@")[0]}`}>
+              <button type="button" className="btn btn-primary btn-sm" onClick={() => { setOpen(false); onUse(a.email, a.password); }} data-test={`demo-${a.email.split("@")[0]}`}>
                 <span>Use</span>
               </button>
             </div>
