@@ -20,6 +20,8 @@ One entry per phase (`docs/BACKEND_SPEC.md` section 15), newest first. Each entr
 
 **Verified end to end in the browser** (not just curl), against the real database: the sign-in page's Demo Access panel shows real passwords and signs a demo account straight in with zero console errors; the real starter-admin invitation was accepted through the actual `/accept/[token]` UI (name/password form, live validation, redirect to sign-in) and then correctly required the real emailed code (not the demo bypass); `/account`'s profile save persisted to the real `profiles` row; `/regulator/team`'s invite/resend/cancel dialog and list all round-trip through the real actions with toasts and a refreshed table. `tsc --noEmit`, `eslint`, `next build` all clean.
 
+**Shipped and confirmed in production:** promoted via [PR #67](https://github.com/Emmalex17/SuperAtlas/pull/67) (merge commit `6b9ff83`). `/api/health`, `/signin` and `/regulator/team` all 200 on `superatlas-green.vercel.app`.
+
 **Not done yet:** the formal Vitest/Playwright/gitleaks test and CI layer (spec section 17's full definition-of-done) — next.
 
 ---
