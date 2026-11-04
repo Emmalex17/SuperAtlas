@@ -1,15 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { AnyWorkspaceShell } from "@/components/AnyWorkspaceShell";
 import { PageHead, Button, Field, Tile, Chip } from "@/components/ui";
 import { Dialog } from "@/components/Overlay";
 import { useToast } from "@/components/Toast";
 import { Icon } from "@/lib/icons";
-import { getSession } from "@/lib/auth";
+import { getSession, ACCOUNTS } from "@/lib/auth";
 import { pwRules } from "@/lib/authHelpers";
-import { SESSIONS, DEFAULT_MFA_DEVICE, type Session } from "@/lib/mockData";
+import { SESSIONS, type Session } from "@/lib/mockData";
+import { updateProfile, changePassword, changeEmail, updateNotificationPrefs, signOutOtherSessions } from "@/server/actions/auth";
 
 type Tab = "profile" | "security" | "notif" | "sessions";
 const TABS: { id: Tab; label: string }[] = [
@@ -28,9 +28,9 @@ const NOTIF_EVENTS: [string, boolean, boolean][] = [
 ];
 
 export default function AccountPage() {
-  const router = useRouter();
   const toast = useToast();
   const session = getSession();
+  const isDemo = session ? session.email in ACCOUNTS : false;
   const [tab, setTab] = useState<Tab>("profile");
 
   useEffect(() => {
@@ -40,28 +40,83 @@ export default function AccountPage() {
       setTab(requested as Tab);
     }
   }, []);
+
   const [sessions, setSessions] = useState<Session[]>(SESSIONS);
   const [changePwOpen, setChangePwOpen] = useState(false);
-  const [newCodesOpen, setNewCodesOpen] = useState(false);
-  const [removeMfaOpen, setRemoveMfaOpen] = useState(false);
+  const [changeEmailOpen, setChangeEmailOpen] = useState(false);
+  const [curPw, setCurPw] = useState("");
   const [newPw, setNewPw] = useState("");
+  const [pwSaving, setPwSaving] = useState(false);
+  const [newEmail, setNewEmail] = useState("");
+  const [emailSaving, setEmailSaving] = useState(false);
+
+  const [fullName, setFullName] = useState(session?.name ?? "");
+  const [jobTitle, setJobTitle] = useState(session?.role ?? "");
+  const [phone, setPhone] = useState("");
+  const [profileSaving, setProfileSaving] = useState(false);
+
+  const [notifPrefs, setNotifPrefs] = useState<Record<string, boolean | string>>({});
+  const [notifSaving, setNotifSaving] = useState(false);
 
   function killSession(i: number) {
     setSessions((prev) => prev.filter((_, idx) => idx !== i));
   }
-  function killAll() {
+  async function killAll() {
+    const result = await signOutOtherSessions();
+    if (!result.ok) {
+      toast(result.error.message, "bad");
+      return;
+    }
     setSessions((prev) => prev.filter((s) => s.current));
     toast("Signed out of all other devices");
   }
-  function submitChangePw(e: React.FormEvent) {
+
+  async function submitProfile(e: React.FormEvent) {
+    e.preventDefault();
+    setProfileSaving(true);
+    const result = await updateProfile({ fullName, jobTitle, phone });
+    setProfileSaving(false);
+    toast(result.ok ? "Profile saved" : result.error.message, result.ok ? "ok" : "bad");
+  }
+
+  async function submitChangePw(e: React.FormEvent) {
     e.preventDefault();
     if (!pwRules(newPw).ok) {
       toast("The new password does not meet the rules", "bad");
       return;
     }
+    setPwSaving(true);
+    const result = await changePassword({ currentPassword: curPw, newPassword: newPw });
+    setPwSaving(false);
+    if (!result.ok) {
+      toast(result.error.message, "bad");
+      return;
+    }
     setChangePwOpen(false);
+    setCurPw("");
     setNewPw("");
     toast("Password changed");
+  }
+
+  async function submitChangeEmail(e: React.FormEvent) {
+    e.preventDefault();
+    setEmailSaving(true);
+    const result = await changeEmail({ newEmail });
+    setEmailSaving(false);
+    if (!result.ok) {
+      toast(result.error.message, "bad");
+      return;
+    }
+    setChangeEmailOpen(false);
+    setNewEmail("");
+    toast("Check both your old and new email to confirm the change");
+  }
+
+  async function saveNotifPrefs() {
+    setNotifSaving(true);
+    const result = await updateNotificationPrefs({ prefs: notifPrefs });
+    setNotifSaving(false);
+    toast(result.ok ? "Notification preferences saved" : result.error.message, result.ok ? "ok" : "bad");
   }
 
   if (!session) return null;
@@ -86,30 +141,27 @@ export default function AccountPage() {
               <div className="h4">{session.name}</div>
               <div className="muted small">{session.email}</div>
             </div>
-            <Button variant="outline" size="sm" icon="upload-simple" onClick={() => toast("Profile photo updated")}>Change photo</Button>
           </div>
-          <form
-            className="grid g2"
-            style={{ gap: 16 }}
-            onSubmit={(e) => {
-              e.preventDefault();
-              toast("Profile saved");
-            }}
-          >
+          <form className="grid g2" style={{ gap: 16 }} onSubmit={submitProfile}>
             <Field label="Full name" htmlFor="pf-name">
-              <input className="inp" id="pf-name" defaultValue={session.name} />
+              <input className="inp" id="pf-name" value={fullName} onChange={(e) => setFullName(e.target.value)} />
             </Field>
             <Field label="Job title" htmlFor="pf-role">
-              <input className="inp" id="pf-role" defaultValue={session.role} />
+              <input className="inp" id="pf-role" value={jobTitle} onChange={(e) => setJobTitle(e.target.value)} />
             </Field>
-            <Field label="Email" hint="Your workspace admin can change your email." htmlFor="pf-email">
-              <input className="inp" id="pf-email" defaultValue={session.email} readOnly />
+            <Field label="Email" hint={isDemo ? "Demo account: email and password are fixed." : "Changing this sends a code to both your old and new address."} htmlFor="pf-email">
+              <div className="row gap8">
+                <input className="inp" id="pf-email" value={session.email} readOnly style={{ flex: 1 }} />
+                {!isDemo ? (
+                  <Button type="button" variant="outline" size="sm" onClick={() => setChangeEmailOpen(true)}>Change</Button>
+                ) : null}
+              </div>
             </Field>
             <Field label="Phone" optional htmlFor="pf-phone">
-              <input className="inp" id="pf-phone" defaultValue="+234 803 000 0000" />
+              <input className="inp" id="pf-phone" value={phone} onChange={(e) => setPhone(e.target.value)} />
             </Field>
             <div className="row end" style={{ gridColumn: "1/-1" }}>
-              <Button type="submit">Save changes</Button>
+              <Button type="submit" disabled={profileSaving}>{profileSaving ? "Saving…" : "Save changes"}</Button>
             </div>
           </form>
         </div>
@@ -119,30 +171,28 @@ export default function AccountPage() {
         <>
           <div className="card col gap16">
             <div className="h4">Password</div>
-            <p className="muted small">Last changed 3 months ago.</p>
-            <div>
-              <Button variant="secondary" onClick={() => setChangePwOpen(true)}>Change password</Button>
-            </div>
+            {isDemo ? (
+              <p className="muted small">Demo account: email and password are fixed.</p>
+            ) : (
+              <>
+                <p className="muted small">Change it any time. You will stay signed in on this device; other devices are signed out.</p>
+                <div>
+                  <Button variant="secondary" onClick={() => setChangePwOpen(true)}>Change password</Button>
+                </div>
+              </>
+            )}
           </div>
           <div className="card col gap16">
             <div className="row">
               <div className="grow">
-                <div className="h4">Multi-factor authentication</div>
-                <p className="muted small">Required by your workspace. You cannot turn it off.</p>
+                <div className="h4">Sign-in verification</div>
+                <p className="muted small">
+                  {isDemo
+                    ? "Demo accounts sign in with the password alone, with no email code."
+                    : "A 6-digit code is emailed to you every time you sign in. This cannot be turned off."}
+                </p>
               </div>
-              <Chip tone="ok" icon="shield-check">On</Chip>
-            </div>
-            <div className="file">
-              <Tile icon="fingerprint" size="sm" />
-              <div className="grow">
-                <div className="strong">{DEFAULT_MFA_DEVICE.name}</div>
-                <div className="cap muted">Added {DEFAULT_MFA_DEVICE.added} · last used {DEFAULT_MFA_DEVICE.last}</div>
-              </div>
-              <Button variant="tertiary" size="sm" onClick={() => setRemoveMfaOpen(true)}>Remove</Button>
-            </div>
-            <div className="row">
-              <Button variant="outline" icon="plus" onClick={() => router.push("/mfa-setup")}>Add another device</Button>
-              <Button variant="tertiary" icon="key" onClick={() => setNewCodesOpen(true)}>New recovery codes</Button>
+              <Chip tone="ok" icon="shield-check">{isDemo ? "Password only" : "Email code"}</Chip>
             </div>
           </div>
         </>
@@ -160,8 +210,26 @@ export default function AccountPage() {
                   {NOTIF_EVENTS.map(([name, inApp, email]) => (
                     <tr key={name}>
                       <td>{name}</td>
-                      <td><label className="switch"><input type="checkbox" defaultChecked={inApp} /><span /></label></td>
-                      <td><label className="switch"><input type="checkbox" defaultChecked={email} /><span /></label></td>
+                      <td>
+                        <label className="switch">
+                          <input
+                            type="checkbox"
+                            defaultChecked={inApp}
+                            onChange={(e) => setNotifPrefs((p) => ({ ...p, [`${name}.inApp`]: e.target.checked }))}
+                          />
+                          <span />
+                        </label>
+                      </td>
+                      <td>
+                        <label className="switch">
+                          <input
+                            type="checkbox"
+                            defaultChecked={email}
+                            onChange={(e) => setNotifPrefs((p) => ({ ...p, [`${name}.email`]: e.target.checked }))}
+                          />
+                          <span />
+                        </label>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -170,14 +238,14 @@ export default function AccountPage() {
           </div>
           <div className="card col gap16" style={{ maxWidth: 520 }}>
             <Field label="Email digest" htmlFor="dig">
-              <select className="sel" id="dig" defaultValue="Daily at 08:00">
+              <select className="sel" id="dig" defaultValue="Daily at 08:00" onChange={(e) => setNotifPrefs((p) => ({ ...p, digest: e.target.value }))}>
                 <option>Off</option>
                 <option>Daily at 08:00</option>
                 <option>Weekly on Monday</option>
               </select>
             </Field>
             <div className="row end">
-              <Button onClick={() => toast("Notification preferences saved")}>Save preferences</Button>
+              <Button disabled={notifSaving} onClick={saveNotifPrefs}>{notifSaving ? "Saving…" : "Save preferences"}</Button>
             </div>
           </div>
         </>
@@ -226,39 +294,30 @@ export default function AccountPage() {
         </div>
         <form className="col gap16" onSubmit={submitChangePw}>
           <Field label="Current password" htmlFor="cp0">
-            <input className="inp" type="password" id="cp0" />
+            <input className="inp" type="password" id="cp0" value={curPw} onChange={(e) => setCurPw(e.target.value)} />
           </Field>
           <Field label="New password" hint="At least 12 characters with upper and lower case, a number and a symbol." htmlFor="cp1">
             <input className="inp" type="password" id="cp1" value={newPw} onChange={(e) => setNewPw(e.target.value)} />
           </Field>
           <div className="row end">
             <Button type="button" variant="outline" onClick={() => setChangePwOpen(false)}>Cancel</Button>
-            <Button type="submit">Change password</Button>
+            <Button type="submit" disabled={pwSaving}>{pwSaving ? "Changing…" : "Change password"}</Button>
           </div>
         </form>
       </Dialog>
 
-      <Dialog open={removeMfaOpen} onClose={() => setRemoveMfaOpen(false)}>
-        <div className="row">
-          <Tile icon="warning" tone="warn" size="sm" />
-          <h2 className="h3">You need at least one device</h2>
-        </div>
-        <p className="muted small">MFA is required by your workspace. Add a new device before removing this one.</p>
-        <div className="row end">
-          <Button onClick={() => router.push("/mfa-setup")}>Add a device</Button>
-        </div>
-      </Dialog>
-
-      <Dialog open={newCodesOpen} onClose={() => setNewCodesOpen(false)}>
-        <div className="row">
-          <Tile icon="key" size="sm" />
-          <h2 className="h3">Create new recovery codes?</h2>
-        </div>
-        <p className="muted small">Your old codes will stop working immediately.</p>
-        <div className="row end">
-          <Button variant="outline" onClick={() => setNewCodesOpen(false)}>Cancel</Button>
-          <Button onClick={() => router.push("/mfa-setup")}>Create new codes</Button>
-        </div>
+      <Dialog open={changeEmailOpen} onClose={() => setChangeEmailOpen(false)}>
+        <div className="row"><Tile icon="envelope-simple" size="sm" /><h2 className="h3">Change email</h2></div>
+        <p className="muted small">We will send a code to both your old and new address. The change applies once both are confirmed.</p>
+        <form className="col gap16" onSubmit={submitChangeEmail}>
+          <Field label="New email" htmlFor="ce0">
+            <input className="inp" type="email" id="ce0" value={newEmail} onChange={(e) => setNewEmail(e.target.value)} />
+          </Field>
+          <div className="row end">
+            <Button type="button" variant="outline" onClick={() => setChangeEmailOpen(false)}>Cancel</Button>
+            <Button type="submit" disabled={emailSaving}>{emailSaving ? "Sending…" : "Send confirmation"}</Button>
+          </div>
+        </form>
       </Dialog>
     </AnyWorkspaceShell>
   );
